@@ -209,6 +209,44 @@
   }
   .spine b{color:var(--ink)}
 
+  /* Apps Script 區塊 */
+  .ascript{margin:72px 0 0;padding:42px 0 8px;border-top:2px solid var(--ink)}
+  .ascript h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:10px}
+  .ascript h2 .em{color:var(--accent)}
+  .ascript .sub{color:var(--ink-soft);max-width:740px;margin-bottom:20px;font-size:15px}
+  .ascript .sub b{color:var(--ink)}
+  .as-analogy{
+    background:rgba(45,106,106,.08);border:1px solid var(--accent-2);border-radius:6px;
+    padding:16px 20px;margin-bottom:26px;font-size:15px;color:var(--ink);max-width:760px;
+  }
+  .as-analogy b{color:var(--accent-2)}
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:30px}
+  .compare .col{border:1.5px solid var(--ink);border-radius:6px;background:var(--paper-2);padding:18px;box-shadow:3px 3px 0 var(--shadow)}
+  .compare .col h4{font-family:"Noto Serif TC",serif;font-size:1.1rem;margin-bottom:4px}
+  .compare .col .en{font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-soft);opacity:.7;margin-bottom:10px}
+  .compare .col ul{list-style:none;font-size:13.5px;color:var(--ink-soft)}
+  .compare .col li{padding:5px 0 5px 18px;position:relative}
+  .compare .col li::before{content:"·";position:absolute;left:6px;color:var(--accent);font-weight:700}
+  .compare .appsheet{border-color:var(--accent-2)}
+  .compare .appsheet h4{color:var(--accent-2)}
+  .compare .script{border-color:var(--gold)}
+  .compare .script h4{color:var(--gold)}
+  .bridge{
+    text-align:center;font-family:"Noto Serif TC",serif;font-size:1.05rem;color:var(--ink);
+    margin:0 0 30px;padding:14px;background:rgba(184,137,58,.1);border-radius:6px;
+  }
+  .bridge b{color:var(--accent)}
+  .scenario{margin-bottom:18px;border:1.5px solid var(--ink);border-radius:6px;overflow:hidden;background:#fff;box-shadow:3px 3px 0 var(--shadow)}
+  .scenario .s-head{background:var(--ink);color:var(--paper);padding:12px 18px;font-family:"Noto Serif TC",serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px}
+  .scenario .s-head .num{background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:12px;flex-shrink:0}
+  .scenario .s-body{padding:16px 18px}
+  .scenario .s-body .desc{font-size:14.5px;color:var(--ink-soft);margin-bottom:12px}
+  .scenario .s-body .desc b{color:var(--ink)}
+  .scenario .flow{font-family:"Noto Sans TC",sans-serif;font-size:13px;color:var(--ink);background:var(--paper-2);border:1px dashed var(--line-strong);border-radius:5px;padding:10px 14px;margin-bottom:14px;line-height:1.9}
+  .scenario .flow .seg{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:#fff;background:var(--accent-2);padding:1px 7px;border-radius:3px}
+  .as-note{font-size:13px;color:var(--ink-soft);margin-top:10px;padding-left:14px;border-left:2px solid var(--gold)}
+  .as-note b{color:var(--accent)}
+
   .mcp-section{margin:80px 0 40px;padding:42px 0;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}
   .mcp-section h2{font-family:"Noto Serif TC",serif;font-weight:900;font-size:clamp(1.6rem,3.4vw,2.3rem);margin-bottom:10px}
   .mcp-section h2 .em{color:var(--accent-2)}
@@ -247,6 +285,7 @@
     .lvl{width:44px;height:44px;font-size:11px}
     .layer-titles h3{font-size:1.2rem}
     .body-inner{padding:8px 16px 24px}
+    .compare{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -664,6 +703,95 @@
   <div class="spine">
     <span class="tag">一句話總結</span>
     <span><b>這五層就像蓋房子：</b>先有資料（地基）、再讓它會自動算（管線）、做出好看的畫面（裝潢）、加上按鈕跟通知（開關）、最後鎖好門再交鑰匙（門禁）。每一層都可以請 AI 幫忙，你負責想清楚要什麼就好。</span>
+  </div>
+
+  <div class="ascript">
+    <h2>那 <span class="em">Apps Script</span> 又是什麼？跟 AppSheet 有關係嗎？</h2>
+    <p class="sub">你可能會聽到同事提起 <b>Google Apps Script</b>。它跟 AppSheet 是「<b>同一個 Google 家族</b>」的工具，常常合作。它要寫一點點程式（一種叫 JavaScript 的語言），但別緊張——這部分通常交給技術同事或請 AI 代寫，你只要知道「它能補 AppSheet 做不到的事」。</p>
+
+    <div class="as-analogy">
+      <b>一句話理解兩者關係：</b>AppSheet 是「不用寫程式、拉一拉就有 App」的裝潢師傅；Apps Script 是「會寫程式、什麼客製需求都接」的水電師傅。<b>它們最大的交會點，就是那一份 Google 試算表</b>——兩邊都能讀寫同一份資料，所以能合作。
+    </div>
+
+    <div class="compare">
+      <div class="col appsheet">
+        <h4>AppSheet</h4>
+        <div class="en">拉一拉就有 App</div>
+        <ul>
+          <li>不用寫程式，用點選的</li>
+          <li>強項：做手機畫面、表單、清單</li>
+          <li>適合：日常操作、現場填寫</li>
+          <li>誰來做：行政自己就能上手</li>
+        </ul>
+      </div>
+      <div class="col script">
+        <h4>Apps Script</h4>
+        <div class="en">要寫一點程式</div>
+        <ul>
+          <li>寫一段 JavaScript</li>
+          <li>強項：複雜處理、產文件、串外部</li>
+          <li>適合：AppSheet 做不到的特殊需求</li>
+          <li>誰來做：技術同事 / 請 AI 代寫</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bridge">它們怎麼搭起來？ <b>AppSheet 的「自動通知（第四層）」可以去叫一段 Apps Script 來幫忙。</b></div>
+
+    <div class="scenario">
+      <div class="s-head"><span class="num">1</span>情境一：自動產生一份制式的 PDF 公文</div>
+      <div class="s-body">
+        <div class="desc">AppSheet 本身產 PDF 的彈性有限。假設你要的是<b>事務所專屬格式</b>的監造報告（含浮水印、特定章戳位置），這時就可以讓 Apps Script 來做。</div>
+        <div class="flow">
+          同事在 AppSheet 填好監造紀錄 → <span class="seg">AppSheet 自動通知</span>偵測到新資料 → 去呼叫 <span class="seg">Apps Script</span> → Apps Script 用範本套資料、產出 PDF、存進 Drive、寄給業主
+        </div>
+        <div class="desc">下面這段是 Apps Script 的「示意」，<b>看個感覺就好，不用看懂</b>——重點是它能做這種 AppSheet 做不到的細活：</div>
+        <div class="code"><span class="cmt">// 這是 Apps Script，由 AppSheet 自動叫它執行</span>
+<span class="fn">function</span> 產生監造報告(資料) {
+  <span class="cmt">// 1. 打開一份做好的 Google 文件範本</span>
+  <span class="fn">const</span> 範本 = DriveApp.<span class="fn">getFileById</span>(<span class="str">"範本ID"</span>);
+  <span class="fn">const</span> 副本 = 範本.<span class="fn">makeCopy</span>(資料.案名);
+
+  <span class="cmt">// 2. 把資料填進範本的對應位置</span>
+  <span class="fn">replaceText</span>(<span class="str">"{案名}"</span>, 資料.案名);
+  <span class="fn">replaceText</span>(<span class="str">"{查驗日期}"</span>, 資料.日期);
+
+  <span class="cmt">// 3. 轉成 PDF 並寄出</span>
+  <span class="fn">const</span> pdf = 副本.<span class="fn">getAs</span>(<span class="str">"application/pdf"</span>);
+  MailApp.<span class="fn">sendEmail</span>(資料.業主信箱, <span class="str">"監造報告"</span>, <span class="str">""</span>, {attachments:[pdf]});
+}<span class="copy">複製</span></div>
+        <div class="as-note">看不懂沒關係。<b>你需要做的，只是用講的告訴 AI：「我要 AppSheet 一存檔，就自動產出這種格式的 PDF 寄給業主」</b>，AI 會把這段程式寫好給技術同事貼上去。</div>
+      </div>
+    </div>
+
+    <div class="scenario">
+      <div class="s-head"><span class="num">2</span>情境二：每天定時整理資料、做一份摘要</div>
+      <div class="s-body">
+        <div class="desc">Apps Script 可以「<b>自己排時間跑</b>」，不一定要 AppSheet 觸發。例如每天下班前，自動把當天所有監造紀錄整理成一封摘要信寄給你。</div>
+        <div class="flow">
+          <span class="seg">Apps Script</span> 設定每天 18:00 自動執行 → 讀取今天的試算表資料 → 整理成清單 → 寄一封摘要信給主管
+        </div>
+        <div class="code"><span class="cmt">// 設定「每天定時自動跑」這件事，Apps Script 內建支援</span>
+<span class="fn">function</span> 每日摘要() {
+  <span class="fn">const</span> 表 = SpreadsheetApp.<span class="fn">getActiveSheet</span>();
+  <span class="fn">const</span> 今日資料 = <span class="fn">篩出今天的列</span>(表);
+
+  <span class="fn">const</span> 內文 = <span class="str">"今天共 "</span> + 今日資料.length + <span class="str">" 筆監造紀錄"</span>;
+  MailApp.<span class="fn">sendEmail</span>(<span class="str">"主管信箱"</span>, <span class="str">"今日監造摘要"</span>, 內文);
+}<span class="copy">複製</span></div>
+        <div class="as-note"><b>什麼時候會想到它？</b>當你心裡冒出「要是系統能自動幫我做○○就好了」，而 AppSheet 拉一拉做不到時——那很可能就是 Apps Script 上場的時機。把需求講給 AI，它會判斷該用哪個、並把程式寫好。</div>
+      </div>
+    </div>
+
+    <div class="truth" style="margin-top:24px">
+      <h4>給你的重點整理</h4>
+      <ul>
+        <li><b>AppSheet 做不到的「特殊客製」，Apps Script 通常能補。</b>兩者靠同一份試算表合作。</li>
+        <li><b>觸發方式有兩種：</b>① 由 AppSheet 的自動通知去叫它；② 它自己定時跑。</li>
+        <li><b>你不用學寫程式。</b>你的工作是「想清楚要什麼」，把需求講給 AI 或技術同事，由他們把 Apps Script 寫好。</li>
+        <li><b>判斷時機的口訣：</b>日常操作畫面 → 用 AppSheet；要產文件、複雜處理、定時自動跑 → 想到 Apps Script。</li>
+      </ul>
+    </div>
   </div>
 
   <div class="mcp-section">
