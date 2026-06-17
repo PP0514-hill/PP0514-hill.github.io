@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚷ 凱龍星 · 療癒的鑰匙</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void:    #07070D;
+    --deep:    #0E0E18;
+    --gold:    #C9A96E;
+    --gold-dim:#7D6540;
+    --silver:  #8B9BAA;
+    --mist:    #5A6472;
+    --text:    #D4CBB8;
+    --faint:   #2A2A38;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.9;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── 頂部錨點 ── */
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 4rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .glyph {
+    font-size: 3.2rem;
+    color: var(--gold);
+    letter-spacing: 0;
+    margin-bottom: 2.8rem;
+    opacity: 0.9;
+    display: block;
+    font-family: 'Cinzel', serif;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.82rem;
+    color: var(--mist);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 3.5rem;
+  }
+
+  .divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── 主體容器 ── */
+  main {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 2rem 8rem;
+  }
+
+  /* ── 章節 ── */
+  section {
+    padding: 5rem 0;
+    border-top: 1px solid var(--faint);
+  }
+
+  section:first-child { border-top: none; }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--faint);
+  }
+
+  h2 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+    margin-bottom: 1.8rem;
+  }
+
+  p {
+    color: var(--text);
+    margin-bottom: 1.4rem;
+    font-weight: 300;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  em {
+    color: var(--silver);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  strong {
+    color: #E2D4BC;
+    font-weight: 500;
+  }
+
+  /* ── 數據行 ── */
+  .fact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--faint);
+    gap: 1rem;
+  }
+  .fact-row:last-child { border-bottom: none; }
+  .fact-key {
+    font-size: 0.75rem;
+    color: var(--mist);
+    letter-spacing: 0.15em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .fact-val {
+    color: var(--text);
+    text-align: right;
+    font-size: 0.9rem;
+  }
+  .fact-val.gold { color: var(--gold); font-weight: 500; }
+
+  /* ── 時間軸 ── */
+  .timeline {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6rem;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  }
+  .tl-item {
+    position: relative;
+    padding-bottom: 2.2rem;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 0.55rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+  }
+  .tl-date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.35rem;
+  }
+  .tl-text {
+    font-size: 0.88rem;
+    color: var(--silver);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .tl-text strong { color: var(--text); }
+
+  /* ── 引語塊 ── */
+  blockquote {
+    border-left: 2px solid var(--gold-dim);
+    padding: 0.2rem 0 0.2rem 1.5rem;
+    margin: 2.5rem 0;
+    color: var(--silver);
+    font-size: 0.88rem;
+    line-height: 1.85;
+  }
+
+  /* ── 雙人對比 ── */
+  .duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 2rem 0;
+  }
+  .duo-cell {
+    background: var(--deep);
+    padding: 1.8rem 1.4rem;
+  }
+  .duo-cell:first-child { border-right: 1px solid var(--faint); }
+  .duo-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.35em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  .duo-sign {
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .duo-label {
+    font-size: 0.78rem;
+    color: var(--silver);
+    line-height: 1.7;
+  }
+
+  /* ── 尾部 ── */
+  footer {
+    border-top: 1px solid var(--faint);
+    padding: 3rem 2rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--mist);
+    letter-spacing: 0.2em;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    .duo { grid-template-columns: 1fr; }
+    .duo-cell:first-child { border-right: none; border-bottom: 1px solid var(--faint); }
+    .fact-row { flex-direction: column; gap: 0.3rem; }
+    .fact-val { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="glyph">⚷</span>
+  <h1>凱龍星<br>受傷的療癒者</h1>
+  <p class="subtitle">Chiron · Wounded Healer · 2026–2034</p>
+  <div class="divider"></div>
+</header>
+
+<main>
+
+  <!-- ── 一、凱龍是什麼 ── -->
+  <section>
+    <div class="section-label">本質</div>
+    <h2>介於土星與天王星之間的鑰匙</h2>
+    <p>凱龍星游走於<em>土星（限制）</em>與<em>天王星（解放）</em>之間，約每 50 年繞行黃道一周。它的符號形如一把鑰匙——提示我們：真正的療癒不是消除傷痛，而是從傷痛中找到通往智慧的門扉。</p>
+    <p>在本命盤中，凱龍標誌著<strong>一生的核心傷痛</strong>，也是最深的療癒潛能所在。行運中的凱龍則揭示集體需要面對的集體傷口。</p>
+    <blockquote>「傷口不是阻礙你的東西，而是讓你成為嚮導的東西。」</blockquote>
+  </section>
+
+  <!-- ── 二、當下星象 ── -->
+  <section>
+    <div class="section-label">當下</div>
+    <h2>凱龍入金牛，2026 年 6 月 19 日</h2>
+    <p>凱龍結束在牡羊座長達八年（2018–2026）的旅程，於 <strong>2026 年 6 月 19 日</strong>首次踏入金牛座，並將在此定居至 2034 年。這是自 1984 年以來的首次——整整一代人。</p>
+
+    <div style="margin: 2.5rem 0;">
+      <div class="fact-row">
+        <span class="fact-key">2026.06.19</span>
+        <span class="fact-val">凱龍初入金牛（預覽期）</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">2026.08.03</span>
+        <span class="fact-val">凱龍在金牛 0° 逆行</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">2026.09.17</span>
+        <span class="fact-val">逆回牡羊座（最後整合）</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">2027.04.14</span>
+        <span class="fact-val gold">凱龍正式長駐金牛（深層工作期開始）</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">2034</span>
+        <span class="fact-val">進入雙子座，週期結束</span>
+      </div>
+    </div>
+
+    <p><strong>金牛座的傷痛主題：</strong>自我價值、物質安全感、身體與大地的關係、「我值得被滋養嗎？」這一根本問題。集體層面則涉及金融體系、食物系統、土地倫理與生態。</p>
+  </section>
+
+  <!-- ── 三、歷史回顧 ── -->
+  <section>
+    <div class="section-label">歷史</div>
+    <h2>三次金牛週期的集體映射</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">1926 — 1934</div>
+        <p class="tl-text"><strong>華爾街崩盤、大蕭條</strong>。糧食危機、農業動盪。甘地的食鹽長征抗議壟斷。FDA 成立保護食品安全。那個年代的主流育兒觀甚至主張「不要擁抱孩子」——對身體連結的系統性否定。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">1976 — 1984</div>
+        <p class="tl-text"><strong>停滯性通膨、石油危機</strong>。英國「不滿之冬」大罷工。柴契爾夫人推動私有化重塑資本主義。天花根除（人類史上最大的集體療癒之一）。試管嬰兒誕生。</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026 — 2034</div>
+        <p class="tl-text"><strong>當下進行中。</strong>在 Uranus 天王星金牛座七年動盪後，貨幣、住房、食品體系、AI 浪潮對工作與身份的重塑——凱龍星走入一個已被打開裂縫的金牛座，邀請集體療癒。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 四、牡羊座的八年 ── -->
+  <section>
+    <div class="section-label">告別</div>
+    <h2>牡羊座的八年，我們學到了什麼</h2>
+    <p>2018–2026 年，凱龍星帶著整個世界詢問：<em>「我有資格存在嗎？我可以主張自己的需求嗎？」</em></p>
+    <p>#MeToo 運動、身份政治的高漲、個人邊界意識的覺醒——都是這段旅程的印記。我們彼此激烈碰撞，也在衝突中開始認識自己。</p>
+    <p>現在，從牡羊到金牛，核心問題從<em>「我是誰」</em>深化為：<strong>「什麼能真正滋養我？我值得擁有什麼？」</strong></p>
+  </section>
+
+  <!-- ── 五、雙人盤 ── -->
+  <section>
+    <div class="section-label">個人星盤</div>
+    <h2>育鑫 × 安安</h2>
+
+    <div class="duo">
+      <div class="duo-cell">
+        <div class="duo-name">育鑫</div>
+        <span class="duo-sign">♉ 金牛</span>
+        <div class="duo-label">
+          本命太陽 約 23° 金牛<br>
+          1983 年 5 月 14 日<br><br>
+          行運凱龍將於 <strong>2028–2029</strong> 年直接合相本命太陽，與土星同期進入金牛座，形成深度結構性轉化。
+        </div>
+      </div>
+      <div class="duo-cell">
+        <div class="duo-name">安安</div>
+        <span class="duo-sign">♉ 金牛</span>
+        <div class="duo-label">
+          本命凱龍 約 18–19° 金牛<br>
+          1982 年 12 月 7 日<br><br>
+          出生於凱龍<strong>停滯轉順</strong>前一天，本命凱龍能量特別濃縮。2027–2028 年迎來一生一次的<strong>凱龍回歸</strong>。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 六、育鑫詳解 ── -->
+  <section>
+    <div class="section-label">育鑫</div>
+    <h2>凱龍過境本命太陽</h2>
+    <p>當行運凱龍抵達金牛 23° 並與本命太陽合相，這不只是「行運」，而是一次身份核心的深度照亮。</p>
+    <p>凱龍合相太陽的主題：<em>作為「我自己」是否安全？我的創造力、我的存在本身，是否值得被看見？</em> 這些問題不會以危機的形式出現，而更像是一種緩慢清晰化的過程——舊有的自我形象開始鬆動，更真實的版本逐漸浮現。</p>
+
+    <div style="margin: 2.5rem 0;">
+      <div class="fact-row">
+        <span class="fact-key">2027 年中</span>
+        <span class="fact-val">凱龍進入金牛，接近 23°</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">2028 年</span>
+        <span class="fact-val gold">凱龍合相本命太陽（精確）</span>
+      </div>
+      <div class="fact-row">
+        <span class="fact-key">2028–2029</span>
+        <span class="fact-val">土星同期入金牛，結構性整合</span>
+      </div>
+    </div>
+
+    <p>這個時期與先前討論的<strong>土星合相本命太陽（約 2028–2029）</strong>高度重疊，形成一個多重行星疊加的深度轉化窗口。建議視之為「打磨」而非「試煉」——是精煉本質的時機。</p>
+  </section>
+
+  <!-- ── 七、安安詳解 ── -->
+  <section>
+    <div class="section-label">安安</div>
+    <h2>凱龍回歸——一生一次的回家</h2>
+    <p>安安的本命凱龍在<strong>金牛座約 18–19°</strong>，且出生於凱龍停滯轉順（Station Direct）的前一兩天。這個特殊的出生時機，使她一生攜帶著比同世代更濃縮的凱龍能量。</p>
+
+    <div style="margin: 2.5rem 0;">
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">2026 年 6 月</div>
+          <p class="tl-text">凱龍初入金牛——<strong>主題預覽期</strong>。與自我價值、身體、安全感有關的議題開始以新的方式浮現。</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2027 年 4 月</div>
+          <p class="tl-text">凱龍正式長駐金牛——<strong>深層工作期開始</strong>。感受逐漸加深，可能涉及對過去的重新詮釋。</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2027 年中</div>
+          <p class="tl-text"><strong>第一次精確合相</strong>（約 18–19° 金牛）。凱龍回到出生位置——一生一次的「回家」。</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2027 年底–2028 年初</div>
+          <p class="tl-text"><strong>逆行複習</strong>。最深的內在挖掘期，過去的傷痛模式清晰顯現，是整合的最佳時機。</p>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">2028 年中</div>
+          <p class="tl-text"><strong>最後一次精確合相</strong>。整合完成。凱龍回歸的贈禮：傷口轉化為療癒他人的智慧。</p>
+        </div>
+      </div>
+    </div>
+
+    <p>凱龍在金牛的核心傷痛往往源於：<em>「我必須賺到被愛的資格」「安全感是條件式的」「享受是奢侈品」</em>。療癒的方向不是克服這些感受，而是慢慢允許自己——不需要任何條件——就值得被滋養。</p>
+
+    <p>她的射手座太陽天性渴望自由與遠方；而凱龍金牛正在邀請她同時學習<strong>落地</strong>——讓身體、讓此刻、讓日常的美麗本身成為靈性的棲所。</p>
+  </section>
+
+  <!-- ── 八、共時性 ── -->
+  <section>
+    <div class="section-label">共時</div>
+    <h2>同一段天空，兩條平行的旅程</h2>
+    <p>育鑫的本命太陽在金牛 23°，安安的本命凱龍在金牛 18–19°。行運凱龍將在 <strong>2027–2028 年</strong>依序走過這兩個度數——先是安安的凱龍回歸，接著是育鑫的凱龍合相太陽。</p>
+    <p>這意味著你們不是各自走過一段孤獨的旅程，而是在同一個宇宙節律中，以不同的角色、相互映照地進行著深度的集體療癒。</p>
+    <blockquote>修行人所說的「紀律即自由」，在這裡得到了星象的呼應：<br>正是因為願意進入傷口，才能真正抵達自由。</blockquote>
+  </section>
+
+</main>
+
+<footer>
+  ⚷ &nbsp; Chiron · 2026–2034 &nbsp; · &nbsp; 以星象為鏡，以傷痛為師
+</footer>
+
+</body>
+</html>
