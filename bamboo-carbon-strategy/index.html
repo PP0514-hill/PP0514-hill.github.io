@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>竹構造與木構造的碳方法學、ISO 7567 與台灣碳匯計算 · 初樸事務所</title>
+<meta name="description" content="商業變現路徑研究報告">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#23303A; --ink-deep:#1B262E;
+    --terra:#B0573A; --terra-tint:#F7ECE6;
+    --paper:#EFEDE8; --card:#FCFBF9;
+    --text:#2A343C; --muted:#6E7880;
+    --rule:#E4E0D8; --rule-ink:#33424C;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--text);
+    font-family:"Noto Sans TC",system-ui,sans-serif;
+    font-size:17px;line-height:1.9;font-weight:400;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  .hero{background:var(--ink);color:#EDEAE3;padding:4.2rem 1.5rem 3.4rem;border-bottom:3px solid var(--terra)}
+  .hero-in{max-width:780px;margin:0 auto}
+  .hero .kicker{font-size:.74rem;letter-spacing:.22em;color:var(--terra);font-weight:700;margin:0 0 1.2rem;text-transform:uppercase}
+  .hero .kicker b{color:#C8C2B6;font-weight:500}
+  .hero h1{font-family:"Noto Serif TC",serif;font-weight:600;font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.32;margin:0;color:#F6F3EC;letter-spacing:.01em}
+  .hero .dek{font-family:"Noto Serif TC",serif;font-weight:400;font-size:clamp(1.02rem,2.4vw,1.28rem);line-height:1.6;margin:1.1rem 0 0;color:#B9C2C9}
+  .hero .meta{margin:1.9rem 0 0;font-size:.82rem;color:#8C97A0;letter-spacing:.02em}
+  .hero .meta span{color:#C8C2B6}
+  main{max-width:780px;margin:-1.6rem auto 0;padding:0 1.2rem 4rem;position:relative}
+  .sheet{background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:clamp(1.6rem,4vw,3.2rem)}
+  section{margin:0 0 3.4rem}
+  section:last-child{margin-bottom:0}
+  .sec-head{margin:0 0 1.4rem}
+  .eyebrow{font-size:.7rem;letter-spacing:.2em;color:var(--terra);font-weight:700;margin:0 0 .35rem;text-transform:uppercase}
+  h2{font-family:"Noto Serif TC",serif;font-weight:600;font-size:clamp(1.4rem,3.2vw,1.85rem);line-height:1.3;color:var(--ink);margin:0;padding:0 0 .55rem;border-bottom:1px solid var(--rule);letter-spacing:.01em}
+  h3{font-family:"Noto Serif TC",serif;font-weight:600;font-size:1.18rem;line-height:1.45;color:var(--ink);margin:2.4rem 0 .7rem;padding-left:.85rem;border-left:3px solid var(--terra)}
+  p{margin:0 0 1.05rem}
+  section > p:first-of-type{margin-top:0}
+  strong{font-weight:700;color:var(--ink)}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:#EDE9E2;padding:.05em .35em;border-radius:3px}
+  a{color:var(--terra);text-decoration:underline;text-underline-offset:2px}
+  ul{margin:0 0 1.15rem;padding-left:0;list-style:none}
+  ul > li{position:relative;padding-left:1.5rem;margin:0 0 .6rem}
+  ul > li::before{content:"";position:absolute;left:.15rem;top:.78em;width:6px;height:6px;background:var(--terra);border-radius:1px}
+  ol{margin:0 0 1.15rem;padding-left:1.7rem;list-style:decimal}
+  ol > li{margin:0 0 .7rem;padding-left:.35rem}
+  ol > li::marker{color:var(--terra);font-weight:700;font-family:"Noto Serif TC",serif}
+  li > strong:first-child{color:var(--ink)}
+  .s-tldr{background:var(--terra-tint);border:1px solid #EBD8CE;border-left:4px solid var(--terra);border-radius:4px;padding:1.6rem clamp(1.2rem,3vw,2rem);margin-bottom:3.4rem}
+  .s-tldr .sec-head{margin-bottom:1rem}
+  .s-tldr h2{border-bottom:none;padding-bottom:0;font-size:clamp(1.25rem,3vw,1.5rem)}
+  .s-tldr li{margin-bottom:1rem;line-height:1.85}
+  .s-tldr li:last-child{margin-bottom:0}
+  .s-tldr ul{margin-bottom:0}
+  .s-caveats{background:#F2F1EC;border:1px solid var(--rule);border-radius:4px;padding:1.5rem clamp(1.2rem,3vw,2rem);font-size:.93rem;color:var(--muted)}
+  .s-caveats h2{color:var(--rule-ink);font-size:clamp(1.15rem,2.6vw,1.4rem)}
+  .s-caveats strong{color:var(--rule-ink)}
+  .s-caveats ul > li::before{background:#A9A296}
+  footer{max-width:780px;margin:0 auto;padding:2.4rem 1.5rem 3.5rem;color:var(--muted);font-size:.82rem;line-height:1.7}
+  footer .line{height:1px;background:var(--rule);margin:0 0 1.4rem}
+  footer b{color:var(--ink);font-weight:700;font-family:"Noto Serif TC",serif}
+  @media (max-width:560px){
+    body{font-size:16px;line-height:1.85}
+    .hero{padding:3rem 1.2rem 2.6rem}
+    main{padding:0 .8rem 3rem}
+    .sheet{padding:1.4rem 1.15rem}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .sheet{animation:rise .5s ease both}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-in">
+      <p class="kicker">初樸建築師事務所 <b>· 策略研究報告</b></p>
+      <h1>竹構造與木構造的碳方法學、ISO 7567 與台灣碳匯計算</h1>
+      <p class="dek">商業變現路徑研究報告</p>
+      <p class="meta">整理日期 <span>2026-06-19</span> · 研究範圍 2024–2026</p>
+    </div>
+  </header>
+  <main>
+    <div class="sheet">
+<section class="s-tldr">
+  <header class="sec-head"><p class="eyebrow">TL;DR</p><h2>重點摘要</h2></header>
+<ul>
+  <li><strong>直接把竹木構建築的固碳量「賣成碳權」在 2026 年仍不可行</strong>——全球沒有任何已核准、可發證的「建築物固碳」碳權方法學(Verra「Methodology for Mass Timber Constructions」M0166 已於 2026 年 1 月 14 日暫停,預計 2027 Q3 才重新評估),台灣官方碳匯方法學只認「竹林/森林經營」(綠碳),不認「建材固碳/HWP 入建築」。能立刻變現的是<strong>間接利多</strong>:企業 ESG 採購偏好、品牌與工藝定價權溢價、低碳建築標章帶來的綠色融資與資產加值,以及協助甲方做碳盤查/EPD 的顧問費。</li>
+  <li><strong>ISO 7567:2024 是真正的關鍵槓桿,但它是「產品規範」不是「碳方法學」</strong>——它讓集成竹(glulam bamboo)有了與木結構並列的國際產品標準(歸屬 ISO/TC 165 木結構技術委員會),使竹材得以沿用既有木結構設計邏輯,是竹構從「藝術裝置/個案認可」走向「可認證工程建材」的門票;但它本身不發碳權、不計固碳。</li>
+  <li><strong>給初樸的核心判斷</strong>:現在(法規窗口開啟前)應全力累積「先行者認證信譽」與資料庫(竹材 EPD、低碳建築標示 LEBR、生物源碳盤查能力),把商業模式從「設計代工」轉向「賣低碳工藝 + 碳盤查附加服務」,主攻<strong>私人/企業 ESG 案</strong>(有品牌溢價與定價權),而非公共工程(量大但無定價權)。真正的「碳信用變現」是 3–5 年後的選擇權,應佈局、不應押注。</li>
+</ul>
+</section>
+<section class="s-findings">
+  <header class="sec-head"><p class="eyebrow">Key Findings</p><h2>關鍵發現</h2></header>
+<p><strong>1. 技術門票已到位,碳資產門票尚未開。</strong> ISO 7567:2024「Bamboo structures — Glued laminated bamboo — Product specifications」於 2024 年 10 月 28 日正式發布,由 INBAR 提案、南京林業大學李海濤教授與澳洲 Deakin 大學 Mahmud Ashraf 教授主導,歸屬 ISO/TC 165(Timber structures,木結構技術委員會)——這個歸屬本身就是關鍵:它把集成竹放在木結構的技術框架下管理,使竹構材料可沿用成熟的木結構設計規範與容許應力邏輯。但它規範的是原料選擇、加工、交貨、品質管制與性能測試(8 章 4 附錄),屬「產品規範」,與碳排放/固碳計算無直接關係,本身不能讓竹構「被認證為碳資產」。</p>
+<p><strong>2. 台灣已有「竹林經營碳匯」方法學,但它是綠碳(森林),不是建材固碳。</strong> 環境部於 2024 年 12 月通過「加強森林經營碳匯專案」及「竹林經營碳匯專案」兩項本土自然碳匯減量方法(竹林案由群創光電與農業部林業試驗所以公私協力 ESG 模式撰擬)。重要的是,該方法學「除了木、竹生長所增加的碳儲存量,也將木、竹製成產品後的固碳量納入碳匯計算」——竹產品保守估算留存 20 年、木產品 40 年。但這個固碳量是綁在「林地經營專案」下計算的,並非「建築物固碳專案」。建築端目前完全沒有對應的官方碳匯方法學。</p>
+<p><strong>3. 「把碳鎖進建築物賣成碳權」全球仍是 pre-commercial,且查無任何實際成交。</strong> Verra 的「Methodology for Mass Timber Constructions」(M0166,Sectoral Scope 6 建築,由 Timber Finance、South Pole、Green Canopy NODE 等提出)於 2026 年 1 月 14 日被「暫停(On Hold)」,Verra 將於 2027 Q3 才重新評估是否續推。Verra 的「Tool for Calculating Long-Term Carbon Storage in HWP」(M0314)仍在草案開發階段,且明確只是「計算工具」,須掛在森林(AFOLU)專案下使用,不是建築的獨立發證途徑。Built by Nature 直言「目前自願性碳市場或政府管制的排放交易制度,都不允許建築儲存碳被規模化交易」。三大方法學障礙:<strong>永久性</strong>(建築壽命 vs 百年要求;歐盟 CRCF 僅要求 35 年最低儲存)、<strong>外加性</strong>(建築本來就會蓋)、<strong>重複計算</strong>(國家 HWP 清冊/NDC + 林業階段可能已計算)。</p>
+<p><strong>4. 台灣的低碳建築制度已把竹木構接進 ESG 與綠色金融——這是現在就能用的變現接口。</strong> 內政部建研所於 2024 年 7 月 1 日推動「低碳(低蘊含碳)建築標示制度(LEBR)」,參照 EN 15978 全生命週期評估,依減碳率分級(第 1–7 級,達第 4 級以上為低碳建築,第 1+ 級且減碳率達 20% 以上為超低碳建築)。關鍵突破:2024 年 12 月 31 日金管會已將 LEBR 納入「永續經濟活動認定參考指引」第 2 版,可作為上市櫃公司 ESG 報告中「對氣候變遷減緩具實質貢獻」的技術篩選標準。已有 CLT 木構造案例取得認證(如宜蘭棗稻田 CLT 木構造建築,減碳率 31.25%)。</p>
+<p><strong>5. 碳費已開徵但碰不到營建業——建築端的金錢誘因目前來自「成本規避」與「資產溢價」,不來自碳費直接減免。</strong> 台灣碳費一般費率每公噸新台幣 300 元,2025 年起算、2026 年 5 月首次繳納,首波約 500 家(281 家公司,其中 141 家上市櫃)排碳大戶(電力、鋼鐵、石化、水泥、半導體等,合計約占全國排放量 54%),不含營建業、住商部門。因此竹木構建商本身不繳碳費,「採用低碳建築可少繳碳費」對甲方多數企業並不直接成立;真正的誘因是綠建築/低碳標章帶來的租金溢價(綠建築 A 級商辦租金溢價約一成起跳)、綠色融資利率減碼(約 0.1–0.3 個百分點),以及範疇三的數字效益。</p>
+</section>
+<section class="s-details">
+  <header class="sec-head"><p class="eyebrow">Details</p><h2>深度分析</h2></header>
+<h3>第一部分:技術與法規機制</h3>
+<p><strong>ISO 7567:2024 的角色與限制。</strong> 此標準是全球第一個工程竹結構國際標準,涵蓋集成竹(glued laminated bamboo)的適用範圍、術語、竹單元、材料性質、加工、交貨、品質管制與性能測試;主要適用孟宗竹(Phyllostachys edulis / Moso),也適用其他竹種(如 Guadua angustifolia、Dendrocalamus asper,須證明達到性能要求)。對初樸而言,它的戰略價值在於三點:(a) 把集成竹放進 ISO/TC 165 木結構框架,讓竹構設計可援引木結構規範邏輯,降低工程簽證與審查障礙;(b) 提供「材料一致性」與「品質可驗證」的國際背書,這是公共工程與企業客戶採用的前提;(c) 為後續竹材 EPD(產品環境宣告)與碳足跡盤查提供標準化的材料基礎。但它不發碳權、不計固碳——它是「能不能蓋、能不能簽證」的門票,不是「能不能賣碳」的門票。</p>
+<p><strong>生物源碳儲存(biogenic carbon)在 LCA 中的計算。</strong> 竹與木在生長時透過光合作用固定大氣 CO₂;收穫後製成建材,碳被「暫時儲存」在產品中(Harvested Wood Products, HWP),直到產品壽命結束(燃燒或腐朽)才釋放。竹的優勢在於生長極快(最快 5 年可疏伐,農業部稱竹林碳匯效益約為一般森林的 2–3 倍)。在建築 LCA(EN 15978 / EN 15804)中,生物源碳是否能「扣抵」取決於系統邊界與會計方法:fossil carbon 視為永久性單向排放,biogenic carbon 則是雙向交換,須考慮森林吸存、HWP 儲存效應、替代效應與生命週期末端釋放。實證上,CLT 質木建築相較鋼筋混凝土可大幅降低 GWP(韓國七層木構-RC 混合案用動態生物碳法估算為 RC 方案的約 60%;美國中層辦公木構案相較鋼-混凝土減少約 19%,並儲存約 2,757 噸碳;USDA Forest Service 估算質木建築碳效益平均約每平方米樓地板 0.38 tCO₂e)。但這些是「LCA 帳面減碳」,不等於「可交易碳信用」。</p>
+<p><strong>台灣碳匯方法學現況。</strong> 環境部已於 2024 年 2 月 1 日審定公開 13 類 143 項減量方法。自然碳匯方面,原僅有「造林與植林碳匯專案」一項(2019 年公告);2024 年 12 月新增「加強森林經營」與「竹林經營」兩項。竹林經營方法學經多次審查(計入期最終由 20 年縮短、竹類占林分比率門檻於 20% 與 50% 間爭論),核心限制:「專案活動平均每年溫室氣體淨移除量應小於或等於 2 萬公噸 CO₂e」、竹產品固碳保守估算 20 年留存、生命週期短於 5 年的竹籤紙張排除計算;疏伐森林每公頃固碳約 3 公噸、經營莿竹林每公頃約 20 公噸。台灣碳匯官方方法學目前聚焦綠碳(森林、竹林)、黃碳(土壤)、藍碳(海洋/紅樹林),<strong>「建材固碳/HWP 入建築」未被納入任何官方方法學</strong>。</p>
+<p><strong>台灣碳權交易現況。</strong> 台灣碳權交易所(TCX)2023 年 8 月 7 日掛牌,2023 年 12 月上架國際碳權(成交價約每公噸 3.9–12 美元),2024 年 10 月 2 日上線國內減量額度交易平台,首批 6 專案(中鋼、台北 101、奇美實業、漢程客運、漢寶農畜)共 6,080 公噸,每公噸 2,500–4,000 元;首樁成交為台北 101 停車場高效率光源案,30 公噸、每噸 3,500 元。國內碳權用途:碳費抵減(國內額度上限 10%、國外額度上限 5% 且非高碳洩漏行業)、環評增量抵換、碳中和宣告。竹木建材固碳目前無法在此交易——沒有對應方法學,就沒有可發證的額度。</p>
+<h3>第二部分:商業變現路徑(研究主軸)</h3>
+<p><strong>對甲方企業的利多(現在就能用的)。</strong></p>
+<ul>
+  <li><strong>ESG / 範疇三</strong>:金管會「我國接軌 IFRS 永續揭露準則藍圖」自 2026 會計年度起分三階段適用——2026 年資本額 100 億以上上市櫃公司(2027 年公告)、2027 年 50 億以上、2028 年其餘;範疇三最快 2027 年強制揭露。範疇三規模通常極大:依 CDP 與波士頓顧問公司(BCG)2024 年 6 月聯合報告《Scope 3 Upstream: Big Challenges, Simple Remedies》,企業範疇三供應鏈排放平均是其直接營運(範疇一+二)的 26 倍,CDP 另估範疇三平均約占企業總排放的 75%。企業自建辦公室/廠房若採低碳竹木構,可降低其「資本財/興建」相關的範疇三隱含碳,並在永續報告書中以 LEBR 標示作為實質貢獻佐證。</li>
+  <li><strong>碳費</strong>:多數甲方企業不在碳費徵收名單內,故「少繳碳費」不是主要賣點;但對列管的排碳大戶(鋼鐵、半導體等),自建負碳建築可作為自主減量計畫的一環(優惠費率 A 每噸 50 元、B 每噸 100 元)。</li>
+  <li><strong>資產增值與綠色金融</strong>:綠建築 A 級商辦租金溢價約一成起跳;永豐銀行綠建築融資餘額已近千億元,依標章等級給予利率優惠;合作金庫與台灣建築中心推「永續連結貸款」,利率減碼約 0.1–0.3 個百分點。</li>
+  <li><strong>碳權自我抵換</strong>:企業自建負碳建築的固碳量,目前<strong>無法</strong>開發成可交易碳權自抵碳排(無方法學);但帳面上的 LCA 減碳可計入企業自身的減碳成效揭露。</li>
+</ul>
+<p><strong>對供應商(初樸)的利多。</strong></p>
+<ul>
+  <li><strong>把「固碳/減碳」轉成定價權</strong>:賣點不是「碳權」,而是「可驗證的低碳工藝 + ESG 佐證文件」。具體商業模式:(a) 竹木構 design-build 本業;(b) 附加「低碳建築標示(LEBR)輔導」「建材 EPD/碳足跡盤查」「建築碳足跡計算」顧問服務;(c) 為企業客戶提供 ESG 報告書可引用的減碳佐證。</li>
+  <li><strong>先行者認證信譽護城河</strong>:初樸(初樸建築師事務所 ProtoPlain Architects + 初樸自然構築工程有限公司,台中豐原)已是台灣竹構利基市場前三,參與「島嶼構竹」運動、八仙山國家森林遊樂區自然構築計畫(含 12 米拱形孟宗竹構「竹泊 Bamboo Mooring」)。若率先取得 ISO 7567 對標的材料規範實作經驗、建立竹材 EPD、累積 LEBR 認證案例,將形成方法學與資料的差異化壁壘。</li>
+  <li><strong>公共工程 vs 私人 ESG 案</strong>:公共工程量大但幾乎無定價權(價格由標案決定);私人/企業 ESG 案有品牌溢價與定價權,且企業有 ESG 揭露需求願意付溢價。變現邏輯應向後者傾斜。</li>
+</ul>
+<p><strong>國際 VCM 動態(2024–2026)。</strong> 建材固碳碳權目前停留在「發展中/暫停/諮詢中」:Verra M0166(2026 年 1 月暫停,2027 Q3 重評)、Verra M0314(草案計算工具)、荷蘭 Climate Cleanup Foundation「Construction Stored Carbon」協議(2026 年 5 月 1 日諮詢截止)。對比之下,<strong>生質炭(biochar)</strong> 已是最成熟的耐久型碳移除碳權:據 Puro.earth 2025 年 8 月報告,至 2025 年 6 月已發行逾 40.8 萬張生質炭 CORC,占市場驗證耐久移除量 43%(2019–2024 發行量 CAGR 達 199%);Nasdaq CORCCHAR 指數 2025 年價格穩定在每公噸 125–145 美元;微軟與玻利維亞 Exomad Green 於 2025 年 5 月 21 日簽署 10 年期、移除至少 124 萬噸 CO₂ 協議,業界稱為史上最大生質炭協議。<strong>最可能的近期路徑是歐盟 CRCF(Carbon Removals Certification Framework,Regulation (EU) 2024/3012,2024 年 12 月 6 日通過)</strong>,涵蓋「產品中碳儲存」含生物源建材(木材),要求至少儲存 35 年,但「建築物碳儲存」的專屬方法學(delegated act)預計 2026 Q4 才推出,截至 2026 年 6 月尚未通過(首份 delegated act EU 2026/285 僅涵蓋 DACCS、BioCCS 等永久移除)。</p>
+<h3>第三部分:策略整合與現實校正</h3>
+<p><strong>誠實的現實判斷(2026 年當下)。</strong></p>
+<ul>
+  <li><strong>已可變現(現在就做)</strong>:① 企業 ESG 採購偏好——客戶為了範疇三與永續報告書願意選低碳竹木構;② 品牌與工藝溢價;③ 低碳建築標示(LEBR)→ ESG 佐證 + 綠色融資利率優惠 + 租金溢價;④ 碳盤查/EPD/碳足跡顧問服務收入。</li>
+  <li><strong>敘事階段(需等監管觸發點)</strong>:① 把建築固碳量直接開發成可交易碳信用(等 Verra M0166 復活、或歐盟 CRCF「建築碳儲存」方法學、或台灣推出建材固碳方法學);② 「竹構建築發碳權賣錢」目前是行銷敘事,不是可交易碳資產。</li>
+  <li><strong>委託人正在等的兩個監管觸發點</strong>:(a)「竹構造技術規則/規範」——台灣現行「建築技術規則建築構造編第四章木構造」與「木構造建築物設計及施工技術規範」(內政部 84 年訂頒,歷經 92、97、100、110 年修正)涵蓋集成材/CLT,但竹構尚無對應專屬技術規範,竹構目前多需走「建築新技術、新工法、新材料性能規格評定」個案認可;ISO 7567 的存在正好為台灣制定竹構技術規範提供國際對標基礎。(b)「碳匯/固碳計算方法」——建材固碳尚未入官方方法學。這兩個都尚未到位,委託人的判斷正確:全面進入市場前確實卡在這兩個觸發點。</li>
+</ul>
+</section>
+<section class="s-reco">
+  <header class="sec-head"><p class="eyebrow">Recommendations</p><h2>策略建議</h2></header>
+<p><strong>立即啟動(法規窗口開啟前的能力與信譽累積):</strong></p>
+<ol>
+  <li><strong>建立竹材 EPD 與碳足跡資料庫</strong>:依 ISO 14067 取得第三方驗證的竹構材碳足跡數據(LEBR 申請的 C1~C3 數據亦須來自環境部碳標籤、EPD 或 ISO 14067 驗證)。這是未來所有變現路徑(LEBR、CRCF、碳權)的共同基礎建設——沒有 EPD,後面什麼都做不了。</li>
+  <li><strong>主攻 LEBR 低碳建築標示認證案例</strong>:把竹木構案件送 LEBR 認證,取得減碳率數據(對標既有 CLT 案例約 30% 減碳率),作為向企業客戶銷售的 ESG 佐證。這是金管會已認可、現在就能變現的接口。</li>
+  <li><strong>開展碳盤查/ESG 顧問附加服務</strong>:針對 2026–2028 年分階段被 IFRS S1/S2 與範疇三揭露納管的上市櫃企業,提供「低碳建築 + 碳足跡佐證」一站式服務,把單次工程收入轉為顧問型重複收入。</li>
+  <li><strong>卡位「竹構造技術規範」制定</strong>:主動參與內政部/建研所的竹構技術規範研議(對標 ISO 7567 與既有木構規範,初政部「近零碳建築減碳旗艦行動計畫」115–124 年已列「研議木竹構造」減碳工法),爭取成為規範共同制定者——這是最強的先行者護城河。</li>
+</ol>
+<p><strong>等待但佈局(監管觸發點到位後啟動):</strong></p>
+<ol start="5">
+  <li><strong>追蹤歐盟 CRCF「建築碳儲存」delegated act(預計 2026 Q4)與 Verra M0166(2027 Q3 重評)</strong>:這兩個是建材固碳碳權的全球風向球;一旦其一落地,立即評估把代表案場開發成試點。</li>
+  <li><strong>遊說台灣建材固碳方法學</strong>:比照「竹林經營碳匯」由群創 + 林試所公私協力的成功模式,尋找有 ESG 需求的企業夥伴共同向環境部提報「竹/木建材固碳」新減量方法(管理辦法允許事業申請審定新減量方法)。</li>
+</ol>
+<p><strong>改變建議的門檻指標(benchmarks):</strong></p>
+<ul>
+  <li>若歐盟 CRCF 建築方法學或 Verra M0166 在 2027 年內實際發證 → 從「等待」轉為「開發試點碳權專案」。</li>
+  <li>若台灣環境部公告建材固碳方法學 → 立即啟動碳權開發業務線。</li>
+  <li>若碳費徵收門檻下調納入營建/住商部門 → 「碳費規避」成為對甲方的直接賣點,銷售話術重構。</li>
+  <li>若碳費長期費率上調至 2030 後審議會委員建議的每噸 1,200–1,800 元區間 → 低碳建築的成本規避價值大增。</li>
+</ul>
+</section>
+<section class="s-caveats">
+  <header class="sec-head"><p class="eyebrow">Caveats</p><h2>但書與風險提醒</h2></header>
+<ul>
+  <li><strong>前瞻性時程均為「計畫」非「已完成」</strong>:歐盟 CRCF 建築方法學「預計 2026 Q4」、Verra M0166「2027 Q3 重評」、台灣竹構技術規範均屬規劃中,可能延宕或變更。</li>
+  <li><strong>竹固碳效益數據多帶產業色彩</strong>:「竹林碳匯為森林 2–3 倍」「CLT 減碳 60%」「0.38 tCO₂e/m²」等多來自產業或單一學術研究,屬理論潛力而非已實現的碳信用;且 CLT 製程(燃燒樹皮/鋸屑供熱)會釋放生物源 CO₂,部分研究指出可能抵消甚至超過建材儲存量,固碳淨效益需個案核算。</li>
+  <li><strong>碳費 vs CBAM 不可混用</strong>:歐盟明文規定企業不能以自願減量額度扣減 CBAM 憑證;台灣碳費能否抵減 CBAM 仍視環境部與歐盟協商(碳價扣減計算方式、查驗機構互認),尚未定案。CBAM 已於 2026 年 1 月 1 日進入正式收費期。</li>
+  <li><strong>LEBR 與綠建築標章為自願性制度</strong>,非強制;租金溢價與融資優惠因個案與銀行而異,減碼幅度區間僅供參考。</li>
+  <li><strong>初樸的財務結構交織(個人與公司)</strong>:碳權/顧問收入若未來成形,須留意營業稅與碳交易相關稅務(碳交所購碳可開統一發票申報營業稅;碳權售出獲利的「碳交稅」議題環境部仍與財政部、證交所討論中)。</li>
+  <li><strong>本報告未能取得 ISO 7567 全文的設計參數細節</strong>(標準需付費購買,CHF 98),竹材特徵值如何具體對接 Eurocode/木結構容許應力的工程細節,建議初樸直接購入標準全文研讀。</li>
+</ul>
+</section>
+    </div>
+  </main>
+  <footer>
+    <div class="line"></div>
+    整理者：<b>初樸建築師事務所　PROTOPLAIN Architects</b><br>
+    本報告為內部策略研究參考，前瞻性時程均為「計畫」而非「已完成」，引用數據請以原始法規與標準全文為準。
+  </footer>
+</body>
+</html>
