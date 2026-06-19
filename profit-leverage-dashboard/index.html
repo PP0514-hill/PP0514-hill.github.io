@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>初樸事務所 · 獲利槓桿與自然構築策略儀表板</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#efece4; --panel:#f6f4ee; --panel-2:#f1eee7;
+    --ink:#23271f; --ink-soft:#595d51; --ink-faint:#8a8b7f;
+    --bamboo:#5a7348; --bamboo-deep:#324a27; --bamboo-tint:#e6ebde;
+    --clay:#a85a33; --clay-deep:#79401f; --clay-tint:#f0e2d8;
+    --line:rgba(35,39,31,.16); --line-mid:rgba(35,39,31,.28); --line-strong:rgba(35,39,31,.45);
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'Noto Sans TC',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:var(--sans); color:var(--ink); background:#e4e1d8;
+    line-height:1.75; -webkit-font-smoothing:antialiased;
+    padding:28px 18px 60px;
+  }
+  .sheet{
+    max-width:960px; margin:0 auto; background:var(--paper);
+    border:1px solid var(--line-mid); position:relative;
+    padding:34px 40px 40px;
+    box-shadow:0 1px 0 rgba(0,0,0,.04), 0 18px 50px -30px rgba(35,39,31,.45);
+  }
+  .sheet::before{
+    content:""; position:absolute; inset:9px;
+    border:1px solid var(--line); pointer-events:none;
+  }
+  .reveal{opacity:0; transform:translateY(10px); animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rise{to{opacity:1; transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none; opacity:1; transform:none}}
+
+  /* ---- title block ---- */
+  .titleblock{position:relative; z-index:1; border:1px solid var(--line-mid)}
+  .tb-top{display:flex; justify-content:space-between; align-items:flex-end; gap:16px;
+    padding:16px 18px 14px; border-bottom:1px solid var(--line-mid)}
+  .tb-firm{font-family:var(--mono); font-size:12px; letter-spacing:.16em; color:var(--bamboo-deep); text-transform:uppercase}
+  .tb-firm b{display:block; font-family:var(--sans); font-weight:700; font-size:15px; letter-spacing:.04em; color:var(--ink); text-transform:none; margin-top:3px}
+  h1{font-size:27px; font-weight:700; letter-spacing:.01em; line-height:1.25; text-align:right}
+  h1 small{display:block; font-family:var(--mono); font-weight:400; font-size:11.5px; letter-spacing:.14em; color:var(--ink-soft); margin-top:6px; text-transform:uppercase}
+  .tb-meta{display:grid; grid-template-columns:repeat(4,1fr)}
+  .tb-meta div{padding:8px 18px; border-right:1px solid var(--line)}
+  .tb-meta div:last-child{border-right:0}
+  .tb-meta .k{font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--ink-faint); text-transform:uppercase}
+  .tb-meta .v{font-family:var(--mono); font-size:13px; color:var(--ink); margin-top:2px}
+
+  /* ---- section rules (dimension lines) ---- */
+  .rule{display:flex; align-items:center; gap:12px; margin:34px 0 16px}
+  .rule .line{flex:1; height:1px; background:var(--line-strong); position:relative}
+  .rule .line::after{content:""; position:absolute; top:-3px; width:1px; height:7px; background:var(--line-strong)}
+  .rule .line.l::after{left:0} .rule .line.r::after{right:0}
+  .rule .tag{display:flex; align-items:baseline; gap:9px; white-space:nowrap}
+  .rule .code{font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; color:var(--bamboo); font-weight:600}
+  .rule h2{font-size:18px; font-weight:700; letter-spacing:.02em}
+
+  p{color:var(--ink-soft); font-size:15px}
+  p.lead{color:var(--ink); font-size:15.5px}
+  .em{color:var(--ink); font-weight:500}
+  .green{color:var(--bamboo-deep); font-weight:500}
+  .mono{font-family:var(--mono)}
+
+  /* ---- hero formula ---- */
+  .formula{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px 12px;
+    padding:24px 14px 18px; margin-top:4px}
+  .res{font-family:var(--mono); font-size:21px; color:var(--ink); font-weight:500}
+  .op{font-family:var(--mono); font-size:20px; color:var(--ink-faint)}
+  .lev{padding:10px 16px; border-radius:9px; font-weight:500; font-size:16px; text-align:center; line-height:1.15}
+  .lev.g{background:var(--bamboo-tint); color:var(--bamboo-deep); border:1px solid rgba(90,115,72,.3)}
+  .lev.n{background:var(--panel-2); color:var(--ink); border:1px solid var(--line-mid)}
+  .lev small{display:block; font-family:var(--mono); font-size:10px; letter-spacing:.08em; margin-top:3px; opacity:.7}
+  .fnote{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:10px 20px; margin-top:2px}
+  .fnote span{font-size:13px; color:var(--ink-soft)}
+  .fnote .dot{width:7px; height:7px; border-radius:2px; display:inline-block; margin-right:7px; vertical-align:middle}
+  .callout{display:inline-flex; align-items:center; gap:9px; background:var(--bamboo); color:#fff;
+    padding:7px 15px; border-radius:999px; font-size:13.5px; font-weight:500; margin-top:14px}
+  .callout .mono{font-family:var(--mono); font-size:14px}
+  .center{text-align:center}
+
+  /* ---- principle cards ---- */
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px}
+  .pcard{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:16px 16px 18px}
+  .pcard .num{font-family:var(--mono); font-size:12px; color:var(--bamboo); letter-spacing:.1em}
+  .pcard h3{font-size:15px; font-weight:700; margin:7px 0 6px}
+  .pcard p{font-size:13.5px; line-height:1.65}
+
+  /* ---- north-star ---- */
+  .northstar{display:flex; flex-wrap:wrap; align-items:center; gap:18px 26px;
+    background:var(--bamboo-tint); border:1px solid rgba(90,115,72,.3); border-radius:12px; padding:20px 22px}
+  .northstar .big{flex:1; min-width:240px}
+  .northstar .lbl{font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--bamboo); text-transform:uppercase}
+  .northstar .metric{font-size:19px; font-weight:700; color:var(--bamboo-deep); margin-top:5px; line-height:1.35}
+  .northstar .eq{font-family:var(--mono); font-size:13px; color:var(--bamboo-deep); margin-top:8px; opacity:.85}
+  .northstar .link{min-width:200px; border-left:1px solid rgba(90,115,72,.35); padding-left:22px}
+  .northstar .link .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; color:var(--bamboo); text-transform:uppercase}
+  .northstar .link .t{font-size:14px; color:var(--bamboo-deep); margin-top:5px; line-height:1.55}
+  .northstar .link b{font-family:var(--mono); font-weight:600}
+
+  /* ---- engine tables ---- */
+  .engine{border:1px solid var(--line-mid); border-radius:11px; overflow:hidden; margin-top:16px}
+  .ehead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:13px 18px; background:var(--panel-2)}
+  .ehead .nm{font-size:16px; font-weight:700}
+  .ehead .nm .tick{font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.08em; padding:2px 7px; border-radius:5px; margin-left:9px; vertical-align:2px}
+  .ehead.pub .tick{background:#e4e6dd; color:var(--ink-soft)}
+  .ehead.priv .tick{background:var(--clay-tint); color:var(--clay-deep)}
+  .ehead .sub{font-size:12.5px; color:var(--ink-soft)}
+  .erow{display:grid; grid-template-columns:120px 1fr 1.05fr 1.05fr; border-top:1px solid var(--line)}
+  .erow > div{padding:11px 14px; border-right:1px solid var(--line)}
+  .erow > div:last-child{border-right:0}
+  .erow.head > div{padding:7px 14px; background:var(--panel); font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; color:var(--ink-faint); text-transform:uppercase}
+  .erow .lv-name{font-weight:500; font-size:14px}
+  .erow .lv-name small{display:block; font-family:var(--mono); font-size:10px; color:var(--ink-faint); margin-top:2px; letter-spacing:.04em}
+  .erow .cell{font-size:13px; line-height:1.55; color:var(--ink-soft)}
+  .erow .kpi{font-family:var(--mono); font-size:12px; line-height:1.5; color:var(--bamboo-deep)}
+  .erow .link{font-size:12.5px; line-height:1.5; color:var(--ink-soft)}
+  .erow.key{background:var(--bamboo-tint)}
+  .erow.key .cell, .erow.key .link{color:var(--bamboo-deep)}
+  .erow.key .lv-name small{color:var(--bamboo)}
+  .badge-key{display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.06em; background:var(--bamboo); color:#fff; padding:1px 6px; border-radius:4px; margin-left:6px; vertical-align:1px}
+
+  /* ---- bottleneck ---- */
+  .btl{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px}
+  .seg{border-radius:11px; padding:15px 16px; border:1px solid var(--line-mid)}
+  .seg.ok{background:var(--panel)}
+  .seg.hot{background:var(--clay-tint); border-color:rgba(168,90,51,.4)}
+  .seg .chips{display:flex; gap:9px; margin-bottom:10px}
+  .seg .chip{flex:1; text-align:center; padding:9px 4px; border-radius:7px; font-weight:500; font-size:14px;
+    background:var(--paper); border:1px solid var(--line)}
+  .seg.hot .chip{border-color:rgba(168,90,51,.35)}
+  .seg .cap{font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px}
+  .seg.ok .cap{color:var(--ink-faint)} .seg.hot .cap{color:var(--clay-deep)}
+  .seg .desc{font-size:13px; line-height:1.55}
+  .seg.ok .desc{color:var(--ink-soft)} .seg.hot .desc{color:var(--clay-deep)}
+  .prio{margin-top:16px; counter-reset:n; list-style:none}
+  .prio li{counter-increment:n; position:relative; padding:13px 0 13px 42px; border-top:1px solid var(--line); font-size:14.5px; line-height:1.6}
+  .prio li:first-child{border-top:0}
+  .prio li::before{content:counter(n,decimal-leading-zero); position:absolute; left:0; top:12px;
+    font-family:var(--mono); font-size:13px; font-weight:600; color:var(--clay); border:1px solid var(--clay);
+    width:27px; height:27px; border-radius:50%; display:flex; align-items:center; justify-content:center}
+  .prio b{font-weight:500; color:var(--ink)}
+  .prio .meta{font-family:var(--mono); font-size:11.5px; color:var(--ink-faint)}
+
+  /* ---- archetypes ---- */
+  .arch{border-top:1px solid var(--line)}
+  .arow{display:grid; grid-template-columns:1fr 1.35fr; gap:20px; padding:16px 2px; border-bottom:1px solid var(--line); align-items:start}
+  .arow .left .role{display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.06em; padding:3px 9px; border-radius:5px; margin-bottom:8px}
+  .role.core{background:var(--bamboo); color:#fff}
+  .role.brand{background:var(--bamboo-tint); color:var(--bamboo-deep)}
+  .role.future{background:var(--panel-2); color:var(--ink-soft); border:1px solid var(--line-mid)}
+  .role.now{background:var(--clay-tint); color:var(--clay-deep)}
+  .role.esg{background:#e4e6dd; color:var(--ink-soft)}
+  .arow .left h3{font-size:15.5px; font-weight:700; line-height:1.3}
+  .arow .left .ref{font-size:12.5px; color:var(--ink-faint); margin-top:4px}
+  .arow .right p{font-size:13.5px; line-height:1.62}
+  .arow .right .mean{margin-top:7px; font-size:13.5px; color:var(--bamboo-deep)}
+  .arow .right .mean b{font-weight:500}
+
+  .callout-box{margin-top:18px; background:var(--panel); border:1px solid var(--line-mid); border-left:3px solid var(--bamboo); border-radius:0 10px 10px 0; padding:15px 18px}
+  .callout-box .h{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--bamboo); text-transform:uppercase; margin-bottom:7px}
+  .callout-box p{font-size:13.5px; line-height:1.62}
+  .wedge{margin-top:14px; background:var(--ink); color:#f3f1e9; border-radius:11px; padding:18px 20px}
+  .wedge .h{font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:#b9c4a8; text-transform:uppercase; margin-bottom:8px}
+  .wedge p{color:#f3f1e9; font-size:15px; line-height:1.6}
+  .wedge .k{color:#cdd6bf; font-weight:500}
+
+  /* ---- footer ---- */
+  .foot{margin-top:30px; padding-top:16px; border-top:1px solid var(--line-mid); display:flex; flex-wrap:wrap; justify-content:space-between; gap:14px}
+  .foot .src{font-size:11.5px; color:var(--ink-faint); line-height:1.6; max-width:600px}
+  .foot .src b{font-family:var(--mono); font-weight:600; color:var(--ink-soft)}
+  .foot .stamp{font-family:var(--mono); font-size:11px; color:var(--ink-faint); letter-spacing:.08em; text-align:right; white-space:nowrap}
+
+  /* ---- responsive ---- */
+  @media (max-width:720px){
+    body{padding:14px 8px 40px}
+    .sheet{padding:22px 18px 26px}
+    .sheet::before{inset:6px}
+    h1{font-size:21px}
+    .tb-top{flex-direction:column; align-items:flex-start}
+    h1{text-align:left}
+    .tb-meta{grid-template-columns:repeat(2,1fr)}
+    .tb-meta div:nth-child(2){border-right:0}
+    .grid3{grid-template-columns:1fr}
+    .erow{grid-template-columns:1fr}
+    .erow > div{border-right:0; border-top:1px solid var(--line); padding:9px 14px}
+    .erow > div:first-child{border-top:0}
+    .erow.head{display:none}
+    .erow .lv-name{font-size:14px} .erow .lv-name small{display:inline; margin-left:8px}
+    .erow .kpi::before{content:"KPI · "; color:var(--ink-faint)}
+    .erow .link::before{content:"接點 · "; font-family:var(--mono); font-size:10px; color:var(--ink-faint)}
+    .northstar .link{border-left:0; padding-left:0; border-top:1px solid rgba(90,115,72,.3); padding-top:14px}
+    .btl{grid-template-columns:1fr}
+    .arow{grid-template-columns:1fr; gap:8px}
+  }
+  @media print{
+    body{background:#fff; padding:0}
+    .sheet{box-shadow:none; border:none; max-width:none; padding:18px}
+    .sheet::before{display:none}
+    .reveal{animation:none; opacity:1; transform:none}
+    .engine,.pcard,.seg,.northstar,.wedge,.callout-box,.arow{break-inside:avoid}
+    .rule{break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ===== TITLE BLOCK ===== -->
+  <div class="titleblock reveal">
+    <div class="tb-top">
+      <div class="tb-firm">Protoplain Architects<b>初樸建築師事務所</b></div>
+      <h1>獲利槓桿與自然構築策略儀表板<small>Profit Levers × Natural Construction Strategy</small></h1>
+    </div>
+    <div class="tb-meta">
+      <div><div class="k">圖名 / Sheet</div><div class="v">STRATEGY-01</div></div>
+      <div><div class="k">版次 / Rev</div><div class="v">v1 · 2026.06</div></div>
+      <div><div class="k">比例 / Scale</div><div class="v">策略 1:1</div></div>
+      <div><div class="k">資料地基 / Data</div><div class="v">完全成本時薪系統</div></div>
+    </div>
+  </div>
+
+  <!-- ===== S1 公式與精神 ===== -->
+  <div class="rule reveal" style="margin-top:30px"><div class="line l"></div><div class="tag"><span class="code">S1</span><h2>獲利公式 · 它真正的精神</h2></div><div class="line r"></div></div>
+
+  <div class="reveal">
+    <div class="formula">
+      <span class="res">獲利&nbsp;=</span>
+      <span class="lev g">流量<small>LEAD</small></span>
+      <span class="op">×</span>
+      <span class="lev g">轉換率<small>WIN%</small></span>
+      <span class="op">×</span>
+      <span class="lev g">客單價<small>FEE</small></span>
+      <span class="op">−</span>
+      <span class="lev n">成本<small>COST</small></span>
+    </div>
+    <div class="fnote">
+      <span><i class="dot" style="background:var(--bamboo)"></i>前三項<b class="green">相乘</b>　小進步會疊起來放大</span>
+      <span><i class="dot" style="background:var(--ink-faint)"></i>末項<span class="em">相減</span>　要壓低</span>
+    </div>
+    <div class="center"><span class="callout">三項各 <span class="mono">+20%</span>　獲利就放大 <span class="mono">73%</span>（×1.73）</span></div>
+  </div>
+
+  <div class="grid3 reveal">
+    <div class="pcard"><div class="num">原則 A</div><h3>拆解，不要打包</h3><p>別只想「怎麼多賺」。把獲利拆成四根可獨立調整的槓桿，分頭優化。多數事務所只盯「接更多案」這一根。</p></div>
+    <div class="pcard"><div class="num">原則 B</div><h3>相乘會複利</h3><p>因為前三項相乘，三個小改善會疊成大成長。這是公式唯一重要的數學洞見——也是「接更多案」打不過的地方。</p></div>
+    <div class="pcard"><div class="num">原則 C</div><h3>打最弱那根</h3><p>最弱的槓桿卡住整條鏈。對低轉換率的漏斗灌流量，只是燒掉獲客成本。先找出瓶頸，集中火力。</p></div>
+  </div>
+
+  <!-- ===== S2 北極星 ===== -->
+  <div class="rule reveal"><div class="line l"></div><div class="tag"><span class="code">S2</span><h2>北極星指標 · 把四根槓桿收斂成一個數字</h2></div><div class="line r"></div></div>
+
+  <div class="northstar reveal">
+    <div class="big">
+      <div class="lbl">North-Star Metric</div>
+      <div class="metric">每位初樸夥伴「可計費工時」的淨利</div>
+      <div class="eq">= ( 專案費 − 投入工時 × 完全時薪 ) ÷ 投入工時</div>
+    </div>
+    <div class="link">
+      <div class="k">與時薪系統的接點</div>
+      <div class="t">完全成本時薪（工時加權，<b>約 NT$507/hr</b>）就是這個指標的地基。四根槓桿最後都是為了把這個數字做高。</div>
+    </div>
+  </div>
+
+  <!-- ===== S3 雙引擎 × 四槓桿 ===== -->
+  <div class="rule reveal"><div class="line l"></div><div class="tag"><span class="code">S3</span><h2>雙引擎 × 四槓桿 · 打法、KPI 與時薪接點</h2></div><div class="line r"></div></div>
+  <p class="reveal" style="margin-bottom:4px">兩個引擎物理法則不同：公共工程被產能與法規綁住，自然構築私案品牌彈性大。同一根槓桿，兩邊打法完全不一樣。</p>
+
+  <div class="engine reveal">
+    <div class="ehead pub"><div class="nm">公共工程引擎<span class="tick">產能 / 法規 受限</span></div><div class="sub">費率受技術服務費用計算辦法封頂</div></div>
+    <div class="erow head"><div>槓桿</div><div>在這個引擎的打法</div><div>要追蹤的 KPI</div><div>與時薪系統的接點</div></div>
+    <div class="erow"><div class="lv-name">流量<small>LEAD</small></div><div class="cell">監看政府電子採購網、累積實績；必要時共同投標補資格</div><div class="kpi">每季「符合資格且決定投標」的標案數</div><div class="link">用產能上限反推「該投幾件」，不是越多越好</div></div>
+    <div class="erow key"><div class="lv-name">轉換率<small>WIN%</small><span class="badge-key">最高 CP</span></div><div class="cell">做評選簡報範本；每次得標與落標都進檢討庫</div><div class="kpi">得標率 = 得標數 ÷ 投標數（按案型分）</div><div class="link">每件投標期望成本＝押標金＋簡報工時×時薪；得標率↑→有效獲客成本↓</div></div>
+    <div class="erow"><div class="lv-name">客單價<small>FEE</small></div><div class="cell">追更大造價的案、服務綁包、爭取多年期／後續擴充</div><div class="kpi">平均專案費 ÷ 平均工程造價；同機關重複委託數（LTV）</div><div class="link">費率有法規天花板，這側的客單價是半固定槓桿</div></div>
+    <div class="erow"><div class="lv-name">成本<small>COST</small></div><div class="cell">顧好稼動率、加速估驗計價回款</div><div class="kpi">稼動率（可計費工時÷總工時）；實際vs預算工時；回款天數</div><div class="link">直接接點：完全成本時薪 × 工時 = 專案成本</div></div>
+  </div>
+
+  <div class="engine reveal">
+    <div class="ehead priv"><div class="nm">自然構築私人開發案引擎<span class="tick">品牌 / 彈性 大</span></div><div class="sub">唯一能真正拉高客單價的一側</div></div>
+    <div class="erow head"><div>槓桿</div><div>在這個引擎的打法</div><div>要追蹤的 KPI</div><div>與時薪系統的接點</div></div>
+    <div class="erow"><div class="lv-name">流量<small>LEAD</small></div><div class="cell">作品內容化、主理人個人 IP、碳方法學帶 inbound</div><div class="kpi">每月 inbound 詢問數；作品內容觸及</div><div class="link">最低成本的獲客管道，現在就可建</div></div>
+    <div class="erow"><div class="lv-name">轉換率<small>WIN%</small></div><div class="cell">作品集、信任感、主理人品牌</div><div class="kpi">詢問 → 簽約轉換率</div><div class="link">靠品牌與作品，幾乎零增量成本</div></div>
+    <div class="erow key"><div class="lv-name">客單價<small>FEE</small><span class="badge-key">能拉高</span></div><div class="cell">重新定義產業——賣「永續工藝／碳資產」，不是設計代工</div><div class="kpi">平均專案費；品牌溢價倍數（vs 同業基準）</div><div class="link">這側才能真正把「每工時淨利」往上拉</div></div>
+    <div class="erow"><div class="lv-name">成本<small>COST</small></div><div class="cell">與左欄共用同一套時薪系統</div><div class="kpi">同左（稼動率、實際工時、回款）</div><div class="link">共用完全成本時薪，毋須另建一套</div></div>
+  </div>
+
+  <!-- ===== S4 瓶頸 ===== -->
+  <div class="rule reveal"><div class="line l"></div><div class="tag"><span class="code">S4</span><h2>你現在的瓶頸 · 在後半段，不在前半段</h2></div><div class="line r"></div></div>
+
+  <div class="btl reveal">
+    <div class="seg ok">
+      <div class="chips"><div class="chip">流量</div><div class="chip">轉換率</div></div>
+      <div class="cap">前段 · 現在不是瓶頸 ✓</div>
+      <div class="desc">手上已有一批簽約未執行的案——案源不是當前的限制。</div>
+    </div>
+    <div class="seg hot">
+      <div class="chips"><div class="chip">客單價</div><div class="chip">成本／產能</div></div>
+      <div class="cap">後段 · 你真正的瓶頸 ← 打這裡</div>
+      <div class="desc">能不能把既有案做得更賺、做得完、收得回——這才是限制。</div>
+    </div>
+  </div>
+
+  <ol class="prio reveal">
+    <li><b>把手上 backlog 的「每工時利潤」做高</b>：服務綁包、優先挑高造價的案。<span class="meta"> ／ 客單價 + 成本</span></li>
+    <li><b>高效執行 backlog、加速回款顧現金流</b>：<span class="meta">2027 房貸寬限期到期前尤其關鍵。</span></li>
+    <li><b>趁法規窗口先架好「自然構築品牌／流量」引擎</b>：等市場一開就有現成案源，而不是現在去搶沒產能消化的公共工程。</li>
+  </ol>
+
+  <!-- ===== S5 竹構商業模式 ===== -->
+  <div class="rule reveal"><div class="line l"></div><div class="tag"><span class="code">S5</span><h2>自然構築私案的五種商業模式原型 · 與初樸的疊法</h2></div><div class="line r"></div></div>
+  <p class="reveal" style="margin-bottom:6px">沒有可照抄的現成模板——自然構築（尤其竹構）在全球都還沒完全標準化，先行者各自發明模式。但他們收斂成五種原型，<span class="em">挑你獨有條件能撐起的幾套「疊起來」，而不是複製其中一套。</span></p>
+
+  <div class="arch reveal">
+    <div class="arow">
+      <div class="left"><span class="role core">核心模式</span><h3>垂直整合 design-build 工作室</h3><div class="ref">代表 · IBUKU ＋ Bamboo Pure（峇里島）</div></div>
+      <div class="right"><p>自家設計＋自有施工，高端訂製住宅／度假村／pavilion，旁掛教育與觀光生態系。護城河＝工藝＋招牌美學＋工程稀缺性。</p><p class="mean"><b>對初樸：</b>你同時握有設計與施工兩端，這是純設計事務所要結盟才補得齊的結構優勢——天生就站在這套模式的地基上。</p></div>
+    </div>
+    <div class="arow">
+      <div class="left"><span class="role brand">借品牌邏輯</span><h3>招牌建築師事務所</h3><div class="ref">代表 · Vo Trong Nghia Architects（越南）</div></div>
+      <div class="right"><p>費用制設計實務，竹子當招牌，靠國際媒體與獎項帶委託；施工多交夥伴。客戶集中在旅館與觀光。</p><p class="mean"><b>對初樸：</b>借它「品牌帶案源」的邏輯，但它的奢華觀光需求基礎在台灣不存在，不能照搬營收引擎。</p></div>
+    </div>
+    <div class="arow">
+      <div class="left"><span class="role future">未來選擇權</span><h3>工程材料 / 系統供應商</h3><div class="ref">代表 · 集成竹 glubam／CLB（ISO 7567:2024）</div></div>
+      <div class="right"><p>把竹子產品化為標準化結構材，製造毛利、可規模化。2024 年已有全球第一個工程竹國際標準；且常可沿用現成木結構規範設計。</p><p class="mean"><b>對初樸：</b>「市場一開才啟動」的未來選擇權——需要資本、且受標準閘門限制，符合你的規律性等待策略。</p></div>
+    </div>
+    <div class="arow">
+      <div class="left"><span class="role now">現在就做</span><h3>教育 / 內容 / 觀光生態系</h3><div class="ref">代表 · Bamboo U／Green School</div></div>
+      <div class="right"><p>疊在核心業務上的高毛利層：課程、工作坊、駐村、目的地觀光、內容。同時養核心、行銷品牌、培養人才管線。</p><p class="mean"><b>對初樸：</b>啟動成本最低，和你的「主理人個人 IP＋作品內容化」完全同一條路——現在就做。</p></div>
+    </div>
+    <div class="arow">
+      <div class="left"><span class="role esg">接 ESG / 公共</span><h3>社會企業 / 發展援助</h3><div class="ref">代表 · Simón Vélez／哥倫比亞傳統</div></div>
+      <div class="right"><p>竹子當低成本住宅、災後重建的適切技術，靠補助、NGO、CSR 支撐，走影響力邏輯。</p><p class="mean"><b>對初樸：</b>非主軸，但台灣的碳權／ESG、地方創生、公共建設角度，部分會接到這套錢的邏輯。</p></div>
+    </div>
+  </div>
+
+  <div class="callout-box reveal">
+    <div class="h">台灣現實校正</div>
+    <p>在地標竿是甘銘源／大藏（從木構造起家、再轉竹構；竹桁架、竹薄殼系統；長榮大學長榮堂約 24m 大跨距、取得使用執照）。但台灣需求基礎是<span class="em">機構／公共／文化</span>（大學、生態村、森林公園、故宮南院、農博花博），<span class="em">不是</span>峇里／越南的奢華觀光。法規缺口真實，但政府正在補：行政院 2021「新興竹產業發展綱要計畫」、建研所竹薄殼研究、林務局結構性能研究——你在等的觸發點正在逼近。</p>
+  </div>
+
+  <div class="wedge reveal">
+    <div class="h">你要自己長出來的楔子 / The Wedge</div>
+    <p>在「自然構築」這個場域裡，全世界還沒有人把<span class="k">「竹構 design-build × 碳方法學認證」</span>做成一套打法——竹構就是你最鋒利的護城河，現代木構造則是更成熟、更近期的營收基盤。價值要靠<span class="k">兩條腿</span>落地：<b>公共工程</b>累積實績與碳信譽（量大、卻幾乎沒有定價權），<b>私人／企業 ESG 案</b>才是收品牌溢價、真正握有定價權的地方。ISO 7567 加上台灣碳匯計算方法，就是這套打法的鑰匙。</p>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="foot reveal">
+    <div class="src">內部策略文件 · 資料來源：<b>IBUKU</b>（about／green village）、<b>VTN Architects</b>（Dezeen／designboom）、<b>ISO 7567:2024</b>（INBAR）、工程竹設計沿用木規範研究（Warwick 2025）、<b>大藏／甘銘源</b>（綠媒體／Tatler）、行政院 2021 新興竹產業發展綱要計畫。觀看／費率為內部推估，仍應以實際數據校正。</div>
+    <div class="stamp">PROTOPLAIN · STRATEGY-01<br>REV v1 · 2026.06.19</div>
+  </div>
+
+</div>
+<script>
+  (function(){
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var els = document.querySelectorAll('.reveal');
+    els.forEach(function(el, i){ el.style.animationDelay = Math.min(i*55, 600) + 'ms'; });
+  })();
+</script>
+</body>
+</html>
