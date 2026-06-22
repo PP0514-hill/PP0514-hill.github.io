@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>覺察・想・感受 ── 現象世界</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --deep:     #14100A;
+    --navy:     #1C1610;
+    --indigo:   #2A2117;
+    --fog:      #B48E4A;
+    --lavender: #608056;
+    --gold:     #C9A84C;
+    --gold-dim: #8A6E30;
+    --mist:     #EEE7DA;
+    --white20:  rgba(238,231,218,0.18);
+    --white05:  rgba(238,231,218,0.05);
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--deep);
+    color: var(--mist);
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* 宣紙纖維質感 — 極淡的疊加噪點 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  /* 確保內容在紙紋之上 */
+  .hero, .defs, .synthesis, .flow-section, .footer { position: relative; z-index: 2; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 3rem 1.5rem;
+    overflow: hidden;
+  }
+
+  /* ambient glow */
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(180,142,74,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0.85;
+  }
+
+  .headline {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-align: center;
+    line-height: 1.7;
+    color: var(--mist);
+    margin-bottom: 0.6rem;
+  }
+  .headline em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  .sub {
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.25em;
+    color: rgba(232,238,242,0.45);
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  /* ── VENN DIAGRAM ── */
+  .venn-wrap {
+    position: relative;
+    width: 480px;
+    height: 460px;
+    max-width: 90vw;
+    margin: 0 auto 4rem;
+  }
+
+  .venn-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* ── INK-WASH VENN ── */
+  .venn-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* 墨團：羽化暈染、blend 互染 */
+  .ink-blob {
+    mix-blend-mode: screen;          /* 深底上的疊色 → 交界自然提亮混色 */
+    transition: opacity 0.6s ease;
+    transform-origin: center;
+  }
+  .ink-awareness { animation: bleed-a 9s ease-in-out infinite; }
+  .ink-thought   { animation: bleed-b 11s ease-in-out infinite; }
+  .ink-feeling   { animation: bleed-c 10s ease-in-out infinite; }
+
+  /* 墨在紙上緩慢滲透的呼吸 */
+  @keyframes bleed-a {
+    0%,100% { transform: scale(1.00) translate(0,0); }
+    50%     { transform: scale(1.04) translate(2px,-2px); }
+  }
+  @keyframes bleed-b {
+    0%,100% { transform: scale(1.00) translate(0,0); }
+    50%     { transform: scale(1.05) translate(-3px,2px); }
+  }
+  @keyframes bleed-c {
+    0%,100% { transform: scale(1.00) translate(0,0); }
+    50%     { transform: scale(1.03) translate(2px,2px); }
+  }
+
+  /* node labels */
+  .node-label {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    fill: var(--mist);
+    text-anchor: middle;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: rgba(10,21,32,0.65);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+  .node-sub {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 10.5px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    fill: rgba(232,238,242,0.52);
+    text-anchor: middle;
+    pointer-events: none;
+  }
+
+  /* intersection labels */
+  .inter-label {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    fill: rgba(245,248,250,0.85);
+    text-anchor: middle;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: rgba(10,21,32,0.55);
+    stroke-width: 2.5px;
+    stroke-linejoin: round;
+  }
+
+  /* center glow pulse */
+  @keyframes breathe {
+    0%, 100% { r: 34; opacity: 0.55; }
+    50%       { r: 40; opacity: 0.80; }
+  }
+  .center-pulse {
+    animation: breathe 3.6s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .center-text {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    fill: var(--gold);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+  }
+  .center-sub {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 9.5px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    fill: rgba(201,168,76,0.7);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+  }
+
+  /* ── DEFINITION ROW ── */
+  .defs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto 5rem;
+    border: 1px solid var(--white20);
+    background: var(--white20);
+  }
+  .def-cell {
+    background: var(--navy);
+    padding: 2rem 1.6rem;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .def-cell:hover { background: var(--indigo); }
+  .def-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-bottom: 1.1rem;
+  }
+  .def-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.7rem;
+    color: var(--mist);
+  }
+  .def-en {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    color: rgba(232,238,242,0.35);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+  .def-body {
+    font-size: 0.82rem;
+    line-height: 1.9;
+    font-weight: 300;
+    color: rgba(232,238,242,0.68);
+  }
+
+  /* ── SYNTHESIS SECTION ── */
+  .synthesis {
+    max-width: 680px;
+    margin: 0 auto 5rem;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+  .synthesis-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    margin-bottom: 1.8rem;
+    opacity: 0.8;
+  }
+  .synthesis-quote {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 2.1;
+    color: rgba(232,238,242,0.85);
+    letter-spacing: 0.08em;
+    position: relative;
+    padding: 0 1rem;
+  }
+  .synthesis-quote::before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim));
+    margin: 0 auto 1.5rem;
+  }
+  .synthesis-quote::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    margin: 1.5rem auto 0;
+  }
+  .synthesis-quote em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-section {
+    max-width: 860px;
+    margin: 0 auto 5rem;
+    padding: 0 1.5rem;
+  }
+  .section-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.45em;
+    color: rgba(232,238,242,0.35);
+    margin-bottom: 2.5rem;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    position: relative;
+  }
+  .flow-node {
+    flex: 1;
+    background: var(--white05);
+    border: 1px solid var(--white20);
+    padding: 1.8rem 1.4rem;
+    text-align: center;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .flow-node:hover { background: rgba(232,238,242,0.07); }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 0.3rem;
+    color: var(--gold-dim);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+  .flow-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+    opacity: 0.75;
+  }
+  .flow-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--mist);
+    margin-bottom: 0.5rem;
+  }
+  .flow-desc {
+    font-size: 0.76rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: rgba(232,238,242,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--white20);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: rgba(232,238,242,0.25);
+  }
+
+  /* ── INTERACTIVE INK CANVAS ── */
+  #inkStage {
+    cursor: crosshair;
+    touch-action: none;
+  }
+  #inkCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 4px;
+  }
+  .ink-labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .ink-node, .ink-center-lbl {
+    position: absolute;
+    font-family: 'Noto Serif TC', serif;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    line-height: 1.3;
+    text-shadow:
+       0 0 6px rgba(10,21,32,0.9),
+       0 0 12px rgba(10,21,32,0.7);
+  }
+  .ink-node {
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    color: var(--mist);
+  }
+  .ink-node small, .ink-center-lbl small {
+    display: block;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.28em;
+    font-weight: 300;
+    margin-top: 3px;
+    opacity: 0.55;
+    text-transform: uppercase;
+  }
+  .n-aware { top: 9%;  left: 50%; }
+  .n-think { top: 82%; left: 14%; }
+  .n-feel  { top: 82%; left: 86%; }
+  .ink-center-lbl {
+    top: 55%; left: 50%;
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+  }
+  .ink-center-lbl small { color: rgba(201,168,76,0.7); }
+
+  .ink-hint {
+    position: absolute;
+    bottom: -2.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    font-weight: 300;
+    color: rgba(232,238,242,0.32);
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .defs { grid-template-columns: 1fr; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); align-self: center; }
+    .venn-wrap { width: 330px; height: 340px; }
+    .ink-node { font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <p class="eyebrow">意識現象學</p>
+  <h1 class="headline">覺察・<em>想</em>・感受<br>三者合一</h1>
+  <p class="sub">構成我們所棲居的現象世界</p>
+
+  <!-- INTERACTIVE INK POOL -->
+  <div class="venn-wrap" id="inkStage">
+    <canvas id="inkCanvas"></canvas>
+    <div class="ink-labels">
+      <span class="ink-node n-aware">覺察<small>Awareness</small></span>
+      <span class="ink-node n-think">想<small>Thought</small></span>
+      <span class="ink-node n-feel">感受<small>Feeling</small></span>
+      <span class="ink-center-lbl">現象世界<small>Phenomenon</small></span>
+    </div>
+    <p class="ink-hint">按住 · 墨色從指尖滲開　|　放開 · 沉回靜默</p>
+  </div>
+</section>
+
+<!-- DEFINITIONS -->
+<div class="defs">
+  <div class="def-cell">
+    <div class="def-dot" style="background:#B48E4A;"></div>
+    <div class="def-title">覺察</div>
+    <div class="def-en">Awareness</div>
+    <div class="def-body">
+      純粹的「知道正在知道」。<br>
+      不介入、不評判的背景光，<br>
+      使一切得以被照見。<br>
+      是意識最基本的<em style="font-style:normal;color:var(--gold)">在場</em>。
+    </div>
+  </div>
+  <div class="def-cell">
+    <div class="def-dot" style="background:#608056;"></div>
+    <div class="def-title">想</div>
+    <div class="def-en">Thought</div>
+    <div class="def-body">
+      心智對現實的<em style="font-style:normal;color:var(--gold)">建構與詮釋</em>。<br>
+      語言、概念、記憶、預期——<br>
+      將原始訊息編織成<br>
+      可理解的意義結構。
+    </div>
+  </div>
+  <div class="def-cell">
+    <div class="def-dot" style="background:#A84E34;"></div>
+    <div class="def-title">感受</div>
+    <div class="def-en">Feeling</div>
+    <div class="def-body">
+      身體與心靈的<em style="font-style:normal;color:var(--gold)">即時回響</em>。<br>
+      情緒的質感、內臟的訊息、<br>
+      先於語言而到達的<br>
+      原初智慧。
+    </div>
+  </div>
+</div>
+
+<!-- SYNTHESIS -->
+<div class="synthesis">
+  <p class="synthesis-label">三者合一 · 現象的生成</p>
+  <p class="synthesis-quote">
+    我們從不是以「單一頻道」接觸世界——<br>
+    每一個當下，<em>覺察</em>作為容器，<br>
+    <em>想</em>賦予形狀，<em>感受</em>賦予重量，<br>
+    三者同時共振，才構成我們所<em>真實經歷</em>的現象。
+  </p>
+</div>
+
+<!-- FLOW -->
+<div class="flow-section">
+  <p class="section-label">現象的生成流程</p>
+  <div class="flow-row">
+    <div class="flow-node">
+      <div class="flow-icon">◎</div>
+      <div class="flow-title">原始刺激</div>
+      <div class="flow-desc">感官訊號、<br>內在衝動<br>進入意識場</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-icon" style="color:#B48E4A;">◉</div>
+      <div class="flow-title">覺察接收</div>
+      <div class="flow-desc">不加濾鏡地<br>「知道」訊號<br>正在發生</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-icon" style="color:#608056;">◈</div>
+      <div class="flow-title">想　詮釋</div>
+      <div class="flow-desc">命名、分類、<br>與記憶連結、<br>形成意義</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node">
+      <div class="flow-icon" style="color:#C9A84C;">♦</div>
+      <div class="flow-title">感受共鳴</div>
+      <div class="flow-desc">身體給出<br>情感色調、<br>能量質地</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-node" style="border-color:rgba(201,168,76,0.4);">
+      <div class="flow-icon" style="color:var(--gold);">✦</div>
+      <div class="flow-title" style="color:var(--gold);">現象世界</div>
+      <div class="flow-desc">三者合一，<br>成為我們<br>「所經歷的現實」</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECOND INSIGHT: 解離時的現象 -->
+<div class="flow-section">
+  <p class="section-label">三者解離時 · 現象的扭曲</p>
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:rgba(232,238,242,0.08); border:1px solid rgba(232,238,242,0.1);">
+    <div style="background:var(--navy);padding:1.6rem 1.4rem;">
+      <div style="font-family:'Noto Serif TC',serif;font-size:0.9rem;letter-spacing:0.15em;color:#B48E4A;margin-bottom:0.7rem;">只有覺察，無想無感</div>
+      <div style="font-size:0.78rem;line-height:1.85;color:rgba(232,238,242,0.5);font-weight:300;">
+        空白的見證狀態——<br>清醒卻無法行動，<br>如旁觀自己的生命。
+      </div>
+    </div>
+    <div style="background:var(--navy);padding:1.6rem 1.4rem;">
+      <div style="font-family:'Noto Serif TC',serif;font-size:0.9rem;letter-spacing:0.15em;color:#608056;margin-bottom:0.7rem;">只有想，無覺察無感</div>
+      <div style="font-size:0.78rem;line-height:1.85;color:rgba(232,238,242,0.5);font-weight:300;">
+        無休止的思維迴圈——<br>焦慮反芻、與當下<br>完全失去連結。
+      </div>
+    </div>
+    <div style="background:var(--navy);padding:1.6rem 1.4rem;">
+      <div style="font-family:'Noto Serif TC',serif;font-size:0.9rem;letter-spacing:0.15em;color:#C9A84C;margin-bottom:0.7rem;">只有感受，無覺察無想</div>
+      <div style="font-size:0.78rem;line-height:1.85;color:rgba(232,238,242,0.5);font-weight:300;">
+        情緒淹沒的狀態——<br>被感覺席捲而無法<br>理解或安住其中。
+      </div>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:1.6rem;font-size:0.78rem;line-height:2;color:rgba(232,238,242,0.4);letter-spacing:0.1em;font-weight:300;">
+    三者的充分整合，正是冥想修持、療癒工作與哲學探究所共同指向的<span style="color:var(--gold);">完整性</span>。
+  </p>
+</div>
+
+<footer class="footer">
+  覺察 · 想 · 感受 ── 現象世界的三重根基
+</footer>
+
+<script>
+(function(){
+  const stage  = document.getElementById('inkStage');
+  const canvas = document.getElementById('inkCanvas');
+  const ctx    = canvas.getContext('2d');
+
+  // 三源墨色 (RGB) — 五行大地色系
+  const SRC = {
+    aware: [180,142,74],   // 土 · 赭黃（厚土，承載）
+    think: [96,128,86],    // 木 · 蒼綠（生長、條理）
+    feel:  [168,78,52]     // 火 · 赭紅（溫度、回響）
+  };
+
+  let W=0, H=0, DPR=Math.min(window.devicePixelRatio||1, 2);
+  // 三個墨源的「目標位置」(0..1 比例) — 對應三角佈局
+  const homes = {
+    aware: {x:0.50, y:0.30},
+    think: {x:0.27, y:0.66},
+    feel:  {x:0.73, y:0.66}
+  };
+  // 即時墨源位置（會被滑鼠吸引而偏移）
+  const pos = {
+    aware:{x:0,y:0}, think:{x:0,y:0}, feel:{x:0,y:0}
+  };
+
+  const mouse = {x:-999,y:-999, px:-999, py:-999, active:false, down:false};
+  // 整體顯現能量：0=全黑, 1=完全顯現。按下時上升，放開緩緩沉回黑暗
+  let energy = 0;
+  // 滴墨：點擊產生的暈染圈，隨時間擴散淡出
+  const drops = [];
+  // 墨絲拖尾：滑移軌跡上殘留的小墨點
+  const trail = [];
+
+  function resize(){
+    const r = stage.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width  = W*DPR;
+    canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.clearRect(0,0,W,H);
+    for(const k in homes){
+      pos[k].x = homes[k].x*W;
+      pos[k].y = homes[k].y*H;
+    }
+  }
+
+  // 徑向墨團：濃心淡邊
+  function blob(x,y,r,rgb,alpha){
+    const g = ctx.createRadialGradient(x,y,0, x,y,r);
+    g.addColorStop(0,    `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`);
+    g.addColorStop(0.45, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha*0.42})`);
+    g.addColorStop(0.8,  `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha*0.12})`);
+    g.addColorStop(1,    `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  let t = 0;
+  function frame(){
+    t += 0.016;
+
+    // 關鍵：不完全清除，只半透明覆蓋一層深底 → 墨跡殘留拖曳、暈染滯留
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(20,16,10,0.055)';   // 越小 = 拖尾越久、暈染越濃
+    ctx.fillRect(0,0,W,H);
+
+    // screen 疊色：交界自然提亮混色，模擬墨互染
+    ctx.globalCompositeOperation = 'screen';
+
+    const baseR = Math.min(W,H)*0.34;
+
+    // 能量趨近：按住→上升，放開→緩緩沉回黑暗
+    const target = mouse.down ? 1 : 0;
+    energy += (target - energy) * (mouse.down ? 0.06 : 0.018);
+    if(energy < 0.002){
+      // 全黑時不渲染任何墨，保持純黑起始
+      mouse.px = mouse.x; mouse.py = mouse.y;
+      requestAnimationFrame(frame);
+      return;
+    }
+
+    for(const k in homes){
+      const home = homes[k];
+      const hx = home.x*W, hy = home.y*H;
+
+      // 緩慢回歸本位
+      pos[k].x += (hx - pos[k].x)*0.012;
+      pos[k].y += (hy - pos[k].y)*0.012;
+
+      // 接觸點吸引：墨從手指處被牽引滲開
+      if(mouse.active){
+        const dx = mouse.x - pos[k].x;
+        const dy = mouse.y - pos[k].y;
+        const d  = Math.hypot(dx,dy)+0.001;
+        const pull = Math.max(0, 1 - d/(baseR*2.0));
+        pos[k].x += dx*pull*0.16;
+        pos[k].y += dy*pull*0.16;
+      }
+
+      const breathe = 1 + Math.sin(t*0.7 + (k==='aware'?0:k==='think'?2:4))*0.05;
+      const r = baseR*breathe;
+      const wob = baseR*0.07;
+      const ox = Math.sin(t*0.5+k.length)*wob;
+      const oy = Math.cos(t*0.43+k.length*1.7)*wob;
+
+      // 亮度乘上 energy → 起始全黑，按下才顯現
+      blob(pos[k].x+ox, pos[k].y+oy, r*1.10, SRC[k], 0.10*energy);
+      blob(pos[k].x-ox*0.6, pos[k].y-oy*0.6, r*0.80, SRC[k], 0.13*energy);
+      blob(pos[k].x, pos[k].y, r*0.5, SRC[k], 0.17*energy);
+    }
+
+    // 墨絲拖尾：按住滑移時補墨點
+    if(mouse.down && mouse.active && (Math.abs(mouse.x-mouse.px)+Math.abs(mouse.y-mouse.py))>1.5){
+      // 沿移動方向插值補點，形成連續墨絲
+      const steps = 4;
+      for(let s=0;s<steps;s++){
+        const ix = mouse.px + (mouse.x-mouse.px)*(s/steps);
+        const iy = mouse.py + (mouse.y-mouse.py)*(s/steps);
+        // 取最近源色
+        let best='aware', bd=1e9;
+        for(const k in homes){
+          const d=Math.hypot(ix-pos[k].x, iy-pos[k].y);
+          if(d<bd){bd=d;best=k;}
+        }
+        trail.push({x:ix, y:iy, r:baseR*0.14, life:1, rgb:SRC[best]});
+      }
+    }
+    mouse.px = mouse.x; mouse.py = mouse.y;
+
+    for(let i=trail.length-1;i>=0;i--){
+      const tr = trail[i];
+      tr.r += baseR*0.004;       // 緩慢暈開
+      tr.life -= 0.018;
+      if(tr.life<=0){ trail.splice(i,1); continue; }
+      blob(tr.x, tr.y, tr.r, tr.rgb, 0.10*tr.life*energy);
+    }
+    if(trail.length>260) trail.splice(0, trail.length-260);
+
+    // 滴墨暈染
+    for(let i=drops.length-1;i>=0;i--){
+      const d = drops[i];
+      d.r += (d.max - d.r)*0.045;       // 向外擴散（更慢更久）
+      d.life -= 0.007;
+      if(d.life<=0){ drops.splice(i,1); continue; }
+      blob(d.x, d.y, d.r, d.rgb, 0.26*d.life);
+      blob(d.x, d.y, d.r*0.5, d.rgb, 0.18*d.life);
+    }
+
+    // 中心金核：僅在接觸時隨能量燃起，起始全黑
+    const cx = W*0.5, cy = H*0.55;
+    let glow = (0.05 + Math.sin(t*1.1)*0.02) * energy;
+    if(mouse.active){
+      const dc = Math.hypot(mouse.x-cx, mouse.y-cy);
+      glow += Math.max(0, 1 - dc/(baseR))*0.30*energy;
+    }
+    blob(cx, cy, baseR*0.30, [212,170,96], glow);
+
+    requestAnimationFrame(frame);
+  }
+
+  function pointer(e){
+    const r = stage.getBoundingClientRect();
+    const cx = (e.touches?e.touches[0].clientX:e.clientX) - r.left;
+    const cy = (e.touches?e.touches[0].clientY:e.clientY) - r.top;
+    if(!mouse.active){ mouse.px = cx; mouse.py = cy; }
+    mouse.x = cx; mouse.y = cy; mouse.active = true;
+  }
+  function dropInk(e){
+    const r = stage.getBoundingClientRect();
+    const cx = (e.touches?e.touches[0].clientX:e.clientX) - r.left;
+    const cy = (e.touches?e.touches[0].clientY:e.clientY) - r.top;
+    // 滴下的墨色 = 該位置最接近的本源色，混入一點金
+    let best='aware', bd=1e9;
+    for(const k in homes){
+      const d=Math.hypot(cx-pos[k].x, cy-pos[k].y);
+      if(d<bd){bd=d;best=k;}
+    }
+    const base = SRC[best];
+    drops.push({
+      x:cx, y:cy, r:6, max: Math.min(W,H)*0.22, life:1,
+      rgb:[ (base[0]+200)/2|0, (base[1]+180)/2|0, (base[2]+120)/2|0 ]
+    });
+  }
+
+  stage.addEventListener('mousedown', (e)=>{ pointer(e); mouse.down=true; dropInk(e); });
+  stage.addEventListener('mousemove', (e)=>{ pointer(e); });
+  window.addEventListener('mouseup', ()=>{ mouse.down=false; });
+  stage.addEventListener('mouseleave', ()=>{ mouse.active=false; });
+
+  stage.addEventListener('touchstart', (e)=>{ pointer(e); mouse.down=true; dropInk(e); }, {passive:true});
+  stage.addEventListener('touchmove', (e)=>{ pointer(e); e.preventDefault(); }, {passive:false});
+  window.addEventListener('touchend', ()=>{ mouse.down=false; mouse.active=false; });
+  window.addEventListener('resize', resize);
+
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
