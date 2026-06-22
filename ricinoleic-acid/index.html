@@ -549,6 +549,241 @@
   .td-heat { text-align: center; }
   .dot-yes { color: var(--gold); font-size: 16px; }
   .dot-no  { color: rgba(245,240,232,0.2); font-size: 16px; }
+
+  /* ── 女性子宮舒緩專區 ── */
+  .uterus-section {
+    margin: 56px 0 48px;
+  }
+
+  .uterus-hero {
+    border: 1px solid rgba(180, 120, 140, 0.35);
+    background: linear-gradient(135deg, rgba(90,30,60,0.25) 0%, rgba(13,15,26,0.6) 60%);
+    padding: 36px 32px 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .uterus-hero::before {
+    content: '♀';
+    position: absolute;
+    right: 24px; top: 16px;
+    font-size: 80px;
+    color: rgba(180,120,140,0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .uterus-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight: 300;
+    font-style: italic;
+    color: #e8c0cc;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .uterus-hero-sub {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 11px;
+    color: rgba(232,192,204,0.5);
+    letter-spacing: 0.1em;
+    margin-bottom: 18px;
+  }
+  .uterus-hero-desc {
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.72);
+    font-weight: 300;
+    max-width: 680px;
+  }
+
+  /* 症狀 → 機制 → 做法 三欄 */
+  .uterus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 660px) {
+    .uterus-grid { grid-template-columns: 1fr; }
+  }
+
+  .u-card {
+    border: 1px solid rgba(180,120,140,0.25);
+    background: rgba(90,30,60,0.10);
+    padding: 22px 18px 18px;
+    position: relative;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .u-card:hover {
+    background: rgba(90,30,60,0.18);
+    border-color: rgba(180,120,140,0.45);
+  }
+  .u-card-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(180,120,140,0.6);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .u-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #e8c0cc;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .u-card-body {
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.7);
+    font-weight: 300;
+  }
+  .u-card-tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid rgba(180,120,140,0.3);
+    color: rgba(180,120,140,0.75);
+    background: rgba(90,30,60,0.15);
+  }
+
+  /* 熱敷包做法步驟 */
+  .pack-steps {
+    border: 1px solid rgba(180,120,140,0.25);
+    background: rgba(90,30,60,0.08);
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+  }
+  .pack-steps-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: rgba(180,120,140,0.6);
+    margin-bottom: 20px;
+  }
+  .pack-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .pack-step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(180,120,140,0.12);
+  }
+  .pack-step:last-child { border-bottom: none; }
+  .pack-step-num {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(180,120,140,0.35);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: #e8c0cc;
+    flex-shrink: 0;
+  }
+  .pack-step-content { padding-top: 6px; }
+  .pack-step-label {
+    font-size: 13px;
+    color: var(--parchment);
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .pack-step-note {
+    font-size: 12px;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* 週期對照表 */
+  .cycle-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-bottom: 24px;
+  }
+  .cycle-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(180,120,140,0.6);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(180,120,140,0.2);
+    font-weight: 400;
+  }
+  .cycle-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(180,120,140,0.08);
+    color: rgba(245,240,232,0.68);
+    font-weight: 300;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .cycle-table tr:hover td { background: rgba(90,30,60,0.1); }
+  .cycle-phase {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: #e8c0cc;
+  }
+  .cycle-day {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10px;
+    color: rgba(180,120,140,0.5);
+  }
+
+  /* 精油調配 */
+  .uterus-blend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) { .uterus-blend { grid-template-columns: 1fr; } }
+
+  .ub-card {
+    border: 1px solid rgba(180,120,140,0.22);
+    background: rgba(90,30,60,0.08);
+    padding: 20px;
+  }
+  .ub-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: #e8c0cc;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(180,120,140,0.18);
+  }
+  .ub-item {
+    font-size: 12.5px;
+    color: rgba(245,240,232,0.68);
+    line-height: 1.75;
+    margin-bottom: 8px;
+    font-weight: 300;
+    padding-left: 12px;
+    border-left: 2px solid rgba(180,120,140,0.2);
+  }
+  .ub-item strong { color: var(--parchment); font-weight: 400; }
+
+  .caution-bar {
+    margin-top: 20px;
+    padding: 14px 18px;
+    border: 1px solid rgba(201,168,76,0.25);
+    background: rgba(201,168,76,0.04);
+    font-size: 12px;
+    color: rgba(201,168,76,0.75);
+    font-family: 'Noto Sans Mono', monospace;
+    line-height: 1.7;
+  }
 </style>
 </head>
 <body>
@@ -996,6 +1231,183 @@
         </tr>
       </tbody>
     </table>
+
+  </div>
+
+  <!-- 女性子宮舒緩專區 -->
+  <div class="uterus-section">
+    <p class="mech-title">VI &nbsp;·&nbsp; 女性子宮舒緩 — 蓖麻油酸的深層支持</p>
+
+    <!-- Hero 說明 -->
+    <div class="uterus-hero">
+      <p class="uterus-hero-title">骨盆腔的植物盟友</p>
+      <p class="uterus-hero-sub">Pelvic Sanctuary · Castor Oil Pack Therapy</p>
+      <p class="uterus-hero-desc">
+        蓖麻油酸對骨盆腔的支持，是整合醫學中記載最豐富的外用應用之一。
+        其抗炎（EP3 路徑）、淋巴促進（Treg 調節）與局部循環改善三重機制，
+        共同作用於子宮、卵巢與周邊筋膜組織——尤其透過腹部熱敷包（Castor Oil Pack），
+        被廣泛用於緩解經痛、子宮內膜異位、子宮肌瘤不適，以及週期性骨盆充血。
+      </p>
+    </div>
+
+    <!-- 三大適應症 -->
+    <div class="uterus-grid">
+
+      <div class="u-card">
+        <p class="u-card-eyebrow">Dysmenorrhea</p>
+        <p class="u-card-title">原發性經痛</p>
+        <p class="u-card-body">
+          子宮肌層過度收縮由 PGF2α（前列腺素 F2α）驅動。
+          蓖麻油酸透過 EP3 受體競爭，調節前列腺素平衡，外敷下腹部可在經前 1–2 天開始緩解子宮肌張力。
+        </p>
+        <span class="u-card-tag">PGF2α 調節</span>
+        <span class="u-card-tag">經前 1–2 天開始</span>
+      </div>
+
+      <div class="u-card">
+        <p class="u-card-eyebrow">Endometriosis</p>
+        <p class="u-card-title">子宮內膜異位</p>
+        <p class="u-card-body">
+          異位內膜組織持續誘發局部炎症與沾黏。蓖麻油酸的抗炎效應配合淋巴引流刺激，
+          有助於減少局部充血、支持免疫監控（Treg 活性↑），為輔助性舒緩手段。
+        </p>
+        <span class="u-card-tag">抗炎 · Treg 免疫</span>
+        <span class="u-card-tag">輔助性，非治療</span>
+      </div>
+
+      <div class="u-card">
+        <p class="u-card-eyebrow">Uterine Fibroids</p>
+        <p class="u-card-title">子宮肌瘤不適</p>
+        <p class="u-card-body">
+          肌瘤本身無法透過外用消除，但蓖麻油熱敷可緩解肌瘤造成的骨盆腔充血、
+          下腹脹壓與腰痠。促進淋巴回流有助於減輕局部水腫與組織張力。
+        </p>
+        <span class="u-card-tag">淋巴回流</span>
+        <span class="u-card-tag">骨盆充血緩解</span>
+      </div>
+
+    </div>
+
+    <!-- 熱敷包做法 -->
+    <div class="pack-steps">
+      <p class="pack-steps-title">腹部蓖麻油熱敷包 — 完整做法</p>
+      <div class="pack-flow">
+        <div class="pack-step">
+          <div class="pack-step-num">一</div>
+          <div class="pack-step-content">
+            <p class="pack-step-label">準備材料</p>
+            <p class="pack-step-note">冷壓蓖麻油（無精製）· 法蘭絨布或厚棉布（30×40 cm）· 熱水袋或暖暖包 · 舊毛巾（防油漬）</p>
+          </div>
+        </div>
+        <div class="pack-step">
+          <div class="pack-step-num">二</div>
+          <div class="pack-step-content">
+            <p class="pack-step-label">塗抹蓖麻油於下腹部</p>
+            <p class="pack-step-note">以手掌均勻塗抹於臍下至恥骨上方，厚度足以滲透即可（約 1–2 湯匙）。可加入薰衣草精油 3 滴協同放鬆。</p>
+          </div>
+        </div>
+        <div class="pack-step">
+          <div class="pack-step-num">三</div>
+          <div class="pack-step-content">
+            <p class="pack-step-label">覆蓋法蘭絨布</p>
+            <p class="pack-step-note">將浸過蓖麻油的法蘭絨布（或直接用棉布覆蓋塗抹區域）平整敷上，再疊一層舊毛巾隔油。</p>
+          </div>
+        </div>
+        <div class="pack-step">
+          <div class="pack-step-num">四</div>
+          <div class="pack-step-content">
+            <p class="pack-step-label">放置熱水袋加熱</p>
+            <p class="pack-step-note">熱水袋置於毛巾上方，溫度以舒適暖熱為準（非燙熱）。熱能協助蓖麻油酸滲透，並擴張局部微血管促進循環。</p>
+          </div>
+        </div>
+        <div class="pack-step">
+          <div class="pack-step-num">五</div>
+          <div class="pack-step-content">
+            <p class="pack-step-label">靜臥 45–60 分鐘</p>
+            <p class="pack-step-note">此為放鬆副交感神經的關鍵時段。可配合腹式呼吸、冥想或輕柔音樂。結束後以溫熱毛巾擦淨或淋浴。</p>
+          </div>
+        </div>
+        <div class="pack-step">
+          <div class="pack-step-num">六</div>
+          <div class="pack-step-content">
+            <p class="pack-step-label">頻率建議</p>
+            <p class="pack-step-note">月經來潮前 3–5 天開始，每日一次；經期間暫停。平時保養可每週 2–3 次，持續 4–6 週觀察效果。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 週期對照 -->
+    <p class="pack-steps-title" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.35em;color:rgba(180,120,140,0.6);margin-bottom:16px;">
+      月經週期 · 使用時機對照
+    </p>
+    <table class="cycle-table">
+      <thead>
+        <tr>
+          <th>週期階段</th>
+          <th>天數</th>
+          <th>使用建議</th>
+          <th>重點作用</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="cycle-phase">卵泡期</span></td>
+          <td><span class="cycle-day">Day 5–13</span></td>
+          <td>每週 2–3 次熱敷包</td>
+          <td>支持淋巴循環、調理骨盆腔基底狀態</td>
+        </tr>
+        <tr>
+          <td><span class="cycle-phase">排卵期</span></td>
+          <td><span class="cycle-day">Day 14 前後</span></td>
+          <td>可繼續使用，溫度勿過高</td>
+          <td>維持骨盆腔血流通暢</td>
+        </tr>
+        <tr>
+          <td><span class="cycle-phase">黃體期</span></td>
+          <td><span class="cycle-day">Day 15–26</span></td>
+          <td>每日使用，著重下腹 + 薦椎</td>
+          <td>預防 PGF2α 堆積、緩解經前脹感</td>
+        </tr>
+        <tr>
+          <td><span class="cycle-phase">行經期</span></td>
+          <td><span class="cycle-day">Day 1–4</span></td>
+          <td>⚠️ 暫停腹部熱敷包</td>
+          <td>避免加速出血；可改用薰衣草按摩腰背</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 調油配方 -->
+    <p class="pack-steps-title" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.35em;color:rgba(180,120,140,0.6);margin-bottom:16px;">
+      女性專屬調油配方
+    </p>
+    <div class="uterus-blend">
+      <div class="ub-card">
+        <p class="ub-title">經痛舒緩配方</p>
+        <div class="ub-item"><strong>蓖麻油 2 湯匙</strong>（基底，EP3 抗炎）</div>
+        <div class="ub-item"><strong>薰衣草精油 4 滴</strong>（副交感放鬆、抗痙攣）</div>
+        <div class="ub-item"><strong>快樂鼠尾草精油 3 滴</strong>（類雌激素活性、子宮解痙）</div>
+        <div class="ub-item"><strong>甜馬鬱蘭精油 2 滴</strong>（止痛、暖性、肌肉放鬆）</div>
+        <div class="ub-item">混合後直接塗抹下腹，覆蓋熱敷包 45 分鐘</div>
+      </div>
+      <div class="ub-card">
+        <p class="ub-title">日常骨盆調理配方</p>
+        <div class="ub-item"><strong>蓖麻油 1 份 ＋ 芝麻油 2 份</strong>（基底調合，暖性協同）</div>
+        <div class="ub-item"><strong>天竺葵精油 3 滴</strong>（平衡荷爾蒙、促進骨盆循環）</div>
+        <div class="ub-item"><strong>玫瑰草精油 2 滴</strong>（子宮滋養、情緒穩定）</div>
+        <div class="ub-item"><strong>薑精油 1 滴</strong>（增強暖性滲透，尤適寒性體質）</div>
+        <div class="ub-item">黃體期每日睡前使用，可配合順時針腹部按摩</div>
+      </div>
+    </div>
+
+    <div class="caution-bar">
+      ⚠️ 注意事項 &nbsp;·&nbsp;
+      孕婦禁用腹部熱敷（可能誘發子宮收縮）&nbsp;·&nbsp;
+      經期行血量多者暫停使用 &nbsp;·&nbsp;
+      子宮內膜異位或肌瘤確診者請與婦產科醫師確認後使用 &nbsp;·&nbsp;
+      以上為輔助舒緩，非醫療診斷或治療建議
+    </div>
 
   </div>
 
