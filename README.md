@@ -9,5 +9,6 @@
 | chiron-healing | [https://PP0514-hill.github.io/chiron-healing/](https://PP0514-hill.github.io/chiron-healing/) |  |
 | 覺察・想・感受 ── 現象世界 | [https://PP0514-hill.github.io/phenomenon-triad/](https://PP0514-hill.github.io/phenomenon-triad/) | 2026-06-22 |
 | 初樸事務所 · 獲利槓桿與自然構築策略儀表板 | [https://PP0514-hill.github.io/profit-leverage-dashboard/](https://PP0514-hill.github.io/profit-leverage-dashboard/) | 2026-06-19 |
+| 蓖麻油酸 · 功能圖譜 | [https://PP0514-hill.github.io/ricinoleic-acid/](https://PP0514-hill.github.io/ricinoleic-acid/) | 2026-06-22 |
 
 _此 README 由發佈腳本自動產生。_

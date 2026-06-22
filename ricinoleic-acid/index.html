@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>蓖麻油酸 · 功能圖譜</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;600&family=Noto+Sans+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0d0f1a;
+    --parchment: #f5f0e8;
+    --gold:      #c9a84c;
+    --gold-dim:  #8a6f32;
+    --aubergine: #3b1f3a;
+    --teal:      #1e5c5e;
+    --rust:      #7a3a2a;
+    --slate:     #1c2a3a;
+    --mist:      rgba(201,168,76,0.10);
+    --line:      rgba(201,168,76,0.22);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: 'Noto Serif TC', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── 背景紋理 ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(59,31,58,0.45) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 20%, rgba(30,92,94,0.30) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ── 頁首 ── */
+  header {
+    text-align: center;
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 6vw, 60px);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: var(--parchment);
+    line-height: 1.15;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .subtitle {
+    margin-top: 14px;
+    font-size: 13px;
+    color: rgba(245,240,232,0.5);
+    font-family: 'Noto Sans Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── 分子結構區塊 ── */
+  .molecule-section {
+    margin: 56px 0 48px;
+    background: rgba(245,240,232,0.03);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 36px 32px 28px;
+  }
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold-dim);
+    margin-bottom: 24px;
+  }
+
+  /* SVG 分子比較 */
+  .molecule-compare {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    align-items: center;
+  }
+  .mol-box {
+    text-align: center;
+  }
+  .mol-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--parchment);
+    margin-bottom: 6px;
+  }
+  .mol-iupac {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  .mol-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
+    color: var(--gold-dim);
+    font-size: 11px;
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.1em;
+  }
+  .mol-divider-line {
+    width: 1px;
+    height: 60px;
+    background: var(--line);
+  }
+  .highlight-box {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--gold);
+    font-family: 'Noto Sans Mono', monospace;
+    line-height: 1.6;
+  }
+  .highlight-box strong {
+    color: #e8c86a;
+    font-weight: 400;
+  }
+
+  /* ── 鏈式 SVG ── */
+  svg.chain { width: 100%; height: auto; overflow: visible; }
+
+  /* ── 功能卡片網格 ── */
+  .functions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 48px 0;
+  }
+  @media (max-width: 660px) {
+    .functions-grid { grid-template-columns: 1fr; }
+    .molecule-compare { grid-template-columns: 1fr; }
+    .mol-divider { flex-direction: row; padding: 16px 0; }
+    .mol-divider-line { width: 60px; height: 1px; }
+  }
+
+  .fn-card {
+    border: 1px solid var(--line);
+    padding: 24px 20px 20px;
+    position: relative;
+    background: rgba(245,240,232,0.02);
+    transition: background 0.3s, border-color 0.3s;
+    cursor: default;
+  }
+  .fn-card:hover {
+    background: rgba(245,240,232,0.05);
+    border-color: rgba(201,168,76,0.45);
+  }
+  .fn-card::before {
+    content: attr(data-num);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-style: italic;
+    color: rgba(201,168,76,0.08);
+    position: absolute;
+    top: 8px; right: 14px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .fn-icon {
+    font-size: 22px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .fn-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .fn-desc {
+    font-size: 13px;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.72);
+    font-weight: 300;
+  }
+  .fn-mech {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10.5px;
+    color: rgba(201,168,76,0.65);
+    line-height: 1.6;
+  }
+
+  /* ── 機制流程圖 ── */
+  .mechanism-section {
+    margin: 48px 0;
+  }
+  .mech-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold-dim);
+    margin-bottom: 28px;
+  }
+
+  /* 瀉藥機制流程 */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .flow-step {
+    flex: 1;
+    min-width: 120px;
+    background: rgba(245,240,232,0.03);
+    border: 1px solid var(--line);
+    padding: 16px 14px;
+    position: relative;
+    text-align: center;
+  }
+  .flow-step + .flow-step {
+    border-left: none;
+  }
+  .flow-step::after {
+    content: '→';
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold-dim);
+    font-size: 16px;
+    z-index: 2;
+    background: var(--ink);
+    padding: 0 2px;
+  }
+  .flow-step:last-child::after { display: none; }
+  .flow-step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+  .flow-step-label {
+    font-size: 12px;
+    color: var(--parchment);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  .flow-step-sub {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+
+  /* ── 羥基差異視覺 ── */
+  .oh-section {
+    margin: 48px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) { .oh-section { grid-template-columns: 1fr; } }
+
+  .oh-card {
+    border: 1px solid var(--line);
+    padding: 24px;
+    background: rgba(245,240,232,0.02);
+  }
+  .oh-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+  }
+  .oh-effect {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .oh-arrow {
+    color: var(--gold);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .oh-text {
+    font-size: 13px;
+    color: rgba(245,240,232,0.75);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── 傳統 vs 現代 ── */
+  .tradition-section {
+    margin: 48px 0;
+    border: 1px solid var(--line);
+    padding: 32px;
+    background: rgba(245,240,232,0.02);
+  }
+  .tradition-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 24px;
+  }
+  @media (max-width: 560px) { .tradition-grid { grid-template-columns: 1fr; } }
+
+  .trad-col-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .trad-item {
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: rgba(245,240,232,0.72);
+    line-height: 1.7;
+    font-weight: 300;
+    padding-left: 14px;
+    border-left: 2px solid var(--line);
+  }
+  .trad-item strong {
+    color: var(--parchment);
+    font-weight: 400;
+  }
+
+  /* ── 底部 ── */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── 動畫 ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(16px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .fn-card { animation: fadeUp 0.5s ease both; }
+  .fn-card:nth-child(1) { animation-delay: 0.05s; }
+  .fn-card:nth-child(2) { animation-delay: 0.10s; }
+  .fn-card:nth-child(3) { animation-delay: 0.15s; }
+  .fn-card:nth-child(4) { animation-delay: 0.20s; }
+  .fn-card:nth-child(5) { animation-delay: 0.25s; }
+  .fn-card:nth-child(6) { animation-delay: 0.30s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fn-card { animation: none; }
+  }
+
+  /* ── 外用按摩區塊 ── */
+  .massage-section {
+    margin: 48px 0;
+  }
+
+  /* 人體部位圖 + 卡片 */
+  .body-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    align-items: start;
+    margin-top: 28px;
+  }
+  @media (max-width: 640px) {
+    .body-layout { grid-template-columns: 1fr; }
+    .body-svg-wrap { display: none; }
+  }
+
+  .body-svg-wrap {
+    position: sticky;
+    top: 24px;
+  }
+
+  /* 部位卡片堆疊 */
+  .site-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .site-card {
+    border: 1px solid var(--line);
+    background: rgba(245,240,232,0.02);
+    padding: 18px 20px 16px;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    align-items: start;
+    transition: background 0.25s, border-color 0.25s;
+    cursor: default;
+  }
+  .site-card:hover {
+    background: rgba(245,240,232,0.045);
+    border-color: rgba(201,168,76,0.4);
+  }
+  .site-card.active {
+    border-color: rgba(201,168,76,0.55);
+    background: rgba(201,168,76,0.06);
+  }
+
+  .site-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    background: rgba(245,240,232,0.03);
+  }
+
+  .site-body { }
+
+  .site-name {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .site-desc {
+    font-size: 13px;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.72);
+    font-weight: 300;
+  }
+
+  .site-meta {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .site-tag {
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    color: rgba(201,168,76,0.7);
+    background: rgba(201,168,76,0.05);
+    white-space: nowrap;
+  }
+  .site-tag.heat { border-color: rgba(122,58,42,0.5); color: rgba(220,140,100,0.85); background: rgba(122,58,42,0.1); }
+  .site-tag.night { border-color: rgba(30,92,94,0.5); color: rgba(100,180,185,0.85); background: rgba(30,92,94,0.1); }
+
+  /* 調油建議卡 */
+  .blend-card {
+    margin-top: 24px;
+    border: 1px solid var(--line);
+    background: rgba(245,240,232,0.02);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 560px) {
+    .blend-card { grid-template-columns: 1fr; }
+  }
+  .blend-col-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .blend-item {
+    font-size: 13px;
+    color: rgba(245,240,232,0.7);
+    line-height: 1.7;
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+  .blend-item strong { color: var(--parchment); font-weight: 400; }
+
+  /* 時機提示表格 */
+  .timing-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 12.5px;
+  }
+  .timing-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 400;
+  }
+  .timing-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    color: rgba(245,240,232,0.72);
+    font-weight: 300;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .timing-table tr:hover td {
+    background: rgba(245,240,232,0.02);
+  }
+  .td-site { color: var(--parchment); font-family: 'Cormorant Garamond', serif; font-size: 14px; }
+  .td-heat { text-align: center; }
+  .dot-yes { color: var(--gold); font-size: 16px; }
+  .dot-no  { color: rgba(245,240,232,0.2); font-size: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 頁首 -->
+  <header>
+    <p class="eyebrow">Functional Profile · Biochemistry</p>
+    <h1>蓖麻油酸<br><em>Ricinoleic Acid</em></h1>
+    <p class="subtitle">12-hydroxy-9Z-octadecenoic acid &nbsp;·&nbsp; C₁₈H₃₄O₃ &nbsp;·&nbsp; MW 298.46</p>
+  </header>
+
+  <!-- 分子結構比較 -->
+  <div class="molecule-section">
+    <p class="section-label">I &nbsp;·&nbsp; 結構解析 — 一個羥基的差異</p>
+
+    <div class="molecule-compare">
+      <!-- 油酸 -->
+      <div class="mol-box">
+        <p class="mol-name">油酸 Oleic Acid</p>
+        <p class="mol-iupac">9Z-octadecenoic acid<br>C₁₈H₃₄O₂</p>
+        <!-- SVG 簡化鏈圖 -->
+        <svg class="chain" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ah" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#8a6f32"/>
+            </marker>
+          </defs>
+          <!-- 碳鏈 zigzag -->
+          <polyline points="10,40 30,20 50,40 70,20 90,40 110,20 130,40 150,20 170,40 190,20 210,40 230,20 250,40 270,20"
+            fill="none" stroke="rgba(245,240,232,0.25)" stroke-width="1.5"/>
+          <!-- 雙鍵標記（C9=C10） -->
+          <line x1="110" y1="20" x2="130" y2="40" stroke="#c9a84c" stroke-width="2"/>
+          <line x1="113" y1="16" x2="133" y2="36" stroke="#c9a84c" stroke-width="1"/>
+          <!-- COOH -->
+          <text x="4" y="46" font-family="monospace" font-size="9" fill="rgba(245,240,232,0.5)">COOH</text>
+          <!-- CH₃ -->
+          <text x="256" y="18" font-family="monospace" font-size="9" fill="rgba(245,240,232,0.5)">CH₃</text>
+          <!-- 雙鍵標籤 -->
+          <text x="112" y="12" font-family="monospace" font-size="9" fill="#c9a84c">C9=C10</text>
+        </svg>
+        <div class="highlight-box" style="color:rgba(245,240,232,0.5); border-color:rgba(245,240,232,0.12); background:rgba(245,240,232,0.03);">
+          僅含雙鍵<br>無羥基官能基
+        </div>
+      </div>
+
+      <!-- 分隔 -->
+      <div class="mol-divider">
+        <div class="mol-divider-line"></div>
+        <span>vs</span>
+        <div class="mol-divider-line"></div>
+      </div>
+
+      <!-- 蓖麻油酸 -->
+      <div class="mol-box">
+        <p class="mol-name">蓖麻油酸 Ricinoleic Acid</p>
+        <p class="mol-iupac">12-hydroxy-9Z-octadecenoic acid<br>C₁₈H₃₄O₃</p>
+        <svg class="chain" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="10,50 30,30 50,50 70,30 90,50 110,30 130,50 150,30 170,50 190,30 210,50 230,30 250,50 270,30"
+            fill="none" stroke="rgba(245,240,232,0.25)" stroke-width="1.5"/>
+          <!-- 雙鍵 C9=C10 -->
+          <line x1="110" y1="30" x2="130" y2="50" stroke="#c9a84c" stroke-width="2"/>
+          <line x1="113" y1="26" x2="133" y2="46" stroke="#c9a84c" stroke-width="1"/>
+          <!-- C12 -OH 羥基高亮 -->
+          <circle cx="170" cy="50" r="7" fill="rgba(201,168,76,0.18)" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="170" y1="43" x2="170" y2="20" stroke="#c9a84c" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="160" y="17" font-family="monospace" font-size="11" fill="#e8c86a" font-weight="bold">-OH</text>
+          <!-- 標籤 -->
+          <text x="4" y="56" font-family="monospace" font-size="9" fill="rgba(245,240,232,0.5)">COOH</text>
+          <text x="256" y="28" font-family="monospace" font-size="9" fill="rgba(245,240,232,0.5)">CH₃</text>
+          <text x="112" y="22" font-family="monospace" font-size="9" fill="#c9a84c">C9=C10</text>
+          <text x="150" y="68" font-family="monospace" font-size="9" fill="#c9a84c">C12</text>
+        </svg>
+        <div class="highlight-box">
+          C-12 位額外羥基（<strong>-OH</strong>）<br>帶來雙親性 · 受體活性 · 極性
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 六大功能卡片 -->
+  <p class="section-label" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:.35em;color:var(--gold-dim);margin-bottom:20px;">
+    II &nbsp;·&nbsp; 六大生理功能
+  </p>
+  <div class="functions-grid">
+
+    <div class="fn-card" data-num="1">
+      <span class="fn-icon">🔥</span>
+      <p class="fn-title">抗炎 · 免疫調節</p>
+      <p class="fn-desc">與 EP3 前列腺素受體結合，抑制促炎介質釋放，作用機制異於 NSAIDs，不傷胃黏膜。</p>
+      <p class="fn-mech">靶點 → PGE2 receptor EP3<br>效果 → 關節炎 · 皮膚炎 · 腸道炎</p>
+    </div>
+
+    <div class="fn-card" data-num="2">
+      <span class="fn-icon">🌊</span>
+      <p class="fn-title">刺激腸道蠕動</p>
+      <p class="fn-desc">活化 TRPV1 辣椒素受體，促進 PGE2 分泌，驅動腸壁平滑肌收縮，FDA 認可的瀉藥作用。</p>
+      <p class="fn-mech">靶點 → TRPV1 · PGE2<br>起效 → 口服後 2–6 小時</p>
+    </div>
+
+    <div class="fn-card" data-num="3">
+      <span class="fn-icon">🛡</span>
+      <p class="fn-title">抗菌 · 抗真菌</p>
+      <p class="fn-desc">羥基增強極性，破壞細菌與真菌細胞膜磷脂雙層。對金葡菌、白念珠菌有抑制效果。</p>
+      <p class="fn-mech">機制 → 膜破壞<br>菌種 → S.aureus · C.albicans</p>
+    </div>
+
+    <div class="fn-card" data-num="4">
+      <span class="fn-icon">💧</span>
+      <p class="fn-title">皮膚屏障 · 保濕</p>
+      <p class="fn-desc">雙親性結構插入角質層脂質，降低 TEWL（經皮水分散失），促進膠原蛋白合成。</p>
+      <p class="fn-mech">機制 → 角質層脂質整合<br>效果 → 保濕 · 疤痕修復</p>
+    </div>
+
+    <div class="fn-card" data-num="5">
+      <span class="fn-icon">🌿</span>
+      <p class="fn-title">淋巴循環刺激</p>
+      <p class="fn-desc">透過皮膚滲透，刺激淋巴管收縮，增加調節性 T 細胞活性，支持腸道相關淋巴組織（GALT）。</p>
+      <p class="fn-mech">路徑 → 外用滲透<br>靶器 → 淋巴管 · Treg · GALT</p>
+    </div>
+
+    <div class="fn-card" data-num="6">
+      <span class="fn-icon">🧠</span>
+      <p class="fn-title">神經系統親和</p>
+      <p class="fn-desc">TRPV1 受體介導神經性疼痛調節；外用按摩可能影響副交感神經張力，具鎮靜安神潛力。</p>
+      <p class="fn-mech">機制 → TRPV1 · 副交感<br>傳統 → Vata 鎮靜（阿育吠陀）</p>
+    </div>
+
+  </div>
+
+  <!-- 瀉藥機制流程 -->
+  <div class="mechanism-section">
+    <p class="mech-title">III &nbsp;·&nbsp; 瀉藥作用鏈 — 分子機制</p>
+    <div class="flow">
+      <div class="flow-step">
+        <p class="flow-step-num">①</p>
+        <p class="flow-step-label">口服蓖麻油</p>
+        <p class="flow-step-sub">Castor oil<br>ingestion</p>
+      </div>
+      <div class="flow-step">
+        <p class="flow-step-num">②</p>
+        <p class="flow-step-label">小腸脂肪酶水解</p>
+        <p class="flow-step-sub">Lipase cleavage<br>→ 游離蓖麻油酸</p>
+      </div>
+      <div class="flow-step">
+        <p class="flow-step-num">③</p>
+        <p class="flow-step-label">活化 TRPV1</p>
+        <p class="flow-step-sub">辣椒素受體<br>腸壁神經末梢</p>
+      </div>
+      <div class="flow-step">
+        <p class="flow-step-num">④</p>
+        <p class="flow-step-label">PGE2 分泌↑</p>
+        <p class="flow-step-sub">前列腺素 E2<br>促炎介質釋放</p>
+      </div>
+      <div class="flow-step">
+        <p class="flow-step-num">⑤</p>
+        <p class="flow-step-label">平滑肌收縮<br>水分吸收↓</p>
+        <p class="flow-step-sub">腸蠕動加速<br>滲透壓改變</p>
+      </div>
+      <div class="flow-step">
+        <p class="flow-step-num">⑥</p>
+        <p class="flow-step-label">排便效果</p>
+        <p class="flow-step-sub">2–6 小時<br>FDA 認可</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 羥基帶來的三重效應 -->
+  <div class="oh-section">
+    <div class="oh-card">
+      <p class="oh-card-title">C-12 羥基 → 三重物化效應</p>
+      <div class="oh-effect">
+        <span class="oh-arrow">→</span>
+        <span class="oh-text"><strong style="color:var(--gold)">極性提升</strong><br>水溶性增加，穿透細胞膜能力增強，抗菌力來源</span>
+      </div>
+      <div class="oh-effect">
+        <span class="oh-arrow">→</span>
+        <span class="oh-text"><strong style="color:var(--gold)">雙親性</strong><br>同時親水與親脂，能整合進角質層脂質雙層</span>
+      </div>
+      <div class="oh-effect">
+        <span class="oh-arrow">→</span>
+        <span class="oh-text"><strong style="color:var(--gold)">受體親和性</strong><br>羥基位置精確匹配 EP3 · TRPV1 受體結合口袋</span>
+      </div>
+    </div>
+    <div class="oh-card">
+      <p class="oh-card-title">在自然界的稀缺性</p>
+      <div class="oh-effect">
+        <span class="oh-arrow">◈</span>
+        <span class="oh-text">蓖麻籽油中含量高達 <strong style="color:var(--gold)">85–90%</strong>，自然界中幾乎僅此一處</span>
+      </div>
+      <div class="oh-effect">
+        <span class="oh-arrow">◈</span>
+        <span class="oh-text">Lesquerella（北美十字花科）含少量類似結構，但純度遠不及蓖麻</span>
+      </div>
+      <div class="oh-effect">
+        <span class="oh-arrow">◈</span>
+        <span class="oh-text">工業上亦用於潤滑劑、航空液壓油、尼龍前驅物合成——正是因為這獨特的化學穩定性</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 傳統 vs 現代 -->
+  <div class="tradition-section">
+    <p class="mech-title">IV &nbsp;·&nbsp; 傳統智慧 · 現代分子語言</p>
+    <div class="tradition-grid">
+      <div>
+        <p class="trad-col-title">阿育吠陀觀點</p>
+        <div class="trad-item"><strong>Vata 鎮靜：</strong>暖、重、滋養，安撫風能失衡，對應現代的神經調節作用</div>
+        <div class="trad-item"><strong>Virechana：</strong>Panchakarma 瀉法排毒媒介，對應腸道 TRPV1 機制</div>
+        <div class="trad-item"><strong>外用按摩：</strong>深層滲透關節、神經，對應皮膚屏障整合與副交感調節</div>
+        <div class="trad-item"><strong>肝臟熱敷：</strong>「淨化深層組織」，對應淋巴循環與 Treg 免疫調節</div>
+      </div>
+      <div>
+        <p class="trad-col-title">現代分子解讀</p>
+        <div class="trad-item"><strong>EP3 受體拮抗：</strong>抗炎機制，異於 COX 抑制，無胃腸副作用</div>
+        <div class="trad-item"><strong>TRPV1 活化：</strong>腸道蠕動 · 神經疼痛調節雙重路徑</div>
+        <div class="trad-item"><strong>膜磷脂破壞：</strong>廣效抗菌抗真菌，無耐藥性疑慮（機械式破壞）</div>
+        <div class="trad-item"><strong>TEWL 降低：</strong>皮膚屏障重建，支持傷口癒合與疤痕淡化</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 外用按摩部位 -->
+  <div class="massage-section">
+    <p class="mech-title">V &nbsp;·&nbsp; 外用按摩 — 部位指南</p>
+
+    <div class="body-layout">
+
+      <!-- 簡化人體輪廓 SVG -->
+      <div class="body-svg-wrap">
+        <svg viewBox="0 0 160 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;opacity:0.85;">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- 頭 -->
+          <ellipse cx="80" cy="32" rx="24" ry="28" fill="none" stroke="rgba(245,240,232,0.2)" stroke-width="1.2"/>
+          <!-- 頸 -->
+          <rect x="70" y="58" width="20" height="18" rx="2" fill="none" stroke="rgba(245,240,232,0.15)" stroke-width="1"/>
+          <!-- 肩 -->
+          <path d="M30,80 Q50,72 80,74 Q110,72 130,80 L128,120 Q110,115 80,116 Q50,115 32,120 Z"
+            fill="none" stroke="rgba(245,240,232,0.2)" stroke-width="1.2"/>
+          <!-- 軀幹 -->
+          <path d="M32,120 L28,230 Q50,238 80,238 Q110,238 132,230 L128,120"
+            fill="none" stroke="rgba(245,240,232,0.2)" stroke-width="1.2"/>
+          <!-- 骨盆 -->
+          <path d="M28,230 Q40,260 80,264 Q120,260 132,230"
+            fill="none" stroke="rgba(245,240,232,0.18)" stroke-width="1.2"/>
+          <!-- 左臂 -->
+          <path d="M32,82 Q14,110 12,160 Q14,190 22,220"
+            fill="none" stroke="rgba(245,240,232,0.18)" stroke-width="1.2"/>
+          <!-- 右臂 -->
+          <path d="M128,82 Q146,110 148,160 Q146,190 138,220"
+            fill="none" stroke="rgba(245,240,232,0.18)" stroke-width="1.2"/>
+          <!-- 左腿 -->
+          <path d="M50,264 Q44,320 44,380 Q52,400 60,410"
+            fill="none" stroke="rgba(245,240,232,0.18)" stroke-width="1.2"/>
+          <!-- 右腿 -->
+          <path d="M110,264 Q116,320 116,380 Q108,400 100,410"
+            fill="none" stroke="rgba(245,240,232,0.18)" stroke-width="1.2"/>
+
+          <!-- 熱點：頭皮 -->
+          <circle cx="80" cy="22" r="10" fill="url(#glow)" opacity="0.9"/>
+          <circle cx="80" cy="22" r="4" fill="#c9a84c" opacity="0.7"/>
+
+          <!-- 熱點：腹部 -->
+          <circle cx="80" cy="168" r="18" fill="url(#glow)" opacity="0.8"/>
+          <circle cx="80" cy="168" r="5" fill="#c9a84c" opacity="0.65"/>
+
+          <!-- 熱點：肝區 右肋下 -->
+          <circle cx="106" cy="148" r="10" fill="url(#glow)" opacity="0.7"/>
+          <circle cx="106" cy="148" r="3.5" fill="#c9a84c" opacity="0.6"/>
+
+          <!-- 熱點：薦椎（後面，用側邊標示） -->
+          <circle cx="80" cy="238" r="11" fill="url(#glow)" opacity="0.7"/>
+          <circle cx="80" cy="238" r="4" fill="#8a6f32" opacity="0.8"/>
+
+          <!-- 熱點：膝關節 -->
+          <circle cx="50" cy="338" r="10" fill="url(#glow)" opacity="0.75"/>
+          <circle cx="50" cy="338" r="3.5" fill="#c9a84c" opacity="0.65"/>
+          <circle cx="110" cy="338" r="10" fill="url(#glow)" opacity="0.75"/>
+          <circle cx="110" cy="338" r="3.5" fill="#c9a84c" opacity="0.65"/>
+
+          <!-- 熱點：足底 -->
+          <circle cx="57" cy="408" r="9" fill="url(#glow)" opacity="0.7"/>
+          <circle cx="57" cy="408" r="3" fill="#1e5c5e" opacity="0.9"/>
+          <circle cx="103" cy="408" r="9" fill="url(#glow)" opacity="0.7"/>
+          <circle cx="103" cy="408" r="3" fill="#1e5c5e" opacity="0.9"/>
+
+          <!-- 標籤 -->
+          <text x="108" y="25" font-family="monospace" font-size="8.5" fill="rgba(201,168,76,0.6)">頭皮</text>
+          <text x="108" y="152" font-family="monospace" font-size="8.5" fill="rgba(201,168,76,0.6)">肝區</text>
+          <text x="4"   y="172" font-family="monospace" font-size="8.5" fill="rgba(201,168,76,0.6)">腹部</text>
+          <text x="86"  y="255" font-family="monospace" font-size="8.5" fill="rgba(138,111,50,0.8)">薦椎</text>
+          <text x="2"   y="342" font-family="monospace" font-size="8.5" fill="rgba(201,168,76,0.6)">膝關節</text>
+          <text x="24"  y="418" font-family="monospace" font-size="8.5" fill="rgba(30,92,94,0.9)">足底</text>
+        </svg>
+      </div>
+
+      <!-- 部位卡片 -->
+      <div class="site-cards">
+
+        <div class="site-card">
+          <div class="site-icon-wrap">🦴</div>
+          <div class="site-body">
+            <p class="site-name">關節系統</p>
+            <p class="site-desc">膝、髖、肩、手指、腳踝。蓖麻油酸滲透後作用於 EP3 受體，抑制關節腔促炎介質。以深層圓圈揉壓手法，配合熱毛巾包覆效果更佳。</p>
+            <div class="site-meta">
+              <span class="site-tag heat">🌡 熱敷加強</span>
+              <span class="site-tag">深層揉壓 15–20 min</span>
+              <span class="site-tag">EP3 抗炎路徑</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="site-icon-wrap">🫁</div>
+          <div class="site-body">
+            <p class="site-name">腹部 · 肝區</p>
+            <p class="site-desc">臍周順時針輕推促腸蠕動；右肋弓下方（肝臟投影區）熱敷支持膽汁循環與淋巴排毒；下腹部可緩解經痛與骨盆腔不適。覆蓋法蘭絨布加熱水袋效果最佳。</p>
+            <div class="site-meta">
+              <span class="site-tag heat">🌡 熱敷包必備</span>
+              <span class="site-tag">順時針輕推</span>
+              <span class="site-tag">靜置 30–60 min</span>
+              <span class="site-tag">淋巴 · GALT 調節</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="site-icon-wrap">🧬</div>
+          <div class="site-body">
+            <p class="site-name">脊椎 · 薦椎</p>
+            <p class="site-desc">薦骨與腰椎兩側豎脊肌為 Vata 能量聚集之所。縱向長推手法配合熱水袋，透過皮神經末梢調節副交感張力，具安神助眠的輔助效果。薦椎熱敷另對骨盆腔循環有顯著支持。</p>
+            <div class="site-meta">
+              <span class="site-tag heat">🌡 熱水袋</span>
+              <span class="site-tag">縱向長推</span>
+              <span class="site-tag">20–30 min</span>
+              <span class="site-tag">副交感 · Vata 鎮靜</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="site-icon-wrap">🌿</div>
+          <div class="site-body">
+            <p class="site-name">頭皮</p>
+            <p class="site-desc">少量（數滴）以指腹畫圈，重點按摩頂輪（百會）與髮際線。改善頭皮微循環，傳統上用於養髮固髮。黏度高，建議以 1:3 調和芝麻油後使用，停留 20–30 分鐘後清洗。</p>
+            <div class="site-meta">
+              <span class="site-tag">常溫使用</span>
+              <span class="site-tag">指腹畫圈</span>
+              <span class="site-tag">20–30 min 後洗去</span>
+              <span class="site-tag">建議調和芝麻油</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-card">
+          <div class="site-icon-wrap">🦶</div>
+          <div class="site-body">
+            <p class="site-name">足底</p>
+            <p class="site-desc">角質層厚，蓖麻油高滲透性於此尤為有效。睡前厚塗足弓與腳跟，穿棉襪過夜，是龜裂修復的高效做法。反射療法視足底為全身器官的縮影，也是整體調理的入口。</p>
+            <div class="site-meta">
+              <span class="site-tag night">🌙 睡前過夜</span>
+              <span class="site-tag">拇指深壓足弓</span>
+              <span class="site-tag">棉襪包覆</span>
+              <span class="site-tag">皮膚屏障修復</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 調油建議 -->
+    <p class="mech-title" style="margin-top:40px;">調油建議 — 依部位選擇基底</p>
+    <div class="blend-card">
+      <div>
+        <p class="blend-col-title">通用配方</p>
+        <p class="blend-item"><strong>蓖麻油 1 ：芝麻油 3</strong><br>阿育吠陀首選基底，暖性協同，延展性佳，適合關節、脊椎、腹部</p>
+        <p class="blend-item"><strong>蓖麻油 1 ：椰子油 3</strong><br>夏季或燥熱體質，椰子油清涼收斂，適合頭皮與皮膚外用</p>
+      </div>
+      <div>
+        <p class="blend-col-title">進階調配</p>
+        <p class="blend-item"><strong>加入薑精油 2–3 滴</strong><br>強化暖性，關節慢性疼痛使用，促進局部血循</p>
+        <p class="blend-item"><strong>加入薰衣草精油 3 滴</strong><br>薦椎與脊椎按摩前調入，副交感調節協同，強化助眠效果</p>
+      </div>
+      <div>
+        <p class="blend-col-title">使用注意</p>
+        <p class="blend-item"><strong>純油不建議直接大量使用</strong><br>黏稠度高，不易吸收，且易沾染衣物</p>
+        <p class="blend-item"><strong>初次使用先小面積測試</strong><br>對蓖麻植物過敏者（少見）應避免使用</p>
+        <p class="blend-item"><strong>孕婦避免腹部熱敷</strong><br>可能誘發子宮收縮</p>
+      </div>
+    </div>
+
+    <!-- 快速對照表 -->
+    <p class="mech-title" style="margin-top:36px;">部位 · 手法 · 時間 速查</p>
+    <table class="timing-table">
+      <thead>
+        <tr>
+          <th>部位</th>
+          <th>手法</th>
+          <th style="text-align:center;">加熱</th>
+          <th>時間</th>
+          <th>主要機制</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-site">腹部 · 肝區</td>
+          <td>順時針輕推</td>
+          <td class="td-heat"><span class="dot-yes">●</span></td>
+          <td>30–60 min</td>
+          <td>淋巴 · 腸道 · Treg</td>
+        </tr>
+        <tr>
+          <td class="td-site">關節</td>
+          <td>深層圓圈揉壓</td>
+          <td class="td-heat"><span class="dot-yes">●</span></td>
+          <td>15–20 min</td>
+          <td>EP3 抗炎</td>
+        </tr>
+        <tr>
+          <td class="td-site">脊椎 · 薦椎</td>
+          <td>縱向長推</td>
+          <td class="td-heat"><span class="dot-yes">●</span></td>
+          <td>20–30 min</td>
+          <td>副交感 · Vata</td>
+        </tr>
+        <tr>
+          <td class="td-site">頭皮</td>
+          <td>指腹畫圈</td>
+          <td class="td-heat"><span class="dot-no">○</span></td>
+          <td>20–30 min</td>
+          <td>微循環 · 毛囊</td>
+        </tr>
+        <tr>
+          <td class="td-site">足底</td>
+          <td>拇指深壓</td>
+          <td class="td-heat"><span class="dot-no">○</span></td>
+          <td>過夜</td>
+          <td>皮膚屏障修復</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <footer>
+    Ricinoleic Acid · Functional Profile &nbsp;·&nbsp; 12-hydroxy-9Z-octadecenoic acid
+    &nbsp;·&nbsp; For educational reference only
+  </footer>
+
+</div>
+</body>
+</html>
