@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>初樸 ── 覺察・想・感受　組織的現象</title>
+<meta name="description" content="覺察、想、感受三者合一，構成初樸這家事務所真實運作的現象。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200;300;400;500;600&family=Noto+Sans+TC:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:    #0B0907;
+    --deep:     #14100A;
+    --navy:     #1C1610;
+    --indigo:   #2A2117;
+    --soil:     #B48E4A;   /* 土 */
+    --wood:     #608056;   /* 木 */
+    --fire:     #A84E34;   /* 火 */
+    --gold:     #C9A84C;
+    --gold-dim: #8A6E30;
+    --mist:     #EEE7DA;
+    --mute:     rgba(238,231,218,0.5);
+    --faint:    rgba(238,231,218,0.32);
+    --line:     rgba(238,231,218,0.14);
+  }
+
+  html, body {
+    min-height: 100vh;
+    background: var(--black);
+    color: var(--mist);
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* 宣紙纖維 */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 1;
+    opacity: 0.045; mix-blend-mode: overlay;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  section, footer { position: relative; z-index: 2; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 1.6rem; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem 3rem;
+  }
+  .brand {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.72rem; font-weight: 300;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2.2rem; opacity: 0.85;
+    text-indent: 0.5em;
+  }
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.7rem, 4.5vw, 2.7rem);
+    font-weight: 300; letter-spacing: 0.2em;
+    line-height: 1.7; margin-bottom: 1rem;
+  }
+  .hero-title em { font-style: normal; color: var(--gold); }
+  .hero-sub {
+    font-size: 0.86rem; font-weight: 300;
+    letter-spacing: 0.22em; color: var(--mute);
+    line-height: 2; max-width: 30em;
+  }
+
+  /* ── INK STAGE ── */
+  .ink-section { padding: 1rem 0 5rem; }
+  .ink-wrap {
+    position: relative;
+    width: 520px; height: 500px;
+    max-width: 92vw; margin: 0 auto;
+    cursor: crosshair; touch-action: none;
+  }
+  #inkCanvas { width: 100%; height: 100%; display: block; border-radius: 4px; }
+  .ink-labels { position: absolute; inset: 0; pointer-events: none; }
+  .ink-node, .ink-center-lbl {
+    position: absolute;
+    font-family: 'Noto Serif TC', serif;
+    text-align: center; transform: translate(-50%, -50%);
+    line-height: 1.3;
+    text-shadow: 0 0 6px rgba(11,9,7,0.95), 0 0 14px rgba(11,9,7,0.8);
+  }
+  .ink-node {
+    font-size: 1.1rem; font-weight: 400; letter-spacing: 0.14em;
+    color: var(--mist);
+  }
+  .ink-node b {
+    display: block; font-size: 0.66rem; font-weight: 300;
+    letter-spacing: 0.18em; color: var(--gold);
+    margin-top: 5px; opacity: 0.85;
+  }
+  .ink-node small, .ink-center-lbl small {
+    display: block;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.58rem; letter-spacing: 0.26em;
+    font-weight: 300; margin-top: 3px;
+    opacity: 0.5; text-transform: uppercase;
+  }
+  .n-aware { top: 8%;  left: 50%; }
+  .n-think { top: 84%; left: 15%; }
+  .n-feel  { top: 84%; left: 85%; }
+  .ink-center-lbl {
+    top: 54%; left: 50%;
+    font-size: 0.98rem; font-weight: 600; letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+  .ink-center-lbl small { color: rgba(201,168,76,0.7); }
+  .ink-hint {
+    position: absolute; bottom: -2.6rem; left: 50%;
+    transform: translateX(-50%); white-space: nowrap;
+    font-size: 0.68rem; letter-spacing: 0.22em;
+    font-weight: 300; color: var(--faint); pointer-events: none;
+  }
+
+  /* ── SECTION SCAFFOLD ── */
+  .seg { padding: 3.5rem 0; }
+  .seg-label {
+    font-size: 0.68rem; letter-spacing: 0.42em;
+    color: var(--gold); text-align: center;
+    margin-bottom: 2.6rem; opacity: 0.8;
+    text-transform: uppercase;
+  }
+  .lead {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    font-weight: 300; line-height: 2.3;
+    letter-spacing: 0.08em; text-align: center;
+    color: rgba(238,231,218,0.9);
+    max-width: 34em; margin: 0 auto;
+  }
+  .lead em { font-style: normal; color: var(--gold); }
+  .lead .q {
+    display: block; margin-top: 1.6rem;
+    font-size: 0.92em; color: var(--mute);
+  }
+
+  /* ── TRIAD CARDS ── */
+  .triad {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line);
+    border: 1px solid var(--line);
+    margin-top: 1rem;
+  }
+  .tri-cell {
+    background: var(--deep); padding: 2.4rem 1.7rem;
+    transition: background 0.4s;
+  }
+  .tri-cell:hover { background: var(--navy); }
+  .tri-dot { width: 8px; height: 8px; border-radius: 50%; margin-bottom: 1.3rem; }
+  .tri-elem {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    color: var(--faint); margin-bottom: 0.5rem;
+  }
+  .tri-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.25rem; font-weight: 400;
+    letter-spacing: 0.12em; margin-bottom: 0.3rem;
+  }
+  .tri-maps {
+    font-size: 0.78rem; letter-spacing: 0.08em;
+    color: var(--gold); margin-bottom: 1.2rem;
+    font-weight: 300;
+  }
+  .tri-body {
+    font-size: 0.83rem; line-height: 2; font-weight: 300;
+    color: rgba(238,231,218,0.66);
+  }
+  .tri-body em { font-style: normal; color: var(--mist); }
+
+  /* ── SYNTHESIS QUOTE ── */
+  .synth { text-align: center; max-width: 36em; margin: 0 auto; }
+  .synth-q {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.05rem, 2.5vw, 1.32rem);
+    font-weight: 300; line-height: 2.4; letter-spacing: 0.08em;
+    color: rgba(238,231,218,0.9);
+  }
+  .synth-q em { font-style: normal; color: var(--gold); }
+  .synth-q::before, .synth-q::after {
+    content: ''; display: block;
+    width: 1px; height: 44px; margin: 0 auto;
+    background: linear-gradient(var(--gold-dim), transparent);
+  }
+  .synth-q::before { margin-bottom: 1.8rem; background: linear-gradient(transparent, var(--gold-dim)); }
+  .synth-q::after  { margin-top: 1.8rem; }
+
+  /* ── DISSOCIATION ── */
+  .diss {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+  }
+  .diss-cell { background: var(--deep); padding: 1.8rem 1.5rem; }
+  .diss-h {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.92rem; letter-spacing: 0.1em; margin-bottom: 0.8rem;
+  }
+  .diss-b {
+    font-size: 0.78rem; line-height: 1.95; font-weight: 300;
+    color: rgba(238,231,218,0.55);
+  }
+  .diss-note {
+    text-align: center; margin-top: 1.8rem;
+    font-size: 0.82rem; line-height: 2.1; letter-spacing: 0.06em;
+    color: var(--mute); font-weight: 300;
+  }
+  .diss-note em { font-style: normal; color: var(--gold); }
+
+  /* ── CLOSING ── */
+  .closing {
+    text-align: center; padding: 5rem 1.6rem 4rem;
+    border-top: 1px solid var(--line);
+  }
+  .closing-q {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(1.1rem, 2.6vw, 1.45rem);
+    font-weight: 200; line-height: 2.2; letter-spacing: 0.1em;
+    color: rgba(238,231,218,0.85); max-width: 26em; margin: 0 auto 2rem;
+  }
+  .closing-q em { font-style: normal; color: var(--gold); }
+  .closing-cite {
+    font-size: 0.72rem; letter-spacing: 0.28em;
+    color: var(--faint); font-weight: 300;
+  }
+
+  footer {
+    text-align: center; padding: 2.4rem 1.6rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.68rem; letter-spacing: 0.28em; color: rgba(238,231,218,0.28);
+    line-height: 2;
+  }
+
+  @media (max-width: 680px) {
+    .triad, .diss { grid-template-columns: 1fr; }
+    .ink-wrap { width: 340px; height: 360px; }
+    .ink-node { font-size: 0.95rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="brand">ProtoPlain · 初樸</p>
+  <h1 class="hero-title">覺察 · <em>想</em> · 感受<br>三者合一</h1>
+  <p class="hero-sub">構成初樸這家事務所<br>真實運作的「現象」</p>
+</section>
+
+<!-- INTERACTIVE INK -->
+<section class="ink-section">
+  <div class="ink-wrap" id="inkStage">
+    <canvas id="inkCanvas"></canvas>
+    <div class="ink-labels">
+      <span class="ink-node n-aware">覺察<b>人的本質</b><small>Awareness</small></span>
+      <span class="ink-node n-think">想<b>知識庫</b><small>Thought</small></span>
+      <span class="ink-node n-feel">感受<b>文化慣性</b><small>Feeling</small></span>
+      <span class="ink-center-lbl">初樸<small>The Phenomenon</small></span>
+    </div>
+    <p class="ink-hint">按住 · 墨色從指尖滲開　|　放開 · 沉回靜默</p>
+  </div>
+</section>
+
+<!-- LEAD -->
+<section class="seg wrap">
+  <p class="seg-label">關注「之外」</p>
+  <p class="lead">
+    初樸關注的，是形體之外的<em>光與氣</em>，<br>
+    建築之外的<em>時間與生命</em>。<br>
+    一家事務所也是如此——<br>
+    組織圖能畫出職稱與分工，<br>
+    卻畫不出它<em>真正如何運作</em>。
+    <span class="q">真正運作的那個初樸，是三股力量同時共振的現象：<br>人未經修飾的覺察、被結構化的想、沉澱成默契的感受。</span>
+  </p>
+</section>
+
+<!-- TRIAD CARDS -->
+<section class="seg wrap">
+  <p class="seg-label">三者 · 三行</p>
+  <div class="triad">
+    <div class="tri-cell">
+      <div class="tri-dot" style="background:var(--soil);"></div>
+      <div class="tri-elem">土　承載</div>
+      <div class="tri-title">覺察</div>
+      <div class="tri-maps">人的本質</div>
+      <div class="tri-body">
+        每位成員未經修飾的<em>初心與當下判斷</em>。
+        站在基地上感受風從哪裡來、光如何落下的那種直覺；
+        看見一個空間「之外」的能力。
+        這是初樸最根本的<em>在場</em>——
+        如同厚土，沉默卻承載著一切。
+      </div>
+    </div>
+    <div class="tri-cell">
+      <div class="tri-dot" style="background:var(--wood);"></div>
+      <div class="tri-elem">木　生長</div>
+      <div class="tri-title">想</div>
+      <div class="tri-maps">知識庫 · Notion</div>
+      <div class="tri-body">
+        被<em>結構化、外化、可傳承</em>的顯性知識。
+        構築工法、材料時間性、案例經驗、流程與決策的軌跡——
+        透過 Notion 等工具編織成事務所的「第二大腦」，
+        讓個人的默會經驗能夠<em>累積、流動、長出新枝</em>。
+      </div>
+    </div>
+    <div class="tri-cell">
+      <div class="tri-dot" style="background:var(--fire);"></div>
+      <div class="tri-elem">火　溫度</div>
+      <div class="tri-title">感受</div>
+      <div class="tri-maps">文化慣性</div>
+      <div class="tri-body">
+        不成文、卻真實運作的<em>默契與價值氣味</em>。
+        對品質的堅持、與人相處的溫度、做事的手感——
+        先於語言就在傳遞的東西。
+        初樸所說「非物質、不因時代改變」的，
+        正是這股<em>文化的慣性</em>。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYNTHESIS -->
+<section class="seg wrap">
+  <p class="seg-label">三者合一</p>
+  <div class="synth">
+    <p class="synth-q">
+      每一個專案、每一次決策的當下，<br>
+      <em>覺察</em>作為容器，給出方向；<br>
+      <em>想</em>賦予結構，讓判斷可被傳承；<br>
+      <em>感受</em>賦予溫度，讓選擇有了重量。<br>
+      三者同時共振，<br>
+      才構成我們所<em>真實經歷</em>的初樸。
+    </p>
+  </div>
+</section>
+
+<!-- DISSOCIATION -->
+<section class="seg wrap">
+  <p class="seg-label">當三者解離 · 組織的失衡</p>
+  <div class="diss">
+    <div class="diss-cell">
+      <div class="diss-h" style="color:var(--soil);">只有覺察</div>
+      <div class="diss-b">
+        人人憑直覺，卻無沉澱、無傳承。
+        每個案子都從零開始，
+        靈光無法累積成資產，
+        組織停留在一群天才的鬆散集合。
+      </div>
+    </div>
+    <div class="diss-cell">
+      <div class="diss-h" style="color:var(--wood);">只有想</div>
+      <div class="diss-b">
+        知識庫龐大完整，卻無人真正在場。
+        流程取代了判斷，
+        文件取代了感知，
+        做出「正確卻沒有靈魂」的設計。
+      </div>
+    </div>
+    <div class="diss-cell">
+      <div class="diss-h" style="color:var(--fire);">只有感受</div>
+      <div class="diss-b">
+        文化濃烈、默契深厚，卻說不清為什麼。
+        慣性凝固成包袱，
+        無法被新人理解、被外界檢視，
+        溫度反而成了封閉。
+      </div>
+    </div>
+  </div>
+  <p class="diss-note">
+    三者的充分整合，正是一家成熟事務所所追求的<em>完整性</em>——<br>
+    讓初心被結構承接、讓知識帶著溫度、讓文化保持清醒。
+  </p>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <p class="closing-q">
+    「在可見之外，仍有暗物質與暗能量，<br>
+    無形卻支撐著萬物的運行。」<br><br>
+    一家事務所真正的力量，<br>
+    也在那<em>看不見的「之外」</em>。
+  </p>
+  <p class="closing-cite">初樸建築師事務所 · ProtoPlain Architects</p>
+</section>
+
+<footer>
+  覺察 · 想 · 感受　──　初樸組織的三重根基<br>
+  初樸建築師事務所　|　初樸自然構築工程有限公司
+</footer>
+
+<script>
+(function(){
+  const stage  = document.getElementById('inkStage');
+  const canvas = document.getElementById('inkCanvas');
+  const ctx    = canvas.getContext('2d');
+
+  // 三源墨色 — 五行大地色
+  const SRC = {
+    aware: [180,142,74],   // 土 · 赭黃
+    think: [96,128,86],    // 木 · 蒼綠
+    feel:  [168,78,52]     // 火 · 赭紅
+  };
+
+  let W=0, H=0, DPR=Math.min(window.devicePixelRatio||1, 2);
+  const homes = {
+    aware: {x:0.50, y:0.28},
+    think: {x:0.26, y:0.68},
+    feel:  {x:0.74, y:0.68}
+  };
+  const pos = { aware:{x:0,y:0}, think:{x:0,y:0}, feel:{x:0,y:0} };
+
+  const mouse = {x:-999,y:-999, px:-999, py:-999, active:false, down:false};
+  let energy = 0;
+  const drops = [];
+  const trail = [];
+
+  function resize(){
+    const r = stage.getBoundingClientRect();
+    W = r.width; H = r.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.clearRect(0,0,W,H);
+    for(const k in homes){ pos[k].x = homes[k].x*W; pos[k].y = homes[k].y*H; }
+  }
+
+  function blob(x,y,r,rgb,alpha){
+    if(alpha<=0) return;
+    const g = ctx.createRadialGradient(x,y,0, x,y,r);
+    g.addColorStop(0,    `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`);
+    g.addColorStop(0.45, `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha*0.42})`);
+    g.addColorStop(0.8,  `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha*0.12})`);
+    g.addColorStop(1,    `rgba(${rgb[0]},${rgb[1]},${rgb[2]},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+
+  let t = 0;
+  function frame(){
+    t += 0.016;
+
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(11,9,7,0.055)';
+    ctx.fillRect(0,0,W,H);
+    ctx.globalCompositeOperation = 'screen';
+
+    const baseR = Math.min(W,H)*0.34;
+    const target = mouse.down ? 1 : 0;
+    energy += (target - energy) * (mouse.down ? 0.06 : 0.018);
+    if(energy < 0.002){ mouse.px = mouse.x; mouse.py = mouse.y; requestAnimationFrame(frame); return; }
+
+    for(const k in homes){
+      const hx = homes[k].x*W, hy = homes[k].y*H;
+      pos[k].x += (hx - pos[k].x)*0.012;
+      pos[k].y += (hy - pos[k].y)*0.012;
+      if(mouse.active){
+        const dx = mouse.x - pos[k].x, dy = mouse.y - pos[k].y;
+        const d = Math.hypot(dx,dy)+0.001;
+        const pull = Math.max(0, 1 - d/(baseR*2.0));
+        pos[k].x += dx*pull*0.16; pos[k].y += dy*pull*0.16;
+      }
+      const breathe = 1 + Math.sin(t*0.7 + (k==='aware'?0:k==='think'?2:4))*0.05;
+      const r = baseR*breathe, wob = baseR*0.07;
+      const ox = Math.sin(t*0.5+k.length)*wob, oy = Math.cos(t*0.43+k.length*1.7)*wob;
+      blob(pos[k].x+ox, pos[k].y+oy, r*1.10, SRC[k], 0.10*energy);
+      blob(pos[k].x-ox*0.6, pos[k].y-oy*0.6, r*0.80, SRC[k], 0.13*energy);
+      blob(pos[k].x, pos[k].y, r*0.5, SRC[k], 0.17*energy);
+    }
+
+    if(mouse.down && mouse.active && (Math.abs(mouse.x-mouse.px)+Math.abs(mouse.y-mouse.py))>1.5){
+      const steps = 4;
+      for(let s=0;s<steps;s++){
+        const ix = mouse.px + (mouse.x-mouse.px)*(s/steps);
+        const iy = mouse.py + (mouse.y-mouse.py)*(s/steps);
+        let best='aware', bd=1e9;
+        for(const k in homes){ const d=Math.hypot(ix-pos[k].x, iy-pos[k].y); if(d<bd){bd=d;best=k;} }
+        trail.push({x:ix, y:iy, r:baseR*0.14, life:1, rgb:SRC[best]});
+      }
+    }
+    mouse.px = mouse.x; mouse.py = mouse.y;
+
+    for(let i=trail.length-1;i>=0;i--){
+      const tr = trail[i];
+      tr.r += baseR*0.004; tr.life -= 0.018;
+      if(tr.life<=0){ trail.splice(i,1); continue; }
+      blob(tr.x, tr.y, tr.r, tr.rgb, 0.10*tr.life*energy);
+    }
+    if(trail.length>260) trail.splice(0, trail.length-260);
+
+    for(let i=drops.length-1;i>=0;i--){
+      const d = drops[i];
+      d.r += (d.max - d.r)*0.045; d.life -= 0.007;
+      if(d.life<=0){ drops.splice(i,1); continue; }
+      blob(d.x, d.y, d.r, d.rgb, 0.26*d.life*energy);
+      blob(d.x, d.y, d.r*0.5, d.rgb, 0.18*d.life*energy);
+    }
+
+    const cx = W*0.5, cy = H*0.54;
+    let glow = (0.05 + Math.sin(t*1.1)*0.02) * energy;
+    if(mouse.active){
+      const dc = Math.hypot(mouse.x-cx, mouse.y-cy);
+      glow += Math.max(0, 1 - dc/(baseR))*0.30*energy;
+    }
+    blob(cx, cy, baseR*0.30, [212,170,96], glow);
+
+    requestAnimationFrame(frame);
+  }
+
+  function pointer(e){
+    const r = stage.getBoundingClientRect();
+    const cx = (e.touches?e.touches[0].clientX:e.clientX) - r.left;
+    const cy = (e.touches?e.touches[0].clientY:e.clientY) - r.top;
+    if(!mouse.active){ mouse.px = cx; mouse.py = cy; }
+    mouse.x = cx; mouse.y = cy; mouse.active = true;
+  }
+  function dropInk(e){
+    const r = stage.getBoundingClientRect();
+    const cx = (e.touches?e.touches[0].clientX:e.clientX) - r.left;
+    const cy = (e.touches?e.touches[0].clientY:e.clientY) - r.top;
+    let best='aware', bd=1e9;
+    for(const k in homes){ const d=Math.hypot(cx-pos[k].x, cy-pos[k].y); if(d<bd){bd=d;best=k;} }
+    const base = SRC[best];
+    drops.push({ x:cx, y:cy, r:6, max:Math.min(W,H)*0.22, life:1,
+      rgb:[(base[0]+200)/2|0,(base[1]+180)/2|0,(base[2]+120)/2|0] });
+  }
+
+  stage.addEventListener('mousedown', (e)=>{ pointer(e); mouse.down=true; dropInk(e); });
+  stage.addEventListener('mousemove', (e)=>{ pointer(e); });
+  window.addEventListener('mouseup', ()=>{ mouse.down=false; });
+  stage.addEventListener('mouseleave', ()=>{ mouse.active=false; });
+  stage.addEventListener('touchstart', (e)=>{ pointer(e); mouse.down=true; dropInk(e); }, {passive:true});
+  stage.addEventListener('touchmove', (e)=>{ pointer(e); e.preventDefault(); }, {passive:false});
+  window.addEventListener('touchend', ()=>{ mouse.down=false; mouse.active=false; });
+  window.addEventListener('resize', resize);
+
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
