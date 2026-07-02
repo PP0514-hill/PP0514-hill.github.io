@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鑽探數據差異之說明｜彰化縣生命園區（火化場）興建工程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pp-bg:#ECEAE5; --pp-card:#FFFFFF; --pp-card2:#F3F1EC;
+  --pp-ink:#232220; --pp-sub:#6E6B64; --pp-hint:#9A968D;
+  --pp-line:#D8D5CE; --pp-line-strong:#C3BFB6;
+  --pp-accent:#9C3D2C; --pp-accent-dark:#843022; --pp-accent-bg:#F2E3DE;
+  --pp-ok:#5C7355; --pp-warn:#B07D24;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--pp-bg); color:var(--pp-ink);
+  font-family:'Noto Sans TC','Inter','Helvetica Neue',sans-serif;
+  font-weight:400; font-size:15px; line-height:1.7;
+  padding:48px 24px 64px;
+}
+.mono{font-family:'JetBrains Mono',monospace; font-size:13px;}
+.wrap{max-width:960px; margin:0 auto;}
+
+/* ---------- header ---------- */
+.eyebrow{font-size:13px; color:var(--pp-hint); letter-spacing:.08em; margin-bottom:8px;}
+h1{font-size:28px; font-weight:500; line-height:1.4; margin-bottom:4px;}
+.subtitle{color:var(--pp-sub); font-size:15px;}
+header{padding-bottom:24px; border-bottom:0.5px solid var(--pp-line-strong); margin-bottom:32px;}
+
+/* ---------- section ---------- */
+section{margin-bottom:40px;}
+h2{font-size:20px; font-weight:500; margin-bottom:4px;}
+.sec-note{color:var(--pp-sub); font-size:13px; margin-bottom:16px;}
+h2 .num{color:var(--pp-accent); font-family:'JetBrains Mono',monospace; font-size:14px; margin-right:10px;}
+
+/* ---------- conclusion banner ---------- */
+.conclusion{
+  background:var(--pp-card); border:0.5px solid var(--pp-line-strong);
+  border-left:3px solid var(--pp-accent);
+  border-radius:12px; padding:24px 28px;
+}
+.conclusion .formula{
+  display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:12px;
+}
+.chip{
+  background:var(--pp-accent-bg); color:var(--pp-accent-dark);
+  border-radius:8px; padding:8px 16px; font-weight:500; font-size:15px;
+}
+.op{color:var(--pp-hint); font-size:20px; font-family:'JetBrains Mono',monospace;}
+.chip.neutral{background:var(--pp-card2); color:var(--pp-ink); border:0.5px solid var(--pp-line);}
+.conclusion .verdict{margin-top:16px; padding-top:16px; border-top:0.5px solid var(--pp-line); color:var(--pp-sub);}
+.conclusion .verdict strong{color:var(--pp-ink); font-weight:500;}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative; padding-left:24px;}
+.timeline::before{
+  content:''; position:absolute; left:5px; top:8px; bottom:8px;
+  width:0.5px; background:var(--pp-line-strong);
+}
+.t-item{position:relative; padding-bottom:24px;}
+.t-item:last-child{padding-bottom:0;}
+.t-item::before{
+  content:''; position:absolute; left:-24px; top:8px;
+  width:11px; height:11px; border-radius:50%;
+  background:var(--pp-bg); border:1.5px solid var(--pp-line-strong);
+}
+.t-item.key::before{background:var(--pp-accent); border-color:var(--pp-accent);}
+.t-date{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--pp-hint); display:block;}
+.t-card{
+  background:var(--pp-card); border:0.5px solid var(--pp-line);
+  border-radius:12px; padding:16px 20px; margin-top:6px;
+}
+.t-card h3{font-size:16px; font-weight:500; margin-bottom:4px;}
+.t-card p{color:var(--pp-sub); font-size:13px;}
+.tag{
+  display:inline-block; font-size:13px; font-family:'JetBrains Mono',monospace;
+  background:var(--pp-card2); border:0.5px solid var(--pp-line);
+  border-radius:8px; padding:1px 10px; margin-top:8px; margin-right:6px; color:var(--pp-sub);
+}
+.tag.red{background:var(--pp-accent-bg); color:var(--pp-accent-dark); border-color:transparent;}
+
+/* ---------- two factors ---------- */
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+.factor{
+  background:var(--pp-card); border:0.5px solid var(--pp-line);
+  border-radius:12px; padding:20px 24px;
+}
+.factor .f-label{font-size:13px; color:var(--pp-accent-dark); font-weight:500; letter-spacing:.06em; margin-bottom:8px;}
+.factor h3{font-size:16px; font-weight:500; margin-bottom:12px;}
+.swap{display:flex; align-items:center; gap:10px; font-size:13px;}
+.swap .box{
+  flex:1; background:var(--pp-card2); border:0.5px solid var(--pp-line);
+  border-radius:8px; padding:10px 12px; text-align:center; color:var(--pp-sub); line-height:1.5;
+}
+.swap .box b{display:block; color:var(--pp-ink); font-weight:500; font-size:14px;}
+.swap .arr{color:var(--pp-accent); font-size:16px;}
+.factor .f-note{margin-top:12px; font-size:13px; color:var(--pp-sub);}
+
+/* ---------- responsibility flow ---------- */
+.flow{display:flex; gap:0; align-items:stretch;}
+.role{
+  flex:1; background:var(--pp-card); border:0.5px solid var(--pp-line);
+  border-radius:12px; padding:20px;
+}
+.role .r-tier{font-size:13px; font-family:'JetBrains Mono',monospace; color:var(--pp-hint); margin-bottom:6px;}
+.role h3{font-size:16px; font-weight:500; margin-bottom:8px;}
+.role ul{list-style:none;}
+.role li{font-size:13px; color:var(--pp-sub); padding-left:14px; position:relative; margin-bottom:4px;}
+.role li::before{content:''; position:absolute; left:0; top:9px; width:5px; height:0.5px; background:var(--pp-line-strong);}
+.role .r-key{margin-top:10px; padding-top:10px; border-top:0.5px solid var(--pp-line); font-size:13px; color:var(--pp-accent-dark); font-weight:500;}
+.flow-arr{display:flex; align-items:center; padding:0 10px; color:var(--pp-line-strong); flex-direction:column; justify-content:center;}
+.flow-arr span{font-size:20px; color:var(--pp-accent);}
+.flow-arr small{font-size:11px; color:var(--pp-hint); white-space:nowrap;}
+
+/* ---------- key sentence logic ---------- */
+.logic{
+  background:var(--pp-card); border:0.5px solid var(--pp-line-strong);
+  border-radius:12px; padding:28px;
+}
+.keyline{
+  font-size:20px; font-weight:500; line-height:1.6; text-align:center;
+  padding:16px 12px; margin-bottom:24px;
+  border-top:0.5px solid var(--pp-line); border-bottom:0.5px solid var(--pp-line);
+}
+.keyline em{font-style:normal; color:var(--pp-accent);}
+.syllogism{display:grid; grid-template-columns:32px 1fr; gap:12px 16px; margin-bottom:24px;}
+.syl-n{
+  font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--pp-accent);
+  border:0.5px solid var(--pp-accent-bg); background:var(--pp-accent-bg);
+  border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+}
+.syl-t p{margin-top:2px;}
+.syl-t b{font-weight:500;}
+.syl-t .cite{font-size:13px; color:var(--pp-hint); display:block;}
+.analogy{
+  background:var(--pp-card2); border:0.5px solid var(--pp-line);
+  border-radius:12px; padding:20px 24px;
+}
+.analogy .a-title{font-size:13px; color:var(--pp-hint); letter-spacing:.06em; margin-bottom:12px;}
+.pair{display:grid; grid-template-columns:1fr 40px 1fr; gap:8px; align-items:center; margin-bottom:10px; font-size:14px;}
+.pair:last-child{margin-bottom:0;}
+.pair .p-l{text-align:right; color:var(--pp-sub);}
+.pair .p-eq{text-align:center; color:var(--pp-accent); font-family:'JetBrains Mono',monospace;}
+.pair .p-r{font-weight:500;}
+
+footer{
+  margin-top:48px; padding-top:16px; border-top:0.5px solid var(--pp-line-strong);
+  font-size:13px; color:var(--pp-hint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+
+@media (max-width:720px){
+  .grid2{grid-template-columns:1fr;}
+  .flow{flex-direction:column;}
+  .flow-arr{padding:8px 0; flex-direction:row; gap:8px;}
+  .flow-arr span{transform:rotate(90deg);}
+  h1{font-size:22px;}
+  .keyline{font-size:17px;}
+}
+@media print{
+  body{padding:24px; background:#fff;}
+  .t-card,.factor,.role,.logic,.conclusion{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">「彰化縣生命園區（火化場）興建工程」委託設計監造技術服務案</div>
+  <h1>鑽探數據差異之說明</h1>
+  <div class="subtitle">設計成果差異的成因分析與權責釐清｜Soil Investigation Data Discrepancy Brief</div>
+</header>
+
+<!-- 0 結論 -->
+<section>
+  <div class="conclusion">
+    <div class="eyebrow">結論先行 TL;DR</div>
+    <div class="formula">
+      <span class="chip">資料來源不同<br><span class="mono" style="font-weight:400">鄰地 → 本基地</span></span>
+      <span class="op">+</span>
+      <span class="chip">規範改版<br><span class="mono" style="font-weight:400">90年版 → 113年版</span></span>
+      <span class="op">=</span>
+      <span class="chip neutral">設計成果之差異</span>
+    </div>
+    <p class="verdict">兩項均為<strong>客觀因素</strong>，且均非設計監造單位所能決定。前後成果不同係<strong>依法依規之正常設計變更</strong>，非設計疏失（Not a design error）。</p>
+  </div>
+</section>
+
+<!-- 1 時間軸 -->
+<section>
+  <h2><span class="num">01</span>事件時間軸 Timeline</h2>
+  <p class="sec-note">每一步皆依「當時唯一可用之資料」與「當時有效之規範」辦理</p>
+  <div class="timeline">
+    <div class="t-item">
+      <span class="t-date">110.11</span>
+      <div class="t-card">
+        <h3>鄰地舊鑽探報告完成</h3>
+        <p>草湖南段 230 地號地基調查報告（增鏈工程）</p>
+        <span class="tag">適用規範｜90年版</span>
+      </div>
+    </div>
+    <div class="t-item key">
+      <span class="t-date">初期</span>
+      <div class="t-card">
+        <h3>機關指示：以鄰地舊資料先行設計</h3>
+        <p>因火化場基地有爭議，機關未同意設計單位進場鑽探，指示引用鄰地 230 地號報告辦理結構設計</p>
+        <span class="tag red">關鍵決策點｜非設計單位裁量</span>
+      </div>
+    </div>
+    <div class="t-item">
+      <span class="t-date">設計期</span>
+      <div class="t-card">
+        <h3>依報告成果 × 當時有效規範完成結構設計</h3>
+        <p>FL 判讀依大地技師簽證成果，結構設計依 90 年版規範（D<sub>E</sub> 可於日本道路協會／日本建築學會二表擇一）</p>
+        <span class="tag">程序完備</span>
+      </div>
+    </div>
+    <div class="t-item key">
+      <span class="t-date">115.06</span>
+      <div class="t-card">
+        <h3>本基地始得進場鑽探</h3>
+        <p>草湖南段 228-2 等地號地基調查報告（中盛鑽探）</p>
+        <span class="tag">適用規範｜113年版</span>
+        <span class="tag red">D<sub>E</sub> 僅採日本建築學會表（較保守）</span>
+      </div>
+    </div>
+    <div class="t-item">
+      <span class="t-date">現階段</span>
+      <div class="t-card">
+        <h3>依新鑽探成果及現行規範檢討基礎設計</h3>
+        <p>設計參數必然趨嚴 → 基礎型式／樁長依新成果調整，屬正常設計變更程序</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 兩項客觀因素 -->
+<section>
+  <h2><span class="num">02</span>差異的兩項客觀成因 Two Objective Factors</h2>
+  <p class="sec-note">兩者交疊，即使土層條件相近，計算結果亦必然不同</p>
+  <div class="grid2">
+    <div class="factor">
+      <div class="f-label">因素 A</div>
+      <h3>資料來源不同（換了「病人」）</h3>
+      <div class="swap">
+        <div class="box"><b>230 地號</b>鄰地・110年</div>
+        <div class="arr">→</div>
+        <div class="box"><b>228-2 等地號</b>本基地・115年</div>
+      </div>
+      <p class="f-note">不同地號、不同鑽孔位置，土層數據本就不會相同。</p>
+    </div>
+    <div class="factor">
+      <div class="f-label">因素 B</div>
+      <h3>規範改版（換了「規則」）</h3>
+      <div class="swap">
+        <div class="box"><b>90年版</b>D<sub>E</sub> 二表擇一<br>可選較有利者</div>
+        <div class="arr">→</div>
+        <div class="box"><b>113年版</b>僅採建築學會表<br>強制較保守</div>
+      </div>
+      <p class="f-note">同一份數據，用新規範計算也會得到更嚴格的結果。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 責任分工 -->
+<section>
+  <h2><span class="num">03</span>法定權責分工 Responsibility Chain</h2>
+  <p class="sec-note">單向上下游關係：下游只能引用上游成果，無權改動</p>
+  <div class="flow">
+    <div class="role">
+      <div class="r-tier">上游｜UPSTREAM</div>
+      <h3>機關</h3>
+      <ul>
+        <li>決定可否進場鑽探</li>
+        <li>指示引用之資料來源</li>
+      </ul>
+      <div class="r-key">本案：指示以鄰地 230 舊報告設計</div>
+    </div>
+    <div class="flow-arr"><span>→</span><small>提供資料</small></div>
+    <div class="role">
+      <div class="r-tier">中游｜簽證</div>
+      <h3>大地技師</h3>
+      <ul>
+        <li>鑽探成果判讀</li>
+        <li>FL 液化評估與簽證</li>
+      </ul>
+      <div class="r-key">FL 之產出者・判讀權在此</div>
+    </div>
+    <div class="flow-arr"><span>→</span><small>簽證成果</small></div>
+    <div class="role">
+      <div class="r-tier">下游｜簽證</div>
+      <h3>結構技師</h3>
+      <ul>
+        <li>依鑽探報告成果設計</li>
+        <li>依當時有效規範計算</li>
+      </ul>
+      <div class="r-key">FL 之引用者・無判讀裁量權</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 關鍵句邏輯 -->
+<section>
+  <h2><span class="num">04</span>關鍵句的邏輯 Key Statement Logic</h2>
+  <div class="logic">
+    <div class="keyline">「結構技師對 FL <em>沒有判讀權</em>，只有<em>引用義務</em>。」</div>
+
+    <div class="syllogism">
+      <div class="syl-n">①</div>
+      <div class="syl-t">
+        <b>前提一｜法定分工</b>
+        <p>FL（抗液化安全係數）之判讀屬大地工程技師簽證權責，係鑽探報告之「簽證產出」。<span class="cite">技師法第 12、13 條・技師分科執業範圍</span></p>
+      </div>
+      <div class="syl-n">②</div>
+      <div class="syl-t">
+        <b>前提二｜引用義務</b>
+        <p>結構技師依法「必須」採用該簽證成果進行設計，不得自行重新判讀或改動上游數據。</p>
+      </div>
+      <div class="syl-n">∴</div>
+      <div class="syl-t">
+        <b>結論</b>
+        <p>鑽探報告換了（230 → 228-2）、規範換了（90 → 113年版），結構設計成果<b>依法必然</b>隨之改變。這是制度設計的正常運作，而非任何一方的疏失。</p>
+      </div>
+    </div>
+
+    <div class="analogy">
+      <div class="a-title">一句話比喻｜檢驗科與主治醫師</div>
+      <div class="pair">
+        <div class="p-l">檢驗科出血檢報告</div><div class="p-eq">=</div><div class="p-r">大地技師出 FL 判讀</div>
+      </div>
+      <div class="pair">
+        <div class="p-l">醫師依報告開藥</div><div class="p-eq">=</div><div class="p-r">結構技師依 FL 設計</div>
+      </div>
+      <div class="pair">
+        <div class="p-l">醫師不能竄改血檢數值</div><div class="p-eq">=</div><div class="p-r">結構技師不能改判 FL</div>
+      </div>
+      <div class="pair">
+        <div class="p-l">質疑數值 → 重驗一次血</div><div class="p-eq">=</div><div class="p-r">質疑 FL → 重新鑽探判讀</div>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:var(--pp-sub);">若對數值有疑慮，正確途徑是「回上游重做檢驗」（本案 115 年 6 月進場鑽探即是），而非要求下游醫師（結構技師）為檢驗數值負責。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>初樸建築師事務所 ProtoPlain Architects｜設計監造單位說明資料</span>
+  <span class="mono">2026.07</span>
+</footer>
+
+</div>
+</body>
+</html>
