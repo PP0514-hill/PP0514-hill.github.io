@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台灣建築師事務所法人化｜研究報告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pp-bg:#ECEAE5;
+    --pp-card:#FFFFFF;
+    --pp-card-alt:#F3F1EC;
+    --pp-text:#232220;
+    --pp-text-2:#6E6B64;
+    --pp-text-3:#9A968D;
+    --pp-line:#D8D5CE;
+    --pp-line-strong:#C3BFB6;
+    --pp-accent:#9C3D2C;
+    --pp-accent-dark:#843022;
+    --pp-accent-tint:#F2E3DE;
+    --st-progress:#3E6B7D;
+    --st-complete:#5C7355;
+    --st-caution:#B07D24;
+    --st-risk:#B5342A;
+    --st-neutral:#9A968D;
+    --font-zh:'Noto Sans TC', sans-serif;
+    --font-en:'Inter', Helvetica, Arial, sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation:none !important; transition:none !important; }
+  }
+
+  body{
+    margin:0;
+    background:var(--pp-bg);
+    color:var(--pp-text);
+    font-family:var(--font-zh), var(--font-en);
+    font-weight:400;
+    font-size:15px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{ margin:0; font-weight:500; letter-spacing:0.01em; }
+  h1{ font-size:28px; line-height:1.35; }
+  h2{ font-size:20px; line-height:1.5; }
+  h3{ font-size:16px; line-height:1.6; }
+  p{ margin:0 0 12px; color:var(--pp-text); }
+  p:last-child{ margin-bottom:0; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:0.08em;
+    color:var(--pp-text-3);
+    text-transform:uppercase;
+  }
+
+  .cite{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:13px;
+    background:var(--pp-card-alt);
+    border:0.5px solid var(--pp-line);
+    border-radius:8px;
+    padding:1px 7px;
+    color:var(--pp-text-2);
+    white-space:nowrap;
+  }
+
+  /* ---------- Top nav ---------- */
+  .topnav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(236,234,229,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:0.5px solid var(--pp-line-strong);
+  }
+  .topnav-inner{
+    max-width:1040px; margin:0 auto;
+    padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .brand{ display:flex; flex-direction:column; gap:1px; }
+  .brand-name{ font-size:13px; font-weight:500; color:var(--pp-text); }
+  .brand-sub{ font-family:var(--font-mono); font-size:11px; color:var(--pp-text-3); letter-spacing:0.05em; }
+  .navlinks{ display:flex; gap:4px; flex-wrap:wrap; }
+  .navlinks a{
+    font-size:13px; color:var(--pp-text-2); text-decoration:none;
+    padding:6px 12px; border-radius:8px;
+  }
+  .navlinks a:hover{ background:var(--pp-card-alt); color:var(--pp-text); }
+
+  /* ---------- Layout ---------- */
+  .wrap{ max-width:1040px; margin:0 auto; padding:0 24px; }
+  section{ padding:56px 0; border-bottom:0.5px solid var(--pp-line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .section-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:28px; }
+  .section-num{ font-family:var(--font-mono); font-size:13px; color:var(--pp-accent); }
+  .section-head h2{ color:var(--pp-text); }
+
+  /* ---------- Hero ---------- */
+  .hero{ padding-top:64px; }
+  .hero h1{ margin:14px 0 10px; }
+  .hero-sub{ font-size:16px; color:var(--pp-text-2); max-width:620px; margin-bottom:8px; }
+  .hero-meta{ font-family:var(--font-mono); font-size:12px; color:var(--pp-text-3); margin-top:18px; }
+
+  /* ---------- Cards / grid ---------- */
+  .card{
+    background:var(--pp-card);
+    border:0.5px solid var(--pp-line);
+    border-radius:12px;
+    padding:20px 22px;
+  }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+  .tldr-grid{ display:grid; grid-template-columns:1fr; gap:12px; margin-top:8px; }
+  .tldr-item{
+    background:var(--pp-card);
+    border:0.5px solid var(--pp-line);
+    border-left:3px solid var(--pp-accent);
+    border-radius:10px;
+    padding:16px 20px;
+  }
+  .tldr-item p{ color:var(--pp-text); }
+
+  /* ---------- Signature: entity firewall diagram ---------- */
+  .firewall{
+    margin-top:36px;
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:stretch;
+    gap:0;
+  }
+  .entity{
+    background:var(--pp-card);
+    border:0.5px solid var(--pp-line);
+    border-radius:12px;
+    padding:22px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .entity-tag{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em;
+    color:var(--pp-text-3); text-transform:uppercase;
+  }
+  .entity-name{ font-size:16px; font-weight:500; }
+  .entity-scope{ font-size:13px; color:var(--pp-text-2); }
+  .entity-liability{
+    margin-top:auto;
+    font-family:var(--font-mono); font-size:12px;
+    display:inline-block; align-self:flex-start;
+    padding:4px 10px; border-radius:8px;
+  }
+  .lia-unlimited{ background:#F6E4E1; color:var(--st-risk); }
+  .lia-limited{ background:#E7EEEA; color:var(--st-complete); }
+
+  .wall{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:0 22px;
+    position:relative;
+  }
+  .wall-line{
+    flex:1;
+    width:0;
+    border-left:2px dashed var(--pp-accent);
+  }
+  .wall-label{
+    writing-mode:vertical-rl;
+    text-orientation:mixed;
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--pp-accent-dark);
+    background:var(--pp-accent-tint);
+    padding:10px 6px;
+    border-radius:8px;
+    margin:10px 0;
+    white-space:nowrap;
+  }
+
+  /* ---------- Tables ---------- */
+  .table-wrap{ overflow-x:auto; border:0.5px solid var(--pp-line); border-radius:12px; }
+  table{ width:100%; border-collapse:collapse; background:var(--pp-card); font-size:14px; }
+  thead th{
+    text-align:left; font-weight:500; font-size:13px;
+    color:var(--pp-text-2);
+    background:var(--pp-card-alt);
+    padding:11px 16px;
+    border-bottom:0.5px solid var(--pp-line-strong);
+    white-space:nowrap;
+  }
+  tbody td{
+    padding:11px 16px;
+    border-bottom:0.5px solid var(--pp-line);
+    vertical-align:top;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody td:first-child{ color:var(--pp-text); font-weight:500; white-space:nowrap; }
+
+  /* ---------- Status badges ---------- */
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-mono); font-size:12px;
+    padding:3px 10px; border-radius:8px; white-space:nowrap;
+  }
+  .badge::before{ content:''; width:6px; height:6px; border-radius:50%; }
+  .b-allow{ background:#E7EEEA; color:var(--st-complete); }
+  .b-allow::before{ background:var(--st-complete); }
+  .b-deny{ background:#F6E4E1; color:var(--st-risk); }
+  .b-deny::before{ background:var(--st-risk); }
+  .b-gray{ background:#F3E9D9; color:var(--st-caution); }
+  .b-gray::before{ background:var(--st-caution); }
+  .b-pending{ background:#E4ECEF; color:var(--st-progress); }
+  .b-pending::before{ background:var(--st-progress); }
+
+  /* ---------- Subsection ---------- */
+  .subsec{ margin-bottom:32px; }
+  .subsec:last-child{ margin-bottom:0; }
+  .subsec-title{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+  .subsec-title h3{ color:var(--pp-text); }
+  .subsec-index{
+    font-family:var(--font-mono); font-size:12px; color:var(--pp-accent);
+    border:0.5px solid var(--pp-line-strong); border-radius:8px;
+    width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+
+  .callout{
+    border-radius:12px; padding:18px 20px; border:0.5px solid var(--pp-line);
+    margin:14px 0;
+  }
+  .callout-risk{ background:#F9EEEC; border-color:#E9C7BF; }
+  .callout-risk .callout-label{ color:var(--st-risk); }
+  .callout-note{ background:var(--pp-card-alt); }
+  .callout-note .callout-label{ color:var(--pp-text-2); }
+  .callout-label{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.04em;
+    text-transform:uppercase; margin-bottom:8px; display:block;
+  }
+
+  ul{ margin:0; padding-left:20px; }
+  li{ margin-bottom:6px; }
+  li:last-child{ margin-bottom:0; }
+
+  /* ---------- Roadmap / phases ---------- */
+  .phase{
+    display:grid; grid-template-columns:120px 1fr; gap:20px;
+    padding:22px 0;
+    border-bottom:0.5px solid var(--pp-line);
+  }
+  .phase:last-child{ border-bottom:none; padding-bottom:0; }
+  .phase:first-child{ padding-top:0; }
+  .phase-marker{ display:flex; flex-direction:column; gap:8px; }
+  .phase-num{ font-family:var(--font-mono); font-size:22px; color:var(--pp-accent); }
+  .phase-label{ font-size:13px; color:var(--pp-text-2); }
+  .phase-priority{
+    font-family:var(--font-mono); font-size:11px;
+    display:inline-block; padding:2px 8px; border-radius:8px; width:fit-content;
+  }
+  .pri-high{ background:#F6E4E1; color:var(--st-risk); }
+  .pri-mid{ background:#F3E9D9; color:var(--st-caution); }
+  .pri-low{ background:#E4ECEF; color:var(--st-progress); }
+  .phase-title{ margin-bottom:10px; }
+  .phase-items{ display:flex; flex-direction:column; gap:10px; }
+  .phase-item{
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:14px; color:var(--pp-text);
+  }
+  .phase-item-num{
+    font-family:var(--font-mono); font-size:12px; color:var(--pp-text-3);
+    flex-shrink:0; padding-top:1px;
+  }
+
+  .trigger-box{
+    margin-top:24px; background:var(--pp-card-alt); border-radius:12px;
+    padding:18px 20px; border:0.5px solid var(--pp-line);
+  }
+  .trigger-box h3{ margin-bottom:10px; font-size:14px; color:var(--pp-text-2); }
+  .trigger-row{ display:flex; gap:10px; font-size:14px; margin-bottom:8px; }
+  .trigger-row:last-child{ margin-bottom:0; }
+  .trigger-arrow{ color:var(--pp-accent); flex-shrink:0; }
+
+  /* ---------- Caveats ---------- */
+  .caveat-list{ display:flex; flex-direction:column; gap:12px; }
+  .caveat{
+    display:grid; grid-template-columns:20px 1fr; gap:10px;
+    padding:14px 16px; background:var(--pp-card); border:0.5px solid var(--pp-line);
+    border-radius:10px; font-size:14px;
+  }
+  .caveat-mark{ color:var(--st-caution); font-family:var(--font-mono); }
+
+  footer{
+    padding:32px 24px 48px; text-align:center;
+    font-family:var(--font-mono); font-size:12px; color:var(--pp-text-3);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:720px){
+    .grid-2, .grid-3{ grid-template-columns:1fr; }
+    .firewall{ grid-template-columns:1fr; }
+    .wall{ padding:16px 0; }
+    .wall-line{ display:none; }
+    .wall-label{ writing-mode:horizontal-tb; margin:0; }
+    .phase{ grid-template-columns:1fr; }
+    .navlinks{ display:none; }
+    h1{ font-size:24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <span class="brand-name">初樸建築師事務所 ProtoPlain</span>
+      <span class="brand-sub">STUDY REPORT · LEGAL &amp; BUSINESS</span>
+    </div>
+    <div class="navlinks">
+      <a href="#tldr">TL;DR</a>
+      <a href="#findings">重點</a>
+      <a href="#details">細節</a>
+      <a href="#recommendations">建議</a>
+      <a href="#caveats">注意事項</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="eyebrow">建築師法 · 法人化研究 · 2026.07</span>
+    <h1>台灣建築師事務所法人化</h1>
+    <div class="hero-sub">優點、法規限制與策略建議——依現行《建築師法》組織型態限制，比對「個人執業＋關聯法人」雙實體架構的責任、稅務與傳承議題。</div>
+    <div class="hero-meta">資料範圍：2026年7月可得之公開法規與公告資訊</div>
+
+    <div class="firewall">
+      <div class="entity">
+        <span class="entity-tag">簽證本業 · Design &amp; Supervision</span>
+        <span class="entity-name">建築師事務所（個人執業）</span>
+        <span class="entity-scope">設計、監造、簽證業務。依《建築師法》第6條僅得以個人或聯合（合夥）型態執業。</span>
+        <span class="entity-liability lia-unlimited">無限責任 Unlimited Liability</span>
+      </div>
+      <div class="wall">
+        <div class="wall-line"></div>
+        <span class="wall-label">第25條防火牆 · 不得兼營／兼任</span>
+        <div class="wall-line"></div>
+      </div>
+      <div class="entity">
+        <span class="entity-tag">周邊業務 · Construction &amp; Advisory</span>
+        <span class="entity-name">初樸自然構築工程有限公司</span>
+        <span class="entity-scope">營造承攬等可合法公司化之周邊業務。建築師本人不得任負責人或專任工程人員。</span>
+        <span class="entity-liability lia-limited">有限責任 Limited Liability</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="tldr">
+    <div class="section-head">
+      <span class="section-num">00</span>
+      <h2>TL;DR</h2>
+    </div>
+    <div class="tldr-grid">
+      <div class="tldr-item">
+        <p>現行《建築師法》<strong>仍不允許</strong>以公司法人形式執行建築師簽證業務——<span class="cite">第6條</span>僅允許個人事務所或聯合（合夥）事務所。開放「法人建築師事務所」的修正草案自2017年送立法院後因屆期不續審而失效，截至2026年7月仍未三讀通過。</p>
+      </div>
+      <div class="tldr-item">
+        <p>「建築師事務所（個人執業、無限責任）＋關聯有限公司（有限責任、承接營造）」的雙實體模式，是現行法下最務實的架構；須嚴守<span class="cite">第25條</span>紅線（建築師不得兼營營造業、不得任營造業主任建築師），並管理設計—營造間的利益衝突與稅務移轉訂價風險。</p>
+      </div>
+      <div class="tldr-item">
+        <p>真正的法人化利益（有限責任、股權傳承、規模化、員工認股）須待修法；建議以「稅務效率＋傳承布局＋合規防火牆」三軸操作現有雙實體，同時透過公會參與修法倡議。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="findings">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>重點 Key Findings</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>面向</th><th>現行法規狀態</th><th>判斷</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>建築師事務所組織型態</td>
+            <td><span class="cite">第6條</span>：僅個人事務所、聯合事務所（合夥）</td>
+            <td><span class="badge b-allow">明確允許</span></td>
+          </tr>
+          <tr>
+            <td>以公司法人執行簽證業務</td>
+            <td>無法源；經濟部函釋專門職業不得以公司經營</td>
+            <td><span class="badge b-deny">明確禁止</span></td>
+          </tr>
+          <tr>
+            <td>法人建築師事務所</td>
+            <td>2017年修正草案擬開放，但已失效</td>
+            <td><span class="badge b-pending">修法未過</span></td>
+          </tr>
+          <tr>
+            <td>建築師兼營營造業</td>
+            <td><span class="cite">第25條</span>明文禁止，違者停業、廢止開業證書（<span class="cite">第46條</span>）</td>
+            <td><span class="badge b-deny">明確禁止</span></td>
+          </tr>
+          <tr>
+            <td>關聯營造公司（他人任負責人）</td>
+            <td>法無禁止「投資」，但建築師不得兼營、兼任</td>
+            <td><span class="badge b-gray">灰色地帶</span></td>
+          </tr>
+          <tr>
+            <td>周邊業務子公司化（室內設計、顧問）</td>
+            <td>法無禁止，屬營利事業</td>
+            <td><span class="badge b-allow">可行</span></td>
+          </tr>
+          <tr>
+            <td>政府採購投標資格</td>
+            <td>技術服務採購：事務所與法人（技師事務所、工程顧問公司）均可投標</td>
+            <td><span class="badge b-pending">兩者皆可，非加分項</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="details">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>細節 Details</h2>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">
+        <span class="subsec-index">01</span>
+        <h3>現行法規架構</h3>
+      </div>
+      <p><strong>允許的組織型態</strong>（《建築師法》最新修正民國112年12月6日）：<span class="cite">第6條</span>規定建築師開業應設立建築師事務所，或由二個以上建築師組織聯合建築師事務所共同執行業務——僅個人事務所與聯合事務所（合夥）兩種型態。<span class="cite">第21條</span>規定簽證責任歸屬於建築師個人。聯合事務所為合夥組織，合夥人依《民法》第681條負連帶無限責任。</p>
+      <p><strong>是否允許公司法人執業——不允許</strong>：經濟部函釋（經商字第09602149510號）明示專門職業業務尚非公司或商業得登記經營之營業項目，不得以組織公司經營。建築師簽證業務無法以公司名義承接，與律師、（過去的）會計師相同。</p>
+      <p><strong>修法動向——已失效，尚未重啟三讀</strong>：行政院於民國106年（2017年）2月3日函送立法院審議之修正草案，擬增訂法人建築師事務所（定性為社團法人，準用公司法有限公司規定；股東以開業建築師為限；<span class="cite">第32條</span>強制投保責任險；<span class="cite">第33條</span>股東與事務所負連帶賠償責任）。該草案因屆期不續審而失效，現行法仍無法人事務所制度。</p>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">
+        <span class="subsec-index">02</span>
+        <h3>法人化的潛在優點</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>面向</th><th>個人／聯合事務所（現行本業）</th><th>公司法人（周邊業務／未來修法後之本業）</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>責任 Liability</td><td>個人／合夥人無限責任；簽證責任隨個人</td><td>股東有限責任，以出資額為限；專業過失責任仍隨簽證者個人</td></tr>
+            <tr><td>稅務</td><td>執行業務所得併入個人綜所稅（五級累進5%–40%）</td><td>營所稅率20%；盈餘保留可遞延個人稅，未分配盈餘加徵5%</td></tr>
+            <tr><td>傳承／股權</td><td>合夥人退出、世代交替須重組合夥契約</td><td>股權移轉便利，可分年贈與、引進合夥人</td></tr>
+            <tr><td>品牌／規模化</td><td>受限於個人名義</td><td>便於整合設計、營造、室內設計等多角化業務</td></tr>
+            <tr><td>融資</td><td>以個人信用為主</td><td>法人可獨立累積信用、財報，較利於銀行融資</td></tr>
+            <tr><td>員工制度</td><td>勞健保、退休金照常</td><td>可設計員工認股／分紅留才工具</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px">當個人執行業務所得將邊際稅率推升至30%–40%區間時，將高利潤留存於20%營所稅的公司實體可產生稅負遞延效果。惟建築師本業依法不得公司化，此稅務利益目前<strong>只能透過營造、室內設計、顧問等可合法公司化的周邊業務實現</strong>。實務上一般以綜所稅邊際稅率達20%級距（114年度課稅所得約133萬–266萬元區間）作為評估設立公司的參考門檻，須個案試算。</p>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">
+        <span class="subsec-index">03</span>
+        <h3>限制與風險</h3>
+      </div>
+      <p><strong>簽證個人責任與公司有限責任的根本衝突</strong>：<span class="cite">第21條</span>、《建築法》<span class="cite">第13條</span>皆將責任綁定於建築師個人。即使未來開放法人事務所，草案<span class="cite">第33條</span>仍要求股東與事務所負連帶賠償責任、強制投保——立法者不願讓建築師藉法人化卸責。</p>
+
+      <div class="callout callout-risk">
+        <span class="callout-label">Risk · 第25條紅線</span>
+        <p><strong>第25條</strong>：建築師不得兼任或兼營公務人員、營造業（含營造業之主任技師或技師，或為其承攬工程之保證人）、建築材料商。內政部函釋進一步認定開業建築師不得兼任營造業之「主任建築師」（專任工程人員）。違反者依<span class="cite">第46條</span>應停止執行業務，不遵從者廢止開業證書。</p>
+        <p style="margin-top:10px">對雙實體架構的直接意涵：建築師本人可為關聯營造公司之股東／投資人，但<strong>不得擔任該公司之負責人、專任工程人員（主任建築師），亦不得為其承攬工程之保證人</strong>；且應避免以建築師身分同時擔任設計監造人又實質經營承造該案之營造公司。</p>
+      </div>
+
+      <div class="table-wrap" style="margin-top:16px">
+        <table>
+          <thead>
+            <tr><th>職業</th><th>法人化狀態</th><th>對建築師的啟示</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>會計師</td>
+              <td>《會計師法》（2007年修正）設「法人會計師事務所」，違失執業股東負連帶責任，其他股東以出資額負有限責任，強制投保</td>
+              <td>建築師法草案幾乎完全比照此模式；惟因稅負因素，實務上至今幾無法人會計師事務所成立</td>
+            </tr>
+            <tr>
+              <td>律師</td>
+              <td>《律師法》第48條列有法人型態，但另以法律定之，框架尚未完備運作</td>
+              <td>「開了門但少人走」，稅務與連帶責任設計是關鍵障礙</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px"><strong>關鍵洞察</strong>：會計師法人事務所自2007年開放至今使用率極低，主因稅負不利與連帶責任未真正切割。這預示即使建築師法未來開放法人事務所，若稅制與責任設計不變，實益也可能有限，不宜過度期待「法人化」本身能帶來重大突破。</p>
+      <p><strong>本業個人執業＋周邊業務公司化的稅務與利益衝突疑慮</strong>：事務所與關聯法人間業務往來須以常規交易（arm's length）訂價，避免國稅局認定藉關係人交易不當移轉利潤；同一案件若事務所設計監造、關聯營造公司承造，對政府採購案尤須迴避並主動揭露關係。</p>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">
+        <span class="subsec-index">04</span>
+        <h3>實務案例</h3>
+      </div>
+      <p>台灣現行法下無「公司化」的建築師簽證事務所；大型知名事務所皆為個人或聯合建築師事務所型態。常見的集團化模式即為「建築師事務所（簽證本業）＋關聯營造公司／室內裝修公司／設計公司（可合法公司化的周邊業務）」，以自然人交叉持股或家族成員分持方式串接，屬業界普遍的「影子公司」實務。</p>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">
+        <span class="subsec-index">05</span>
+        <h3>國際比較</h3>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>國家</th><th>允許的法律形式</th><th>所有權限制</th><th>責任與稅務</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>美國（各州不一）</td>
+              <td>PC（Professional Corporation）、PLLC</td>
+              <td>多數州要求股東／一定比例董事須為執照建築師</td>
+              <td>PC預設按C-corp課稅，可選S-corp；專業過失責任仍隨個人</td>
+            </tr>
+            <tr>
+              <td>加州</td>
+              <td>專業建築公司；不允許LLC/PLLC執業建築</td>
+              <td>股東須具建築師照</td>
+              <td>不設PLLC，認為專業人員不應限制其個人過失責任</td>
+            </tr>
+            <tr>
+              <td>日本</td>
+              <td>《建築士法》第23條：允許以株式会社、合同会社等法人開設建築士事務所</td>
+              <td>須登記代表者、役員，並置專任「管理建築士」</td>
+              <td>明確允許法人化，享法人節稅與有限責任</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px">日本已明文允許建築士事務所法人化且行之有年，是台灣新南向修法的主要參考；美國則以「PC/PLLC＋股東須具照＋個人過失責任不免」平衡專業責任與商業效率。兩者都保留「專業過失責任隨個人」的核心，與台灣草案第33條連帶責任精神一致。</p>
+    </div>
+
+    <div class="subsec">
+      <div class="subsec-title">
+        <span class="subsec-index">06</span>
+        <h3>外部發文查證：AIA（美國建築師協會）執業主體與保險規範</h3>
+      </div>
+      <p>查證對象為「AIA Taipei／Jenny Ling」2026年7月臉書發文，內容涉及美國建築師執業主體（LLC／PC／LLP）與職業保險（AIA Trust）之描述。整體內容多數與查證結果相符，惟其中一項關於AIA制式合約（B101）分擔複委託技師專業過失連帶責任之敘述有誤，已於下方訂正。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>發文主張</th><th>查證結果</th><th>說明</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>美國允許建築師以LLC、PC、LLP等法人形式執業，形成有限度的個人資產隔離（法人面紗）</td>
+              <td><span class="badge b-allow">大致正確</span></td>
+              <td>多數州允許；惟各州規定不一，例如加州禁止建築師以LLC／PLLC執業，僅允許PC或LLP</td>
+            </tr>
+            <tr>
+              <td>有限責任可避免因公司一般商業債務或合夥人之非專業過失遭個人連帶追討</td>
+              <td><span class="badge b-allow">正確</span></td>
+              <td>PC／PLLC／LLP均提供此類「同儕過失防火牆」，惟仍須視各州法規細節</td>
+            </tr>
+            <tr>
+              <td>建築師個人專業過失（設計錯誤），法人盾牌通常無法完全免除個人責任</td>
+              <td><span class="badge b-allow">正確</span></td>
+              <td>此為美國法下之普遍原則，多方文獻一致確認</td>
+            </tr>
+            <tr>
+              <td>AIA強烈建議投保專業責任險（PLI/E&amp;O）與一般責任險（CGL）</td>
+              <td><span class="badge b-allow">正確</span></td>
+              <td>AIA Trust設有專屬風險管理資源與保單比較資料庫</td>
+            </tr>
+            <tr>
+              <td>AIA Trust與Victor／CNA合作，提供會員專屬保費折扣</td>
+              <td><span class="badge b-allow">正確</span></td>
+              <td>公開資料確認為5%保費折扣（premium credit），予符合資格之AIA會員</td>
+            </tr>
+            <tr>
+              <td>AIA制式合約（B101）明訂分工，確保建築師不需為複委託技師之專業過失負無限連帶責任</td>
+              <td><span class="badge b-deny">需訂正</span></td>
+              <td>B101條文邏輯相反：委任顧問技師不得免除建築師於合約下之義務；建築師仍為業主單一責任窗口</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-risk">
+        <span class="callout-label">訂正 · B101條款實際邏輯</span>
+        <p>依B101-2017條文，建築師使用顧問技師（consultant）以補充或審查其服務，<strong>不得免除或解除建築師於合約下對業主之義務與責任</strong>；建築師另須以書面合約要求顧問技師依比例投保相應之專業責任保險。換言之，B101的設計目的是確保業主有單一究責窗口（建築師），而非為建築師卸除對複委託技師之責任。至於建築師是否與過失技師對第三人負連帶賠償責任，屬於各州侵權行為法（如共同侵權人分擔規則）範疇，非AIA制式合約所能片面排除。</p>
+      </div>
+
+      <p style="margin-top:14px">發文中提及「參考泰國經驗」部分，因原文未展開具體法規內容，現有查證資料尚不足以確認泰國建築師法之法人化規定，故不列入以上驗證結果，亦不納入本報告之國際比較表。</p>
+
+      <p style="font-family:var(--font-mono); font-size:12px; color:var(--pp-text-3); margin-top:14px">資料來源：AIA Trust 官網、AIA New York「Designing the Right Entity」、B101-2017 標準契約條文（2026年7月查證）</p>
+    </div>
+  </section>
+
+  <section id="recommendations">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>建議 Recommendations</h2>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker">
+        <span class="phase-num">Ph.1</span>
+        <span class="phase-label">現行法下 · 立即可執行</span>
+        <span class="phase-priority pri-high">Priority: High</span>
+      </div>
+      <div>
+        <h3 class="phase-title">鞏固雙實體、守住紅線</h3>
+        <div class="phase-items">
+          <div class="phase-item"><span class="phase-item-num">1</span><span>確認角色分離：查核於關聯營造公司的登記身分，不得列名為負責人、專任工程人員（主任建築師），亦不得為其承攬工程之保證人（<span class="cite">第25條</span>）。若目前有此情形，應立即調整由他人任負責人與專任工程人員。</span></div>
+          <div class="phase-item"><span class="phase-item-num">2</span><span>利益衝突防火牆：同一建築案避免「事務所設計監造＋關聯營造公司承造」同時發生；政府採購案尤須迴避，並主動揭露關係人關係。</span></div>
+          <div class="phase-item"><span class="phase-item-num">3</span><span>移轉訂價合規：事務所與營造公司、設計公司間的收付款以常規交易訂價，保留合約與計價依據，委由會計師建立關係人交易文件。</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker">
+        <span class="phase-num">Ph.2</span>
+        <span class="phase-label">稅務與傳承布局</span>
+        <span class="phase-priority pri-mid">Priority: Mid</span>
+      </div>
+      <div>
+        <h3 class="phase-title">稅務交叉點與股權規劃</h3>
+        <div class="phase-items">
+          <div class="phase-item"><span class="phase-item-num">4</span><span>稅務交叉點檢視：若個人執行業務所得已使綜所稅邊際稅率達30%以上，將可合法公司化的業務盡量歸入公司實體，利用20%營所稅與盈餘保留遞延效果。設立公司前先與會計師試算記帳費、設立成本與稅負節省之差額。</span></div>
+          <div class="phase-item"><span class="phase-item-num">5</span><span>股權傳承規劃：對營造／設計公司（法人）可提早以分年贈與、引進次世代或核心員工持股方式布局；建築師事務所本業則須另循培養年輕建築師合夥人、轉為聯合事務所路徑處理世代交替。</span></div>
+          <div class="phase-item"><span class="phase-item-num">6</span><span>員工留才：於法人實體設計員工分紅入股或績效獎金，作為團隊留才工具；事務所本業則以合夥人晉升機制留住關鍵建築師。</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-marker">
+        <span class="phase-num">Ph.3</span>
+        <span class="phase-label">政策倡議與長期</span>
+        <span class="phase-priority pri-low">Priority: Low</span>
+      </div>
+      <div>
+        <h3 class="phase-title">修法倡議與國際布局準備</h3>
+        <div class="phase-items">
+          <div class="phase-item"><span class="phase-item-num">7</span><span>參與修法倡議：透過地方及全國建築師公會，推動建築師法法人事務所修法重啟，並參考日本株式会社模式、檢討會計師法人事務所稅負不利的前車之鑑，爭取合理稅制配套。</span></div>
+          <div class="phase-item"><span class="phase-item-num">8</span><span>國際業務預備：預先建立可轉換為法人事務所的內部治理（章程、股東協議雛形），為未來法人化開放後的新南向、跨國接案品牌與資格助益做準備。</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trigger-box">
+      <h3>觸發條件 Benchmarks</h3>
+      <div class="trigger-row"><span class="trigger-arrow">→</span><span>建築師法修正草案於立法院重啟並三讀通過：立即評估將現有雙實體整併為「法人建築師事務所＋營造子公司」控股架構。</span></div>
+      <div class="trigger-row"><span class="trigger-arrow">→</span><span>個人綜所稅邊際稅率持續低於20%：維持個人執業，勿為公司化而增加記帳與合規成本。</span></div>
+      <div class="trigger-row"><span class="trigger-arrow">→</span><span>營造公司年營收顯著成長、需大額融資或引進外部股東：強化法人治理，考慮股份有限公司型態。</span></div>
+    </div>
+  </section>
+
+  <section id="caveats">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>注意事項 Caveats</h2>
+    </div>
+    <div class="caveat-list">
+      <div class="caveat"><span class="caveat-mark">!</span><span><strong>法規時效</strong>：本報告依2026年7月可得資料。修法動態請以內政部國土管理署、立法院議事系統最新公告為準；查證未找到2020年後正式重啟三讀之公開來源，但現行法無法人事務所條文可確認改革尚未完成。</span></div>
+      <div class="caveat"><span class="caveat-mark">!</span><span><strong>「不允許」與「灰色地帶」的區分</strong>：以公司法人執行簽證本業＝明確禁止；兼營營造業＝明確禁止（<span class="cite">第25條</span>）；單純投資關聯法人而不任負責人、專任工程人員＝法無明文禁止但須嚴管利益衝突；周邊業務公司化＝可行。</span></div>
+      <div class="caveat"><span class="caveat-mark">!</span><span><strong>專業責任不因公司化而免除</strong>：無論國內外，建築師個人的專業過失責任均無法藉法人有限責任卸除，專業責任保險不可或缺。</span></div>
+      <div class="caveat"><span class="caveat-mark">!</span><span><strong>稅務規劃須個案化</strong>：營所稅與綜所稅的優劣高度依賴所得結構、盈餘分配政策，稅率級距金額亦逐年隨CPI調整，務必委任會計師依最新公告個案試算。</span></div>
+      <div class="caveat"><span class="caveat-mark">!</span><span><strong>本報告非法律或稅務意見</strong>：涉及第25條懲戒風險與關係人交易，建議正式諮詢執業律師與會計師出具個案意見書後再行動。</span></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>ProtoPlain Architects · 初樸建築師事務所 — 內部研究文件 · 非公開發布</footer>
+
+</body>
+</html>

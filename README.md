@@ -5,6 +5,7 @@
 | 頁面 | 網址 | 發佈日期 |
 | --- | --- | --- |
 | AppSheet 是什麼？給完全沒寫過程式的你 | [https://pp0514-hill.github.io/appsheet-101/](https://pp0514-hill.github.io/appsheet-101/) | 2026-06-08 |
+| 台灣建築師事務所法人化｜研究報告 | [https://pp0514-hill.github.io/arch-legal-07/](https://pp0514-hill.github.io/arch-legal-07/) | 2026-07-07 |
 | 竹構造與木構造的碳方法學・ISO 7567・商業變現路徑研究報告 | [https://pp0514-hill.github.io/bamboo-carbon-strategy/](https://pp0514-hill.github.io/bamboo-carbon-strategy/) | 2026-06-19 |
 | 鑽探數據差異之說明 | [https://pp0514-hill.github.io/brief-2607-cx/](https://pp0514-hill.github.io/brief-2607-cx/) | 2026-07-02 |
 | chiron-healing | [https://pp0514-hill.github.io/chiron-healing/](https://pp0514-hill.github.io/chiron-healing/) |  |
