@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雷禪｜幽遊白書的隱藏第一因</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pp-bg:#ECEAE5;
+  --pp-card:#FFFFFF;
+  --pp-card2:#F3F1EC;
+  --pp-ink:#232220;
+  --pp-sub:#6E6B64;
+  --pp-hint:#9A968D;
+  --pp-line:#D8D5CE;
+  --pp-line-strong:#C3BFB6;
+  --pp-acc:#9C3D2C;
+  --pp-acc-dark:#843022;
+  --pp-acc-bg:#F2E3DE;
+  --pp-status-run:#3E6B7D;
+  --pp-status-done:#5C7355;
+  --pp-status-warn:#B07D24;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--pp-bg);
+  color:var(--pp-ink);
+  font-family:'Noto Sans TC','Inter','Helvetica Neue',sans-serif;
+  font-weight:400;
+  font-size:15px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'JetBrains Mono',monospace;font-size:13px;}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px;}
+
+/* ---------- Header ---------- */
+header{padding:64px 0 40px;border-bottom:0.5px solid var(--pp-line-strong);}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pp-acc);letter-spacing:0.12em;margin-bottom:16px;}
+h1{font-size:28px;font-weight:500;line-height:1.4;letter-spacing:0.02em;}
+h1 .sub-en{display:block;font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:var(--pp-hint);letter-spacing:0.08em;margin-top:8px;}
+.lede{margin-top:20px;color:var(--pp-sub);max-width:640px;}
+
+/* ---------- Section ---------- */
+section{padding:48px 0;border-bottom:0.5px solid var(--pp-line);}
+section:last-of-type{border-bottom:none;}
+h2{font-size:20px;font-weight:500;margin-bottom:6px;}
+h2 .en{font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:var(--pp-hint);margin-left:10px;letter-spacing:0.06em;}
+.sec-note{color:var(--pp-sub);font-size:13px;margin-bottom:28px;}
+
+/* ---------- TL;DR ---------- */
+.tldr{
+  background:var(--pp-card);
+  border:0.5px solid var(--pp-line-strong);
+  border-left:2px solid var(--pp-acc);
+  border-radius:12px;
+  padding:24px 28px;
+  margin-top:32px;
+}
+.tldr .tag{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pp-acc);margin-bottom:8px;}
+.tldr p{max-width:720px;}
+.tldr strong{font-weight:500;color:var(--pp-acc-dark);}
+
+/* ---------- Causal chain (signature) ---------- */
+.chain{position:relative;margin-left:8px;}
+.chain::before{
+  content:'';position:absolute;left:0;top:12px;bottom:12px;
+  width:0.5px;background:var(--pp-line-strong);
+}
+.chain-item{position:relative;padding:0 0 36px 40px;}
+.chain-item:last-child{padding-bottom:0;}
+.chain-item::before{
+  content:'';position:absolute;left:-4.5px;top:8px;
+  width:9px;height:9px;border-radius:50%;
+  background:var(--pp-bg);border:1.5px solid var(--pp-acc);
+}
+.chain-item.origin::before{background:var(--pp-acc);}
+.chain-time{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pp-hint);margin-bottom:4px;}
+.chain-title{font-size:16px;font-weight:500;margin-bottom:6px;}
+.chain-body{color:var(--pp-sub);max-width:640px;}
+.chain-body em{font-style:normal;color:var(--pp-acc-dark);}
+.chain-consequence{
+  margin-top:10px;display:inline-block;
+  background:var(--pp-acc-bg);color:var(--pp-acc-dark);
+  border-radius:8px;padding:4px 12px;font-size:13px;
+}
+
+/* ---------- Cards grid ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.card{
+  background:var(--pp-card);
+  border:0.5px solid var(--pp-line);
+  border-radius:12px;
+  padding:24px;
+}
+.card h3{font-size:16px;font-weight:500;margin-bottom:4px;}
+.card .en{font-family:'Inter',sans-serif;font-size:13px;font-weight:400;color:var(--pp-hint);display:block;margin-bottom:12px;}
+.card p{color:var(--pp-sub);font-size:14px;}
+.card ul{list-style:none;margin-top:10px;}
+.card li{
+  color:var(--pp-sub);font-size:14px;
+  padding:8px 0;border-top:0.5px solid var(--pp-line);
+}
+.card li:first-child{border-top:none;}
+.card li strong{font-weight:500;color:var(--pp-ink);}
+
+/* ---------- Mirror (雷禪 vs 仙水) ---------- */
+.mirror{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:0;
+  background:var(--pp-card);border:0.5px solid var(--pp-line-strong);
+  border-radius:12px;overflow:hidden;
+}
+.mirror-col{padding:28px;}
+.mirror-axis{
+  width:0.5px;background:var(--pp-line-strong);
+  position:relative;
+}
+.mirror-axis span{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(90deg);
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:var(--pp-hint);white-space:nowrap;letter-spacing:0.2em;
+  background:var(--pp-card);padding:0 8px;
+}
+.mirror h3{font-size:16px;font-weight:500;}
+.mirror .who-en{font-family:'Inter',sans-serif;font-size:13px;color:var(--pp-hint);display:block;margin-bottom:16px;}
+.mirror dl{margin:0;}
+.mirror dt{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pp-hint);margin-top:14px;}
+.mirror dd{margin:2px 0 0;font-size:14px;color:var(--pp-sub);}
+.mirror .verdict{
+  margin-top:18px;padding-top:14px;border-top:0.5px solid var(--pp-line);
+  font-size:14px;font-weight:500;
+}
+.mirror .verdict.up{color:var(--pp-status-done);}
+.mirror .verdict.down{color:var(--pp-acc);}
+.mirror-note{
+  grid-column:1 / -1;border-top:0.5px solid var(--pp-line);
+  padding:16px 28px;font-size:13px;color:var(--pp-sub);
+  background:var(--pp-card2);
+}
+
+/* ---------- Flow diagram (兩條遺產) ---------- */
+.legacy{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+.legacy-track{
+  background:var(--pp-card);border:0.5px solid var(--pp-line);
+  border-radius:12px;padding:24px;
+}
+.legacy-track .track-label{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  color:var(--pp-acc);margin-bottom:16px;letter-spacing:0.08em;
+}
+.legacy-node{
+  border:0.5px solid var(--pp-line);border-radius:8px;
+  padding:12px 16px;background:var(--pp-card2);
+  font-size:14px;
+}
+.legacy-node strong{font-weight:500;}
+.legacy-node .n-sub{display:block;font-size:13px;color:var(--pp-hint);margin-top:2px;}
+.legacy-arrow{
+  text-align:center;color:var(--pp-line-strong);
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  padding:6px 0;user-select:none;
+}
+.legacy-node.final{
+  background:var(--pp-acc-bg);border-color:var(--pp-acc);
+}
+.legacy-node.final strong{color:var(--pp-acc-dark);}
+.legacy-node.final .n-sub{color:var(--pp-acc-dark);opacity:0.75;}
+
+/* ---------- Assessment table ---------- */
+table{width:100%;border-collapse:collapse;background:var(--pp-card);border:0.5px solid var(--pp-line-strong);border-radius:12px;overflow:hidden;}
+th,td{padding:14px 18px;text-align:left;font-size:14px;border-top:0.5px solid var(--pp-line);}
+thead th{
+  border-top:none;background:var(--pp-card2);
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+  color:var(--pp-sub);letter-spacing:0.06em;
+}
+td:first-child{font-weight:500;white-space:nowrap;}
+td{color:var(--pp-sub);}
+td:first-child{color:var(--pp-ink);}
+.pill{
+  display:inline-block;border-radius:8px;padding:2px 10px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+}
+.pill.high{background:var(--pp-acc-bg);color:var(--pp-acc-dark);}
+.pill.mid{background:#F1E9DA;color:var(--pp-status-warn);}
+
+/* ---------- Caveats ---------- */
+.caveat{
+  background:var(--pp-card2);border:0.5px solid var(--pp-line);
+  border-radius:12px;padding:24px 28px;
+}
+.caveat .tag{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pp-status-warn);margin-bottom:10px;}
+.caveat p{color:var(--pp-sub);font-size:14px;max-width:720px;}
+.caveat p + p{margin-top:10px;}
+
+/* ---------- Character Sigils ---------- */
+.sigil-note{color:var(--pp-sub);font-size:13px;margin-bottom:28px;}
+.sigil-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.sigil-card{
+  background:var(--pp-card);border:0.5px solid var(--pp-line);
+  border-radius:12px;padding:24px 20px;text-align:center;
+}
+.sigil-card svg{width:72px;height:72px;margin:0 auto 16px;display:block;}
+.sigil-card .s-name{font-size:16px;font-weight:500;}
+.sigil-card .s-en{font-family:'Inter',sans-serif;font-size:13px;color:var(--pp-hint);display:block;margin:2px 0 12px;}
+.sigil-card .s-desc{font-size:13px;color:var(--pp-sub);line-height:1.6;}
+.sigil-card .s-track{
+  display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;
+  font-size:13px;border-radius:8px;padding:2px 10px;
+}
+.s-track.blood{background:var(--pp-acc-bg);color:var(--pp-acc-dark);}
+.s-track.ideo{background:#DCE6EA;color:var(--pp-status-run);}
+/* sigil stroke defaults */
+.sig{fill:none;stroke:var(--pp-acc);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.sig-w{fill:none;stroke:var(--pp-line-strong);stroke-width:1;}
+.sig-f{fill:var(--pp-acc);}
+
+/* inline sigil in mirror / legacy headers */
+.inline-sig{width:28px;height:28px;vertical-align:middle;margin-right:10px;display:inline-block;}
+.mirror h3{display:flex;align-items:center;}
+.legacy-node .node-head{display:flex;align-items:center;gap:10px;}
+.legacy-node .node-head svg{width:24px;height:24px;flex-shrink:0;}
+
+footer{padding:32px 0 56px;color:var(--pp-hint);font-size:13px;}
+footer .mono{color:var(--pp-hint);}
+
+@media (max-width:720px){
+  .grid,.legacy{grid-template-columns:1fr;}
+  .mirror{grid-template-columns:1fr;}
+  .mirror-axis{width:auto;height:0.5px;}
+  .mirror-axis span{transform:translate(-50%,-50%) rotate(0);}
+  header{padding:48px 0 32px;}
+  h1{font-size:24px;}
+}
+@media (prefers-reduced-motion: no-preference){
+  .chain-item{opacity:0;transform:translateY(8px);animation:rise .5s ease forwards;}
+  .chain-item:nth-child(1){animation-delay:.05s}
+  .chain-item:nth-child(2){animation-delay:.15s}
+  .chain-item:nth-child(3){animation-delay:.25s}
+  .chain-item:nth-child(4){animation-delay:.35s}
+  .chain-item:nth-child(5){animation-delay:.45s}
+  .chain-item:nth-child(6){animation-delay:.55s}
+  @keyframes rise{to{opacity:1;transform:none;}}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">幽☆遊☆白書 ── 角色結構分析 / CHARACTER STRUCTURE ANALYSIS</div>
+    <h1>雷禪：整部作品的隱藏第一因
+      <span class="sub-en">RAIZEN — THE HIDDEN FIRST CAUSE OF YU YU HAKUSHO</span>
+    </h1>
+    <p class="lede">一個在故事開始前七百年就做出的決定——「不再吃人」——如何逆向定義了主角的存在、重寫前期劇情的意義，並在他死後改寫整個魔界的法律與秩序。</p>
+
+    <div class="tldr">
+      <div class="tag">TL;DR</div>
+      <p>雷禪（Raizen）登場極晚、戲份極少，卻是全作因果鏈的源頭：他的<strong>血脈</strong>造就了浦飯幽助，他的<strong>誓言</strong>透過老友煙鬼升格為魔界公法。仙水因見人性之惡而崩壞，雷禪因見人性之善而昇華——兩人互為鏡像，幽助一身承接兩條線。</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>因果鏈<span class="en">CAUSAL CHAIN · 700 YEARS</span></h2>
+    <p class="sec-note">從一次相遇到魔界統一，每一環都以前一環為必要條件。</p>
+
+    <div class="chain">
+      <div class="chain-item origin">
+        <div class="chain-time">T−700y ── 人間界・亂世</div>
+        <div class="chain-title">起點：與人類女醫的相遇</div>
+        <div class="chain-body">食人妖怪「鬥神」雷禪欲捕食一名人類女醫，卻被她面對死亡與疫病的<em>覺悟</em>震撼。兩人相愛並留下後代；雷禪立誓——再見到她之前，絕不吃人。</div>
+        <div class="chain-consequence">誓言成立 → 血脈成立</div>
+      </div>
+
+      <div class="chain-item">
+        <div class="chain-time">T−700y → T−0 ── 魔界</div>
+        <div class="chain-title">數百年絕食</div>
+        <div class="chain-body">女子早逝，誓言永遠無法解除。S 級妖怪不食人類即無法維持全盛力量，雷禪的實力持續衰退，魔界三強（雷禪／躯／黃泉）的恐怖平衡進入倒數。</div>
+        <div class="chain-consequence">力量衰退 → 平衡瓦解的引信</div>
+      </div>
+
+      <div class="chain-item">
+        <div class="chain-time">T−0 ── 仙水篇</div>
+        <div class="chain-title">隔世遺傳覺醒（魔族大隔世遺傳）</div>
+        <div class="chain-body">幽助被仙水殺死後，雷禪的血脈覺醒使其復活為魔族。決戰中雷禪<em>借幽助身體</em>親自擊敗仙水——少年漫畫罕見地讓主角在最終戰「缺席」。靈界長年監視幽助的真正理由同時揭曉：防的從來是雷禪的血。</div>
+        <div class="chain-consequence">前期劇情被回溯重寫</div>
+      </div>
+
+      <div class="chain-item">
+        <div class="chain-time">T+0 ── 魔界篇・前段</div>
+        <div class="chain-title">託付與死亡</div>
+        <div class="chain-body">雷禪召幽助入魔界，親口述說七百年前的往事後餓死，將領土託付給幽助。三強平衡正式崩潰，躯與黃泉備戰。</div>
+        <div class="chain-consequence">權力真空 → 大戰一觸即發</div>
+      </div>
+
+      <div class="chain-item">
+        <div class="chain-time">T+0 ── 魔界篇・轉折</div>
+        <div class="chain-title">比武大會的提案</div>
+        <div class="chain-body">幽助以「以武會決定魔界之王」化解全面戰爭——本質上是對雷禪遺志的回應。雷禪隱居多年的舊戰友（煙鬼、時雨、太公望等 S 級強者）紛紛現身參賽。</div>
+        <div class="chain-consequence">全面戰爭 → 制度化競爭</div>
+      </div>
+
+      <div class="chain-item">
+        <div class="chain-time">T+1 ── 魔界篇・終局</div>
+        <div class="chain-title">誓言成為法律</div>
+        <div class="chain-body">優勝者是雷禪的舊友<em>煙鬼（Enki）</em>。他立法禁止妖怪危害人間界、誤入魔界的人類須安全送返——雷禪的私人誓言升格為魔界公法，人妖兩界的根本矛盾被和平解消，靈界結界失去存在意義。</div>
+        <div class="chain-consequence">個人戒律 → 世界秩序</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>角色徽記<span class="en">CHARACTER SIGILS · ORIGINAL</span></h2>
+    <p class="sigil-note">四枚原創抽象徽記，各以單一符號濃縮該角色的敘事功能。<span style="color:var(--pp-acc-dark);">紅＝血脈線</span>／<span style="color:var(--pp-status-run);">藍＝理念線</span>。</p>
+
+    <div class="sigil-grid">
+      <!-- 雷禪：斷裂的三強平衡線 + 一點血脈火種 -->
+      <div class="sigil-card">
+        <svg viewBox="0 0 64 64" role="img" aria-label="雷禪徽記">
+          <circle class="sig-w" cx="32" cy="32" r="26"/>
+          <!-- three-force balance, one line broken -->
+          <path class="sig" d="M32 12 L32 32"/>
+          <path class="sig" d="M32 32 L14 44"/>
+          <path class="sig" d="M32 32 L50 44" stroke-dasharray="3 4"/>
+          <!-- ember of bloodline -->
+          <circle class="sig-f" cx="32" cy="32" r="3"/>
+        </svg>
+        <div class="s-name">雷禪</div>
+        <span class="s-en">RAIZEN</span>
+        <p class="s-desc">三強平衡線，一線斷裂（絕食衰退）；中心火種為血脈與誓言的源頭。</p>
+        <span class="s-track blood">FIRST CAUSE</span>
+      </div>
+
+      <!-- 幽助：兩線交會（血脈×繼任）成箭頭 -->
+      <div class="sigil-card">
+        <svg viewBox="0 0 64 64" role="img" aria-label="幽助徽記">
+          <circle class="sig-w" cx="32" cy="32" r="26"/>
+          <!-- bloodline (solid) meets successor line (from Sensui side) -->
+          <path class="sig" d="M18 20 L32 38"/>
+          <path class="sig" d="M46 20 L32 38"/>
+          <path class="sig" d="M32 38 L32 50"/>
+          <circle class="sig-f" cx="32" cy="38" r="2.5"/>
+        </svg>
+        <div class="s-name">浦飯幽助</div>
+        <span class="s-en">YUSUKE</span>
+        <p class="s-desc">兩線匯於一點：雷禪血脈與仙水職位（靈界偵探）在他身上交會、向下延續。</p>
+        <span class="s-track blood">CONVERGENCE</span>
+      </div>
+
+      <!-- 仙水：分裂的鏡面 -->
+      <div class="sigil-card">
+        <svg viewBox="0 0 64 64" role="img" aria-label="仙水徽記">
+          <circle class="sig-w" cx="32" cy="32" r="26"/>
+          <!-- fractured mirror: vertical split, offset halves -->
+          <path class="sig" d="M32 10 L32 54"/>
+          <path class="sig" d="M22 22 L30 30"/>
+          <path class="sig" d="M42 22 L34 30" transform="translate(0 6)"/>
+          <path class="sig" d="M22 42 L30 34" transform="translate(0 -6)"/>
+          <path class="sig" d="M42 42 L34 34"/>
+        </svg>
+        <div class="s-name">仙水忍</div>
+        <span class="s-en">SENSUI</span>
+        <p class="s-desc">沿中軸分裂、兩側錯位的鏡面：人格解離，與雷禪互為鏡像的反題。</p>
+        <span class="s-track ideo">ANTITHESIS</span>
+      </div>
+
+      <!-- 煙鬼：閉合的環（誓言成法） -->
+      <div class="sigil-card">
+        <svg viewBox="0 0 64 64" role="img" aria-label="煙鬼徽記">
+          <circle class="sig-w" cx="32" cy="32" r="26"/>
+          <!-- open vow closing into a ring -->
+          <path class="sig" d="M32 14 A18 18 0 1 1 19 21" stroke="var(--pp-status-run)"/>
+          <circle class="sig-f" cx="32" cy="14" r="2.5" style="fill:var(--pp-status-run);"/>
+          <circle cx="19" cy="21" r="2.5" style="fill:var(--pp-status-run);"/>
+        </svg>
+        <div class="s-name">煙鬼</div>
+        <span class="s-en">ENKI</span>
+        <p class="s-desc">將雷禪未閉合的誓言收攏成環——立法閉合，個人戒律成為魔界公法。</p>
+        <span class="s-track ideo">CLOSURE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>兩條遺產路徑<span class="en">DUAL LEGACY TRACKS</span></h2>
+    <p class="sec-note">雷禪的影響沿「血脈」與「理念」兩條獨立路徑傳遞，最終在魔界統一處匯合。</p>
+
+    <div class="legacy">
+      <div class="legacy-track">
+        <div class="track-label">TRACK A ── 血脈 / BLOODLINE</div>
+        <div class="legacy-node"><strong>雷禪 × 人類女醫</strong><span class="n-sub">七百年前的結合</span></div>
+        <div class="legacy-arrow">↓ 約七百年・數十代</div>
+        <div class="legacy-node">
+          <div class="node-head">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="sig-w" cx="32" cy="32" r="26"/><path class="sig" d="M18 20 L32 38"/><path class="sig" d="M46 20 L32 38"/><path class="sig" d="M32 38 L32 50"/><circle class="sig-f" cx="32" cy="38" r="2.5"/></svg>
+            <strong>浦飯幽助</strong>
+          </div>
+          <span class="n-sub">魔族大隔世遺傳（Atavism）</span>
+        </div>
+        <div class="legacy-arrow">↓ 死而復生・覺醒</div>
+        <div class="legacy-node final"><strong>擊敗仙水・繼承領土</strong><span class="n-sub">主角的存在本身即雷禪的延續</span></div>
+      </div>
+
+      <div class="legacy-track">
+        <div class="track-label">TRACK B ── 理念 / IDEOLOGY</div>
+        <div class="legacy-node"><strong>「不吃人」的誓言</strong><span class="n-sub">個人層次的自我約束</span></div>
+        <div class="legacy-arrow">↓ 舊部與老友共同守戒</div>
+        <div class="legacy-node">
+          <div class="node-head">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="sig-w" cx="32" cy="32" r="26"/><path class="sig" d="M32 14 A18 18 0 1 1 20 20" stroke="var(--pp-status-run)"/><circle cx="32" cy="14" r="2.5" style="fill:var(--pp-status-run);"/></svg>
+            <strong>煙鬼奪冠・即位魔界之王</strong>
+          </div>
+          <span class="n-sub">雷禪舊戰友，理解其一生的人</span>
+        </div>
+        <div class="legacy-arrow">↓ 立法</div>
+        <div class="legacy-node final"><strong>禁止危害人類・遣返法制化</strong><span class="n-sub">私人誓言 → 魔界公法</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>主題鏡像：雷禪 × 仙水<span class="en">THEMATIC MIRROR</span></h2>
+    <p class="sec-note">全作後期核心命題——「妖怪未必惡、人類未必善」——由這對鏡像角色給出正反兩解。</p>
+
+    <div class="mirror">
+      <div class="mirror-col">
+        <h3><svg class="inline-sig" viewBox="0 0 64 64" aria-hidden="true"><circle class="sig-w" cx="32" cy="32" r="26"/><path class="sig" d="M32 12 L32 32"/><path class="sig" d="M32 32 L14 44"/><path class="sig" d="M32 32 L50 44" stroke-dasharray="3 4"/><circle class="sig-f" cx="32" cy="32" r="3"/></svg>雷禪 <span style="color:var(--pp-hint);font-weight:400;margin-left:6px;">Raizen</span></h3>
+        <span class="who-en">食人妖怪・魔界三強</span>
+        <dl>
+          <dt>目擊之物</dt>
+          <dd>人性之善——疫病中仍捨身醫人的覺悟</dd>
+          <dt>回應方式</dt>
+          <dd>自我約束：立誓不再吃人，絕食至死</dd>
+          <dt>對人類的結論</dt>
+          <dd>值得敬重，值得以生命守護承諾</dd>
+        </dl>
+        <div class="verdict up">▲ 昇華 ── 妖怪的人性證明</div>
+      </div>
+
+      <div class="mirror-axis"><span>MIRROR</span></div>
+
+      <div class="mirror-col">
+        <h3><svg class="inline-sig" viewBox="0 0 64 64" aria-hidden="true"><circle class="sig-w" cx="32" cy="32" r="26"/><path class="sig" d="M32 10 L32 54"/><path class="sig" d="M22 22 L30 30"/><path class="sig" d="M42 22 L34 30" transform="translate(0 6)"/><path class="sig" d="M22 42 L30 34" transform="translate(0 -6)"/><path class="sig" d="M42 42 L34 34"/></svg>仙水忍 <span style="color:var(--pp-hint);font-weight:400;margin-left:6px;">Sensui</span></h3>
+        <span class="who-en">人類・前靈界偵探</span>
+        <dl>
+          <dt>目擊之物</dt>
+          <dd>人性之惡——黑之章、人類虐殺妖怪的暗宴</dd>
+          <dt>回應方式</dt>
+          <dd>信念崩壞：人格解離，決意滅絕人類</dd>
+          <dt>對人類的結論</dt>
+          <dd>不可救藥，應由妖怪取而代之</dd>
+        </dl>
+        <div class="verdict down">▼ 崩壞 ── 人類的非人性證明</div>
+      </div>
+
+      <div class="mirror-note">幽助的位置：血脈上是雷禪的後代，職位上是仙水的繼任者（靈界偵探）——一身承接正反兩條線，並由雷禪之手（借體）終結仙水，完成命題的閉環。</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>重要性評估<span class="en">IMPORTANCE ASSESSMENT</span></h2>
+    <p class="sec-note">以敘事功能分項檢驗「隱藏第一因」的成立程度。</p>
+
+    <table>
+      <thead>
+        <tr><th>敘事層面 / DIMENSION</th><th>雷禪的作用</th><th>影響度</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>主角存在論</td>
+          <td>沒有七百年前的相遇即沒有幽助；主角是誓言的副產物</td>
+          <td><span class="pill high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>前期劇情重寫</td>
+          <td>靈界偵探設定、小閻王的監視被回溯賦予真正動機</td>
+          <td><span class="pill high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>仙水篇收尾</td>
+          <td>借體擊敗最終敵人，主角在決戰缺席的罕見處理</td>
+          <td><span class="pill high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>魔界權力結構</td>
+          <td>其死亡是三強平衡瓦解與比武大會的直接成因</td>
+          <td><span class="pill high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>世界觀終局</td>
+          <td>誓言經煙鬼立法化，人妖矛盾和平解消、結界失義</td>
+          <td><span class="pill high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>主題論證</td>
+          <td>與仙水互為鏡像，給出「妖怪未必惡」的正面答案</td>
+          <td><span class="pill high">HIGH</span></td>
+        </tr>
+        <tr>
+          <td>連載初期布局</td>
+          <td>初期並無魔族伏筆，屬中後期回溯補設</td>
+          <td><span class="pill mid">MID</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>注意事項<span class="en">CAVEATS</span></h2>
+    <div class="caveat">
+      <div class="tag">⚠ 創作史限定</div>
+      <p>「隱藏第一因」的判斷基於<strong style="font-weight:500;">成品的敘事結構</strong>，而非連載之初的原始設計。普遍觀點認為魔界篇是富堅義博在連載壓力下加速收尾的產物，雷禪與魔族血統很可能是中後期才回溯補上的設定（幽助初期並無相關伏筆）。</p>
+      <p>然而正因如此，更能體現作者功力：以一個晚期登場的角色，回頭賦予全作因果與主題上的統一性。結構上的關鍵性完全成立；創作意圖上的「預先埋設」則不成立，兩者宜分開評價。</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">SOURCE ── 冨樫義博《幽☆遊☆白書》魔界篇（漫畫原作）· 分析整理 2026-07</span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -13,5 +13,6 @@
 | 初樸事務所 · 獲利槓桿與自然構築策略儀表板 | [https://pp0514-hill.github.io/profit-leverage-dashboard/](https://pp0514-hill.github.io/profit-leverage-dashboard/) | 2026-06-19 |
 | 初樸 ── 覺察・想・感受 組織的現象 | [https://pp0514-hill.github.io/protoplain/](https://pp0514-hill.github.io/protoplain/) | 2026-06-23 |
 | 蓖麻油酸 · 功能圖譜 | [https://pp0514-hill.github.io/ricinoleic-acid/](https://pp0514-hill.github.io/ricinoleic-acid/) | 2026-06-23 |
+| 雷禪｜幽遊白書的隱藏第一因 | [https://pp0514-hill.github.io/yyh-raizen/](https://pp0514-hill.github.io/yyh-raizen/) | 2026-07-11 |
 
 _此 README 由發佈腳本自動產生。_
