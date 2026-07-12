@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一日斷食整合指南 · Ekadashi × One-Day Clean Fast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pp-bg:#ECEAE5; --pp-card:#FFFFFF; --pp-card2:#F3F1EC;
+    --pp-ink:#232220; --pp-ink2:#6E6B64; --pp-hint:#9A968D;
+    --pp-line:#D8D5CE; --pp-line-strong:#C3BFB6;
+    --pp-accent:#9C3D2C; --pp-accent-dark:#843022; --pp-accent-tint:#F2E3DE;
+    --pp-progress:#3E6B7D; --pp-done:#5C7355; --pp-warn:#B07D24; --pp-risk:#B5342A;
+    --pp-r-card:12px; --pp-r-ctrl:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--pp-bg);color:var(--pp-ink);
+    font-family:'Noto Sans TC','Inter',Helvetica,sans-serif;font-weight:400;
+    font-size:15px;line-height:1.7;padding:48px 20px 72px}
+  .wrap{max-width:920px;margin:0 auto}
+  .mono{font-family:'JetBrains Mono',monospace}
+
+  header{margin-bottom:34px}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--pp-hint);margin-bottom:12px}
+  h1{font-size:28px;font-weight:500;letter-spacing:-.01em;line-height:1.35}
+  h1 .en{color:var(--pp-ink2);font-weight:400;margin-left:8px;font-size:19px}
+  .lede{margin-top:14px;color:var(--pp-ink2);max-width:66ch}
+  .rule{height:0;border-top:.5px solid var(--pp-line-strong);margin:28px 0 0}
+
+  section{margin-top:40px}
+  h2{font-size:20px;font-weight:500;letter-spacing:-.005em;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  h2 .idx{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--pp-accent);font-weight:500}
+  h2 .sub{font-size:13px;color:var(--pp-hint);font-weight:400}
+  .sec-line{height:0;border-top:.5px solid var(--pp-line);margin:14px 0 22px}
+
+  .axes{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.axes{grid-template-columns:1fr}}
+  .ax{background:var(--pp-card);border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);padding:20px 22px}
+  .ax .tag{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--pp-accent);margin-bottom:8px}
+  .ax .t{font-size:17px;font-weight:500}
+  .ax .t .en{color:var(--pp-hint);font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:400;margin-left:6px}
+  .ax .d{margin-top:9px;font-size:13.5px;color:var(--pp-ink2);line-height:1.6}
+  .synth{margin-top:14px;background:var(--pp-accent-tint);border:.5px solid #E8CFC7;
+    border-radius:var(--pp-r-card);padding:16px 22px;color:var(--pp-accent-dark)}
+  .synth b{font-weight:500}
+
+  table{width:100%;border-collapse:collapse;background:var(--pp-card);
+    border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);overflow:hidden}
+  th,td{text-align:left;padding:12px 16px;font-size:13.5px;border-bottom:.5px solid var(--pp-line);vertical-align:top}
+  thead th{background:var(--pp-card2);font-weight:500;font-size:12.5px;color:var(--pp-ink2)}
+  tbody tr:last-child td{border-bottom:none}
+  td.lab{color:var(--pp-hint);font-size:12.5px;white-space:nowrap}
+  .cellhead{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--pp-accent);letter-spacing:.04em}
+
+  /* ladder */
+  .ladder{background:var(--pp-card);border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);overflow:hidden}
+  .ladder .lr{display:grid;grid-template-columns:70px 1.1fr 1.3fr 1fr;gap:0;border-bottom:.5px solid var(--pp-line)}
+  .ladder .lr:last-child{border-bottom:none}
+  .ladder .lr.head>div{background:var(--pp-card2);font-weight:500;font-size:12px;color:var(--pp-ink2);padding:11px 14px}
+  .ladder .lr>div{padding:14px;font-size:13.5px;border-right:.5px solid var(--pp-line)}
+  .ladder .lr>div:last-child{border-right:none}
+  .ladder .sev{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+  .ladder .sev .bars{display:flex;gap:2px}
+  .ladder .sev .bars i{width:9px;height:4px;border-radius:2px;background:var(--pp-line-strong)}
+  .ladder .sev .bars i.on{background:var(--pp-accent)}
+  .ladder .sev .lv{font-size:11px;color:var(--pp-hint);font-family:'JetBrains Mono',monospace}
+  .ladder .k{font-weight:500}
+  .ladder .k .en{display:block;font-size:11px;color:var(--pp-hint);font-family:'JetBrains Mono',monospace;font-weight:400;margin-top:2px}
+  .ladder .goal{color:var(--pp-ink2);font-size:13px}
+  @media(max-width:680px){
+    .ladder .lr{grid-template-columns:1fr}
+    .ladder .lr.head{display:none}
+    .ladder .lr>div{border-right:none;border-bottom:.5px dashed var(--pp-line)}
+    .ladder .lr>div:last-child{border-bottom:none}
+    .ladder .lr>div::before{content:attr(data-l);display:block;font-size:11px;
+      color:var(--pp-hint);font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+  }
+
+  /* three-phase timeline */
+  .tl{display:grid;grid-template-columns:repeat(3,1fr);background:var(--pp-card);
+    border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);overflow:hidden}
+  @media(max-width:640px){.tl{grid-template-columns:1fr}}
+  .tl .step{padding:20px;border-right:.5px solid var(--pp-line)}
+  .tl .step:last-child{border-right:none}
+  @media(max-width:640px){.tl .step{border-right:none;border-bottom:.5px solid var(--pp-line)}
+    .tl .step:last-child{border-bottom:none}}
+  .tl .day{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;color:var(--pp-hint);text-transform:uppercase}
+  .tl .th{font-weight:500;font-size:16px;margin:8px 0 8px;display:flex;align-items:center}
+  .tl .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--pp-accent);margin-right:8px}
+  .tl .dot.mid{background:var(--pp-progress)}
+  .tl .dot.end{background:var(--pp-done)}
+  .tl .tx{font-size:13.5px;color:var(--pp-ink2);line-height:1.6}
+  .tl .pill{display:inline-block;margin-top:10px;font-size:12px;font-family:'JetBrains Mono',monospace;
+    padding:3px 9px;border-radius:6px;background:var(--pp-card2);color:var(--pp-ink2);border:.5px solid var(--pp-line)}
+
+  .cf{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:640px){.cf{grid-template-columns:1fr}}
+  .cf .col{background:var(--pp-card);border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);overflow:hidden}
+  .cf .head{padding:12px 18px;font-weight:500;font-size:15px;display:flex;align-items:center;gap:9px;border-bottom:.5px solid var(--pp-line)}
+  .cf .head .m{width:9px;height:9px;border-radius:2px}
+  .cf .head.ok .m{background:var(--pp-done)}
+  .cf .head.no .m{background:var(--pp-risk)}
+  .cf .head .tag{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:400;color:var(--pp-hint)}
+  .cf .row{padding:11px 18px;border-bottom:.5px solid var(--pp-line)}
+  .cf .row:last-child{border-bottom:none}
+  .cf .row .n{font-size:14px}
+  .cf .row .meta{font-size:12px;color:var(--pp-hint);margin-top:2px}
+  .cf .row .kcal{font-family:'JetBrains Mono',monospace}
+
+  .thr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+  @media(max-width:640px){.thr{grid-template-columns:1fr}}
+  .thr .g{background:var(--pp-card2);border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);padding:14px 16px}
+  .thr .g .t{font-weight:500;font-size:14px}
+  .thr .g .b{margin-top:7px;font-size:12.5px;color:var(--pp-ink2);line-height:1.55}
+
+  .fus{background:var(--pp-card);border:.5px solid var(--pp-line);border-radius:var(--pp-r-card);overflow:hidden}
+  .fus .fr{display:grid;grid-template-columns:120px 1fr;border-bottom:.5px solid var(--pp-line)}
+  .fus .fr:last-child{border-bottom:none}
+  .fus .fr .st{padding:13px 16px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;border-right:.5px solid var(--pp-line)}
+  .fus .fr .st .dot{width:9px;height:9px;border-radius:50%}
+  .st.both .dot{background:var(--pp-done)}
+  .st.warn .dot{background:var(--pp-warn)}
+  .st.no .dot{background:var(--pp-risk)}
+  .fus .fr .it{padding:13px 16px;font-size:13.5px;color:var(--pp-ink);line-height:1.6}
+  .fus .fr .it .note{color:var(--pp-hint);font-size:12px}
+  @media(max-width:520px){.fus .fr{grid-template-columns:1fr}.fus .fr .st{border-right:none;border-bottom:.5px dashed var(--pp-line)}}
+
+  .callout{background:var(--pp-card);border:.5px solid var(--pp-line);border-left:2px solid var(--pp-accent);
+    border-radius:var(--pp-r-card);padding:18px 22px}
+  .callout h3{font-size:16px;font-weight:500;margin-bottom:8px}
+  .callout p{font-size:14px;color:var(--pp-ink2);margin-top:8px}
+  .callout p b{color:var(--pp-ink);font-weight:500}
+
+  .cav{display:grid;gap:11px}
+  .cav .c{background:var(--pp-card2);border:.5px solid var(--pp-line);border-radius:var(--pp-r-ctrl);
+    padding:13px 16px;display:flex;gap:13px;align-items:flex-start}
+  .cav .c .lab{flex:0 0 auto;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;
+    padding:3px 8px;border-radius:5px;margin-top:1px;white-space:nowrap}
+  .l-evid{background:#E3EAED;color:var(--pp-progress)}
+  .l-warn{background:#F3EBD9;color:var(--pp-warn)}
+  .l-risk{background:#F2E6E3;color:var(--pp-risk)}
+  .cav .c .txt{font-size:13.5px;color:var(--pp-ink2);line-height:1.6}
+  .cav .c .txt b{color:var(--pp-ink);font-weight:500}
+
+  /* 2026 calendar */
+  .cal-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px;color:var(--pp-ink2)}
+  .cal-legend span{display:flex;align-items:center;gap:6px}
+  .cal-legend .star{color:var(--pp-accent);font-weight:500}
+  .cal-legend .wd{width:9px;height:9px;border-radius:50%;background:var(--pp-warn);display:inline-block}
+  .cal{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:760px){.cal{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:560px){.cal{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:380px){.cal{grid-template-columns:1fr}}
+  .cal .d{background:var(--pp-card);border:.5px solid var(--pp-line);border-radius:var(--pp-r-ctrl);
+    padding:12px 13px;position:relative}
+  .cal .d.sig{border-left:2px solid var(--pp-accent)}
+  .cal .d .date{font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:500;letter-spacing:.01em}
+  .cal .d .wk{font-size:11px;color:var(--pp-hint);font-family:'JetBrains Mono',monospace;margin-left:5px}
+  .cal .d .nm{font-size:13px;margin-top:5px;color:var(--pp-ink)}
+  .cal .d .nm .en{color:var(--pp-hint);font-size:11px;font-family:'JetBrains Mono',monospace;margin-left:4px}
+  .cal .d .badge{margin-top:7px;font-size:11px;color:var(--pp-accent-dark);line-height:1.45}
+  .cal .d .warn{position:absolute;top:12px;right:12px;width:8px;height:8px;border-radius:50%;background:var(--pp-warn)}
+  footer{margin-top:48px;padding-top:18px;border-top:.5px solid var(--pp-line);font-size:12px;
+    color:var(--pp-hint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  footer .mono{font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Integrated One-Day Fasting Guide</div>
+    <h1>一日斷食整合指南<span class="en">Ekadashi × One-Day Clean Fast</span></h1>
+    <p class="lede">將吠陀傳統的艾卡達希（Ekadashi）與現代「一日斷食」融為一套框架。此處的一日斷食，是把時間限制進食「乾淨斷食」的概念，延伸為涵蓋整日的清淨斷食——斷食日全程無碳水、無油脂、無蛋白，僅攝取零熱量液體。兩者天然相合：Ekadashi 本就是每月兩次的全日斷食。</p>
+    <div class="rule"></div>
+  </header>
+
+  <!-- 00 兩軸模型 -->
+  <section style="margin-top:32px">
+    <div class="axes">
+      <div class="ax">
+        <div class="tag">Axis 1 · 質 What</div>
+        <div class="t">Ekadashi<span class="en">吠陀・食物品質</span></div>
+        <div class="d">農曆第十一日、每月兩次的斷食日。核心是戒穀物與豆類、採 sattvic 純淨飲食，將注意力轉向內在。管的是「食物的品質」與靈性意圖。</div>
+      </div>
+      <div class="ax">
+        <div class="tag">Axis 2 · 時 When</div>
+        <div class="t">一日斷食<span class="en">現代・清淨斷食</span></div>
+        <div class="d">由時間限制進食的乾淨斷食概念延伸而來，將斷食時長拉滿一整日。核心是壓低胰島素、促進脂肪氧化與代謝休息。管的是「斷食的時長與清淨度」。</div>
+      </div>
+    </div>
+    <div class="synth">
+      <b>融合點：</b>斷食日全程行 clean fast（無熱量），復食時吃「sattvic × 低碳水」的交集食物；在 Ekadashi 日更升級為全蔬食甚至純水。質與時同時收斂，兩套邏輯疊加。
+    </div>
+  </section>
+
+  <!-- 01 框架對照 -->
+  <section>
+    <h2><span class="idx">01</span>兩套框架對照</h2>
+    <div class="sec-line"></div>
+    <table>
+      <thead><tr><th style="width:88px"></th><th class="cellhead">Ekadashi（質）</th><th class="cellhead">一日斷食（時長）</th></tr></thead>
+      <tbody>
+        <tr><td class="lab">源流</td><td>吠陀／印度教，敬奉毗濕奴</td><td>現代營養學，時間限制進食的延伸</td></tr>
+        <tr><td class="lab">頻率</td><td>每月兩次（一年約 24 次）</td><td>依需求，常與 Ekadashi 同步</td></tr>
+        <tr><td class="lab">定義</td><td>吃什麼：無穀・無豆・sattvic</td><td>斷多久：全日清淨斷食＋次日復食</td></tr>
+        <tr><td class="lab">核心邏輯</td><td>純淨、輕盈、向內專注</td><td>低胰島素、脂肪氧化、代謝休息</td></tr>
+        <tr><td class="lab">最嚴形態</td><td>Nirjala：滴水不進</td><td>全日純水斷食</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 02 統一嚴格度階梯 -->
+  <section>
+    <h2><span class="idx">02</span>統一嚴格度階梯<span class="sub">兩軸對齊，依目標選層</span></h2>
+    <div class="sec-line"></div>
+    <div class="ladder">
+      <div class="lr head"><div>強度</div><div>Ekadashi（質）</div><div>一日斷食（清淨度）</div><div>主要目標</div></div>
+      <div class="lr">
+        <div class="sev" data-l="強度"><span class="bars"><i class="on"></i><i></i><i></i><i></i></span><span class="lv">L1</span></div>
+        <div class="k" data-l="Ekadashi">部分戒穀<span class="en">Partial</span></div>
+        <div data-l="清淨度">縮短進食至一餐<br><span style="color:var(--pp-hint);font-size:12px">其餘時段清淨</span></div>
+        <div class="goal" data-l="目標">習慣養成</div>
+      </div>
+      <div class="lr">
+        <div class="sev" data-l="強度"><span class="bars"><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="lv">L2</span></div>
+        <div class="k" data-l="Ekadashi">一餐無穀豆<span class="en">Naktabhoji</span></div>
+        <div data-l="清淨度">全日 clean fast<br><span style="color:var(--pp-hint);font-size:12px">黑咖啡・純茶・水</span></div>
+        <div class="goal" data-l="目標">減重・代謝</div>
+      </div>
+      <div class="lr">
+        <div class="sev" data-l="強度"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="lv">L3</span></div>
+        <div class="k" data-l="Ekadashi">水果乳製<span class="en">Phalahari</span></div>
+        <div data-l="清淨度">全日純水為主<br><span style="color:var(--pp-hint);font-size:12px">避代糖與咖啡因</span></div>
+        <div class="goal" data-l="目標">胰島素・脂肪氧化</div>
+      </div>
+      <div class="lr">
+        <div class="sev" data-l="強度"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="lv">L4</span></div>
+        <div class="k" data-l="Ekadashi">滴水不進<span class="en">Nirjala</span></div>
+        <div data-l="清淨度">全日純水斷食<br><span style="color:var(--pp-hint);font-size:12px">深層清淨</span></div>
+        <div class="goal" data-l="目標">自噬・深層休息</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 執行方式 三日節奏 -->
+  <section>
+    <h2><span class="idx">03</span>執行方式<span class="sub">三日節奏 · 對齊 Ekadashi</span></h2>
+    <div class="sec-line"></div>
+    <div class="tl">
+      <div class="step">
+        <div class="day">Day 1 · Dashami</div>
+        <div class="th"><span class="dot"></span>前一日 · 減量準備</div>
+        <div class="tx">晚餐宜早、宜輕，避免夜間過食；早睡，讓睡眠涵蓋斷食起始的大半時數。這一餐即啟動一日斷食。</div>
+        <div class="pill">末餐 ~19:00</div>
+      </div>
+      <div class="step">
+        <div class="day">Day 2 · Ekadashi</div>
+        <div class="th"><span class="dot mid"></span>斷食日 · 全日清淨</div>
+        <div class="tx">全程 clean fast：無碳水、無油脂、無蛋白，僅攝取零熱量液體（見 §04）。保持活動、不日間睡覺，將注意力轉向內在。</div>
+        <div class="pill">清淨 · 零熱量</div>
+      </div>
+      <div class="step">
+        <div class="day">Day 3 · Dwadashi</div>
+        <div class="th"><span class="dot end"></span>次日 · 復食（Parana）</div>
+        <div class="tx">於清晨特定時窗溫和破戒，以少量低碳水全食（見 §05）緩和開始，忌暴食；驟然大量進食會抵銷休息效益。</div>
+        <div class="pill">首餐宜輕</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 曆 2026 Ekadashi dates -->
+  <section>
+    <h2><span class="idx">曆</span>2026 Ekadashi 日期<span class="sub">台北時間 UTC+8 · 共 24 次</span></h2>
+    <div class="sec-line"></div>
+    <div class="cal-legend">
+      <span><span class="star">★</span>重要節點（Nirjala／Chaturmas 起訖／Mokshada）</span>
+      <span><span class="wd"></span>落在日出邊界，日期待核（±1 日）</span>
+    </div>
+    <div class="cal">
+      <div class="d"><span class="date">01/14</span><span class="wk">三</span><div class="nm">什底拉<span class="en">Shattila</span></div></div>
+      <div class="d"><span class="date">01/29</span><span class="wk">四</span><div class="nm">賈亞<span class="en">Jaya</span></div></div>
+      <div class="d"><span class="date">02/13</span><span class="wk">五</span><div class="nm">維賈亞<span class="en">Vijaya</span></div></div>
+      <div class="d"><span class="date">02/27</span><span class="wk">五</span><div class="nm">阿摩勒吉<span class="en">Amalaki</span></div></div>
+      <div class="d"><span class="date">03/15</span><span class="wk">日</span><div class="nm">帕帕莫查尼<span class="en">Papamochani</span></div></div>
+      <div class="d"><span class="date">03/29</span><span class="wk">日</span><div class="nm">卡瑪達<span class="en">Kamada</span></div></div>
+      <div class="d"><span class="date">04/13</span><span class="wk">一</span><div class="nm">瓦魯提尼<span class="en">Varuthini</span></div></div>
+      <div class="d"><span class="date">04/27</span><span class="wk">一</span><div class="nm">摩希尼<span class="en">Mohini</span></div></div>
+      <div class="d"><span class="date">05/13</span><span class="wk">三</span><div class="nm">阿帕拉<span class="en">Apara</span></div></div>
+      <div class="d"><span class="warn"></span><span class="date">05/27</span><span class="wk">三</span><div class="nm">帕德米尼<span class="en">Padmini</span></div><div class="badge">閏月 · 待核 05/26–27</div></div>
+      <div class="d"><span class="date">06/11</span><span class="wk">四</span><div class="nm">帕拉瑪<span class="en">Parama</span></div><div class="badge">閏月</div></div>
+      <div class="d sig"><span class="date">06/25</span><span class="wk">四</span><div class="nm">尼爾賈拉<span class="en">Nirjala</span></div><div class="badge">★ 最嚴（無水）· 功德等同全年</div></div>
+      <div class="d"><span class="warn"></span><span class="date">07/11</span><span class="wk">六</span><div class="nm">瑜伽尼<span class="en">Yogini</span></div><div class="badge">待核 07/10–11</div></div>
+      <div class="d sig"><span class="date">07/25</span><span class="wk">六</span><div class="nm">戴弗夏亞尼<span class="en">Devshayani</span></div><div class="badge">★ Chaturmas 起（毗濕奴入眠）</div></div>
+      <div class="d"><span class="date">08/09</span><span class="wk">日</span><div class="nm">卡米卡<span class="en">Kamika</span></div></div>
+      <div class="d"><span class="date">08/23</span><span class="wk">日</span><div class="nm">普特拉達<span class="en">Putrada</span></div></div>
+      <div class="d"><span class="date">09/07</span><span class="wk">一</span><div class="nm">阿賈<span class="en">Aja</span></div></div>
+      <div class="d"><span class="date">09/22</span><span class="wk">二</span><div class="nm">帕爾斯瓦<span class="en">Parsva</span></div></div>
+      <div class="d"><span class="date">10/06</span><span class="wk">二</span><div class="nm">因迪拉<span class="en">Indira</span></div></div>
+      <div class="d"><span class="date">10/22</span><span class="wk">四</span><div class="nm">帕潘庫夏<span class="en">Papankusha</span></div></div>
+      <div class="d"><span class="date">11/05</span><span class="wk">四</span><div class="nm">羅摩<span class="en">Rama</span></div></div>
+      <div class="d sig"><span class="warn"></span><span class="date">11/21</span><span class="wk">六</span><div class="nm">提婆提尼<span class="en">Devutthana</span></div><div class="badge">★ Chaturmas 終 · 待核 11/20–21</div></div>
+      <div class="d"><span class="date">12/04</span><span class="wk">五</span><div class="nm">烏特帕納<span class="en">Utpanna</span></div></div>
+      <div class="d sig"><span class="date">12/20</span><span class="wk">日</span><div class="nm">莫克夏達<span class="en">Mokshada</span></div><div class="badge">★ 授《薄伽梵歌》· Vaikuntha 門開</div></div>
+    </div>
+    <div class="cav" style="margin-top:16px">
+      <div class="c"><span class="lab l-warn">時區校正</span><span class="txt">上表 tithi 時刻已由天文絕對時間換算為<b>台北時間（UTC+8）</b>，並依「日出時 Ekadashi tithi 是否當值」判定齋戒日；已與印度權威來源（BAPS）交叉比對，主要日期一致。台北與印度僅差 2.5 小時，故日期幾乎相同。</span></div>
+      <div class="c"><span class="lab l-warn">待核 ±1 日</span><span class="txt">標記者（Padmini、Yogini、Devutthana）tithi 起訖落在日出前後約 2–3 小時內，Smarta／Vaishnava 傳承與確切經緯度可能造成 ±1 日差異。<b>實際齋戒前，請於設定為台北的 Panchang（如 Drik Panchang）再次確認該日與 Parana 破戒時窗。</b></span></div>
+    </div>
+  </section>
+
+  <!-- 04 clean fast -->
+  <section>
+    <h2><span class="idx">04</span>斷食日：clean fast<span class="sub">無碳水・無油脂・無蛋白＝零熱量</span></h2>
+    <div class="sec-line"></div>
+    <div class="cf">
+      <div class="col">
+        <div class="head ok"><span class="m"></span>維持斷食<span class="tag">KEEP FAST</span></div>
+        <div class="row"><div class="n">白開水 / 氣泡水（無糖）</div><div class="meta"><span class="kcal">0 kcal</span></div></div>
+        <div class="row"><div class="n">黑咖啡（無糖・無奶・無油）</div><div class="meta"><span class="kcal">~2–5 kcal</span>・不顯著升胰島素</div></div>
+        <div class="row"><div class="n">純茶（無添加）</div><div class="meta">綠茶／烏龍／紅茶皆可</div></div>
+        <div class="row"><div class="n">少量岩鹽 / 無糖電解質</div><div class="meta">補充礦物質，一般不破戒</div></div>
+      </div>
+      <div class="col">
+        <div class="head no"><span class="m"></span>破戒<span class="tag">BREAKS FAST</span></div>
+        <div class="row"><div class="n">糖 / 蜂蜜 / 糖漿</div><div class="meta">升血糖、觸發胰島素——明確破戒</div></div>
+        <div class="row"><div class="n">牛奶 / 奶精 / 鮮奶油</div><div class="meta">含碳水與蛋白，微量即可能抑制自噬</div></div>
+        <div class="row"><div class="n">MCT 油 / 奶油（防彈咖啡 BPC）</div><div class="meta"><span class="kcal">200–450 kcal</span>・破熱量與自噬斷食</div></div>
+        <div class="row"><div class="n">BCAA / 胺基酸</div><div class="meta">對自噬最敏感，應完全避免</div></div>
+      </div>
+    </div>
+    <div class="thr">
+      <div class="g"><div class="t">目標＝減重／代謝</div><div class="b">熱量赤字為主。黑咖啡、純茶皆可，避開奶、糖、油即可。門檻最寬。</div></div>
+      <div class="g"><div class="t">目標＝胰島素敏感</div><div class="b">無糖代糖（stevia／赤藻糖醇）有爭議，部分人仍有胰島素反應。保守只喝黑咖啡或純水。</div></div>
+      <div class="g"><div class="t">目標＝自噬</div><div class="b">門檻最嚴，建議全日純水；連微量蛋白／胺基酸都可能中斷。人體自噬時程尚未明確定論。</div></div>
+    </div>
+  </section>
+
+  <!-- 05 復食吃什麼 -->
+  <section>
+    <h2><span class="idx">05</span>復食吃什麼<span class="sub">sattvic × 低碳水的交集</span></h2>
+    <div class="sec-line"></div>
+    <div class="fus">
+      <div class="fr">
+        <div class="st both"><span class="dot"></span>兩者皆宜</div>
+        <div class="it">非澱粉蔬菜、瓜類、菇類、薑；全脂無糖乳製品（優格、paneer、ghee）、堅果、優質油脂、酪梨。<span class="note">→ 融合的甜蜜點</span></div>
+      </div>
+      <div class="fr">
+        <div class="st warn"><span class="dot"></span>需取捨</div>
+        <div class="it">馬鈴薯、地瓜、sabudana、糖、jaggery、高糖水果——<span class="note">Ekadashi 允許，但低碳水應限量或避免</span></div>
+      </div>
+      <div class="fr">
+        <div class="st warn"><span class="dot"></span>視當日框架</div>
+        <div class="it">肉、魚、蛋——<span class="note">低碳水允許，但 Ekadashi 禁；守 Ekadashi 當日改為全蔬食</span></div>
+      </div>
+      <div class="fr">
+        <div class="st no"><span class="dot"></span>兩者皆避</div>
+        <div class="it">穀物（米、麥、麵）、所有豆類、精製糖、洋蔥大蒜（tamasic）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 融合實作 -->
+  <section>
+    <h2><span class="idx">06</span>融合實作建議<span class="sub">兩種強度</span></h2>
+    <div class="sec-line"></div>
+    <div class="axes">
+      <div class="ax">
+        <div class="tag">Standard · 標準</div>
+        <div class="t" style="font-size:15px">全日清淨斷食 ＋ 低碳水復食</div>
+        <div class="d">斷食日行 L2 clean fast（黑咖啡・純茶・水），次日以低碳水全食溫和復食。適合減重與代謝目標，是最易維持的基準型。</div>
+      </div>
+      <div class="ax">
+        <div class="tag">Ekadashi · 對齊靈性</div>
+        <div class="t" style="font-size:15px">每月兩次升級收斂</div>
+        <div class="d">於 Ekadashi 當日執行，食物升級為全蔬食且更嚴——可拉升至 L3 Phalahari（僅水果乳製）或 L4 Nirjala（純水），對齊自噬與深層休息，並承接靈性意圖。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 個人脈絡 -->
+  <section>
+    <h2><span class="idx">07</span>對應個人脈絡<span class="sub">sattvic 低碳水全食</span></h2>
+    <div class="sec-line"></div>
+    <div class="callout">
+      <h3>兩套框架天然貼合，但注意兩點</h3>
+      <p><b>1｜Ekadashi 傳統澱粉與低碳水衝突：</b>其允許的馬鈴薯、sabudana、糖是為「補足能量以行奉獻」而設。對低碳水取向者，直接走 Phalahari 或 Nirjala 反而更一致。</p>
+      <p><b>2｜「代謝休息」屬機制、非框架玄學：</b>清淨斷食降胰島素、Nirjala 的深層休息，在機制層可對話；但 prana／純淨飲食的靈性理據屬<b>框架內部邏輯</b>，與臨床終點須分開陳述。</p>
+    </div>
+  </section>
+
+  <!-- 08 Caveats -->
+  <section>
+    <h2><span class="idx">08</span>注意事項 Caveats<span class="sub">證據分層與查證限制</span></h2>
+    <div class="sec-line"></div>
+    <div class="cav">
+      <div class="c"><span class="lab l-evid">證據・中等</span><span class="txt">時間限制進食的 RCT 統合分析顯示<b>適度</b>減重（約 −1.9～2 kg）並降低空腹胰島素，順從度高、不良事件少；但對 BMI、體脂、血脂、血壓的效益常<b>不顯著</b>，多數益處來自總熱量攝取下降。延伸為全日斷食時，益處來源相同邏輯，惟針對「全日／長時斷食」本身的高品質證據較有限。</span></div>
+      <div class="c"><span class="lab l-risk">爭議・觀察性</span><span class="txt">2024 年 AHA 一份<b>初步</b>研究（約 2 萬名美國成人）指出，習慣性把每日進食壓縮在極短時窗（&lt;8h）者，心血管死亡風險較高（+91%）。惟屬會議摘要、觀察性、依賴自述飲食回憶，<b>關聯不等於因果</b>；偶發的一日斷食與「每日長期極短進食」是不同型態，宜審慎看待而非恐慌。</span></div>
+      <div class="c"><span class="lab l-warn">自噬・未定論</span><span class="txt">「斷食觸發自噬」有機制支持，但人體<b>觸發時程與門檻尚未確立</b>。以自噬為目標時的嚴格建議屬保守推論，非強證據。</span></div>
+      <div class="c"><span class="lab l-risk">未證實</span><span class="txt">Ekadashi 流傳「多數病患死於前後 5 日、與月相影響體內水分有關」之說，<b>屬民間敘事，無可靠臨床證據</b>。</span></div>
+      <div class="c"><span class="lab l-warn">豁免對象</span><span class="txt">孕婦、年長者、重病者、有糖尿病或飲食失調史者<b>不宜貿然全日斷食</b>；服藥（尤其降血糖藥）者的空腹風險須先諮詢醫療專業。全日斷食強度高於一般時段限制，起步宜漸進、注意補水與電解質。</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>初樸建築師事務所　ProtoPlain Architects</span>
+    <span class="mono">Concrete Minimal · One-Day Clean Fast</span>
+  </footer>
+
+</div>
+</body>
+</html>
