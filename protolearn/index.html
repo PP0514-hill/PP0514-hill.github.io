@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>樸學堂 ProtoLearn｜課程專區</title>
+<meta name="description" content="初樸建築師事務所內部學習專區，收錄由 Notion 課程資料庫同步產出的結構化課程頁。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pp-bg:#ECEAE5; --pp-card:#FFFFFF; --pp-card2:#F3F1EC;
+  --pp-ink:#232220; --pp-sub:#6E6B64; --pp-hint:#9A968D;
+  --pp-line:#D8D5CE; --pp-line-strong:#C3BFB6;
+  --pp-acc:#9C3D2C; --pp-acc-dark:#843022; --pp-acc-tint:#F2E3DE;
+  --pp-done:#5C7355;
+  --pp-sans:"Noto Sans TC","Inter",-apple-system,"Helvetica Neue",sans-serif;
+  --pp-mono:"JetBrains Mono","SFMono-Regular",Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pp-bg);color:var(--pp-ink);font-family:var(--pp-sans);
+  font-weight:400;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:500;margin:0;line-height:1.35}
+p{margin:0 0 1em}
+a{color:var(--pp-acc);text-decoration:none}
+a:hover{color:var(--pp-acc-dark)}
+:focus-visible{outline:2px solid var(--pp-acc);outline-offset:3px}
+.wrap{max-width:840px;margin:0 auto;padding:0 32px 88px}
+header.hero{padding:76px 0 40px;border-bottom:.5px solid var(--pp-line)}
+.eyebrow{font-family:var(--pp-mono);font-size:11px;letter-spacing:.16em;color:var(--pp-hint);
+  text-transform:uppercase}
+h1{font-size:28px;margin:14px 0 4px}
+.h1sub{font-size:20px;color:var(--pp-sub);margin-bottom:18px}
+.lede{font-size:15px;color:var(--pp-sub);max-width:42em}
+section{padding:40px 0}
+section > h2{font-size:20px;margin-bottom:6px}
+.hint{color:var(--pp-sub);font-size:15px;max-width:44em;margin-bottom:24px}
+.list{display:grid;gap:12px}
+.course{display:grid;grid-template-columns:48px minmax(0,1fr);gap:20px;
+  background:var(--pp-card);border:.5px solid var(--pp-line);border-radius:12px;
+  padding:22px 24px;color:var(--pp-ink);transition:border-color .15s}
+.course:hover{border-color:var(--pp-acc);color:var(--pp-ink)}
+.course .idx{font-family:var(--pp-mono);font-size:13px;color:var(--pp-line-strong);padding-top:3px}
+.course:hover .idx{color:var(--pp-acc)}
+.course h3{font-size:17px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.course h3 .sub{font-size:14px;color:var(--pp-sub);font-weight:400}
+.course .lede{font-size:14px;color:var(--pp-sub);margin:10px 0 14px;max-width:none}
+.tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-family:var(--pp-mono);font-size:11px;letter-spacing:.06em;color:var(--pp-sub);
+  border:.5px solid var(--pp-line-strong);border-radius:8px;padding:2px 9px}
+.tag.done{color:var(--pp-done);border-color:var(--pp-done)}
+.tag.field{background:var(--pp-acc-tint);color:var(--pp-acc-dark);border-color:transparent;
+  font-family:var(--pp-sans)}
+.tag.plain{border-color:transparent;color:var(--pp-hint)}
+.note{background:var(--pp-card2);border:.5px solid var(--pp-line);border-radius:12px;
+  padding:18px 20px;font-size:13.5px;color:var(--pp-sub)}
+.note b{color:var(--pp-ink);font-weight:500}
+.note ul{margin:8px 0 0;padding-left:1.2em}
+footer{padding-top:32px;border-top:.5px solid var(--pp-line);font-size:12.5px;color:var(--pp-hint)}
+@media (max-width:680px){
+  .wrap{padding:0 20px 64px}
+  header.hero{padding:44px 0 30px}
+  h1{font-size:25px}.h1sub{font-size:17px}
+  .course{grid-template-columns:1fr;gap:8px}
+  .course .idx{padding-top:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">PROTOLEARN ｜ 初樸建築師事務所</div>
+  <h1>樸學堂 ProtoLearn</h1>
+  <div class="h1sub">初樸建築師事務所　內部學習專區</div>
+  <p class="lede">由 Notion 課程資料庫同步產出的結構化課程頁。每門課依課綱順序重整為分頁式單頁，含教材、練習與課堂筆記三個層次。</p>
+</header>
+
+<section>
+  <h2>課程</h2>
+  <p class="hint">目前收錄 2 門課。點選卡片進入課程頁。</p>
+  <div class="list"><a class="course" href="./financial-literacy-10books/"><div class="idx">01</div><div><h3><span>財商底層邏輯</span><span class="sub">10 本書建構你的財富與人生</span></h3><p class="lede">以十本經典著作為核心，由淺入深建立財富觀、提升賺錢能力、掌握投資心法，最終邁向圓滿豐盛的自由人生。</p><div class="tags"><span class="tag field">財務・投資</span><span class="tag">11 堂</span><span class="tag">4 模組</span><span class="tag">專業</span><span class="tag done">已完成</span><span class="tag plain">同步 2026/08/12</span></div></div></a><a class="course" href="./geometry-animal-communication/"><div class="idx">02</div><div><h3><span>幾何心靈密碼</span><span class="sub">神聖幾何與動物溝通進階實踐</span></h3><p class="lede">結合神聖幾何的能量頻率與心靈感應，建立與動物深度對話與雙向療癒的高階橋樑。</p><div class="tags"><span class="tag field">身心靈實踐</span><span class="tag">8 堂</span><span class="tag">4 階段</span><span class="tag">進階</span><span class="tag done">已完成</span><span class="tag plain">同步 2026/08/07</span></div></div></a></div>
+</section>
+
+<section>
+  <h2>關於這個專區</h2>
+  <div class="note">
+    <b>內容來源</b>　各課程內容整理自 Notion「樸學堂 ProtoLearn｜課程資料庫」，
+    依課綱順序重新結構化。原文保留，僅調整層級與呈現方式。
+    <ul>
+      <li>頁面架構：分頁式單頁，一次顯示一堂課；每堂課再分教材／練習／筆記三個分頁。</li>
+      <li>導覽：頂部課次列為唯一常駐導覽，支援鍵盤左右方向鍵切換。</li>
+      <li>右上「全部展開」可攤平全部內容，供全文搜尋與列印。</li>
+      <li>網址帶 <code>#l05</code> 形式的錨點，可直接分享至特定課次。</li>
+    </ul>
+  </div>
+</section>
+
+<footer>樸學堂 ProtoLearn　·　初樸建築師事務所 PROTOPLAIN Architects</footer>
+</div>
+</body>
+</html>
