@@ -1,0 +1,2802 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一息宇宙 One Breath Cosmos — 費氏葉序 · 六維之流</title>
+<style>
+  :root{
+    --bg:#070B1A;
+    --ink:#E8E3D5;
+    --sub:#8A8FA3;
+    --line:rgba(217,180,91,.20);
+    --gold:#E8C87A;
+    --clay:#C4573F;
+    --breathC:#8FBCA8;
+    --mono:'JetBrains Mono','Courier New',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);}
+  body{font-family:'Noto Sans TC','Inter',sans-serif;color:var(--ink);}
+  canvas{display:block;position:fixed;inset:0;}
+  #cv3{display:none;}
+
+  #title{position:fixed;top:20px;left:22px;z-index:10;pointer-events:none;letter-spacing:.08em;}
+  #title h1{font-size:15px;font-weight:500;}
+  #title h1 em{font-style:normal;color:var(--gold);}
+  #title p{font-size:10px;color:var(--sub);margin-top:3px;font-family:var(--mono);letter-spacing:.12em;}
+
+  #legend{
+    position:fixed;top:18px;right:22px;z-index:15;
+    display:flex;flex-direction:column;align-items:flex-end;gap:4px;
+  }
+  .legendBtn{
+    font-family:'Noto Sans TC',sans-serif;font-size:10px;letter-spacing:.12em;
+    background:transparent;border:none;cursor:pointer;padding:3px 2px;
+    display:flex;align-items:center;transition:opacity .25s;
+  }
+  .legendBtn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:7px;transition:all .25s;}
+  .legendBtn.out{color:var(--gold);} .legendBtn.out .dot{background:var(--gold);box-shadow:0 0 5px var(--gold);}
+  .legendBtn.in{color:var(--clay);}  .legendBtn.in .dot{background:var(--clay);box-shadow:0 0 5px var(--clay);}
+  .legendBtn.off{opacity:.32;}
+  .legendBtn.off .dot{background:var(--sub);box-shadow:none;}
+  .legendBtn:hover{opacity:.9;}
+
+  /* 縮放控制(左下,freqInfo 之上) */
+  #zoomCtl{
+    position:fixed;left:22px;bottom:78px;z-index:15;
+    display:flex;flex-direction:column;gap:5px;align-items:center;
+  }
+  .zbtn{
+    width:30px;height:30px;border-radius:8px;cursor:pointer;
+    font-size:14px;line-height:1;color:var(--sub);
+    background:rgba(7,11,26,.5);border:0.5px solid var(--line);
+    backdrop-filter:blur(5px);transition:all .25s;
+  }
+  .zbtn:hover{color:var(--gold);border-color:rgba(232,200,122,.5);}
+  #zVal{font-family:var(--mono);font-size:8px;color:var(--sub);letter-spacing:.03em;text-align:center;line-height:1.5;}
+  #zVal sup{font-size:6px;}
+
+  #siteCredit{
+    position:fixed;left:50%;bottom:5px;transform:translateX(-50%);z-index:8;
+    pointer-events:none;font-size:8px;letter-spacing:.08em;
+    color:rgba(138,143,163,.38);white-space:nowrap;
+  }
+  #freqInfo{
+    position:fixed;left:22px;bottom:20px;z-index:10;pointer-events:none;
+    font-family:var(--mono);font-size:10px;line-height:1.8;color:var(--sub);letter-spacing:.08em;
+    opacity:.85;
+  }
+  #freqInfo .big{font-size:12px;color:var(--gold);}
+
+  /* 呼吸暗示改由畫面本身承載(中心之源脹縮 + 場域明暗潮汐),不再使用文字與圓圈 */
+
+  /* 開場發心 */
+  #blessing{
+    position:fixed;inset:0;z-index:30;pointer-events:none;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:18px;text-align:center;
+    animation:blFade 9s ease-in-out forwards;
+  }
+  #blessing .bl1{font-size:17px;font-weight:400;color:#E8E3D5;letter-spacing:.35em;text-indent:.35em;}
+  #blessing .bl2{font-size:12px;color:var(--sub);letter-spacing:.25em;text-indent:.25em;}
+  @keyframes blFade{
+    0%{opacity:0;}
+    18%{opacity:1;}
+    72%{opacity:1;}
+    100%{opacity:0;visibility:hidden;}
+  }
+
+  /* 置頂列:維度切換(極簡 —— 無底框,靜默文字,細底線標記當前) */
+  #topBar{
+    position:fixed;top:58px;left:50%;transform:translateX(-50%);z-index:15;
+    display:flex;justify-content:center;
+    /* 微暗襯底:僅足以在亮場(二維葉序)上撐住文字,仍近乎隱形 */
+    background:rgba(7,11,26,.42);backdrop-filter:blur(5px);
+    border-radius:10px;padding:1px 6px;
+  }
+  #topBar #views{display:flex;gap:2px;border:none;border-radius:0;overflow:visible;}
+  #topBar .view{
+    flex:none;background:transparent;border:none;border-bottom:1px solid transparent;
+    color:#B8BCC9;opacity:.6;font-size:11px;letter-spacing:.18em;
+    padding:5px 11px;transition:all .3s;
+    text-shadow:0 0 6px rgba(0,0,0,.85);   /* 暗暈:亮底上仍可讀 */
+  }
+  #topBar .view:hover{opacity:.95;}
+  #topBar .view.on{
+    color:var(--gold);opacity:1;background:transparent;
+    border-bottom:1px solid rgba(232,200,122,.6);
+  }
+  @media (max-width:640px){
+    #topBar{top:70px;}
+    #topBar .view{padding:4px 7px;font-size:10px;letter-spacing:.1em;}
+  }
+
+  /* ============ 可收合控制面板(右下,不擋主畫面) ============ */
+  #panelWrap{position:fixed;right:16px;bottom:16px;z-index:20;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+
+  #panelToggle{
+    font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.15em;
+    color:var(--gold);background:rgba(7,11,26,.8);border:0.5px solid var(--line);
+    border-radius:20px;padding:9px 18px;cursor:pointer;backdrop-filter:blur(8px);
+    transition:all .25s;
+  }
+  #panelToggle:hover{border-color:var(--gold);}
+
+  #panel{
+    display:none;flex-direction:column;gap:0;
+    width:262px;max-height:calc(100vh - 120px);overflow-y:auto;
+    border:0.5px solid var(--line);border-radius:12px;
+    background:rgba(7,11,26,.82);backdrop-filter:blur(10px);
+  }
+  #panel.open{display:flex;}
+  #panel::-webkit-scrollbar{width:3px;}
+  #panel::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
+
+  .sec{padding:12px 14px;border-bottom:0.5px solid var(--line);}
+  .sec:last-child{border-bottom:none;}
+  .secHead{
+    display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+    font-size:11px;color:var(--ink);letter-spacing:.18em;user-select:none;
+    margin:-12px -14px;padding:12px 14px;border-radius:8px;   /* 整列滿版可點 */
+    transition:background .2s;
+  }
+  .sec .secBody{margin-top:0;padding-top:11px;}
+  .secHead:hover{background:rgba(232,200,122,.07);}
+  .secHead:hover .arrow{color:var(--gold);}
+  .secHead .arrow{
+    font-family:var(--mono);transition:transform .25s,color .2s;
+    color:var(--gold);font-size:12px;opacity:.9;
+  }
+  .sec.closed .secHead{color:var(--sub);}
+  .sec.closed .arrow{transform:rotate(-90deg);color:var(--sub);}
+  .secBody{display:flex;flex-direction:column;gap:10px;margin-top:11px;}
+  .sec.closed .secBody{display:none;}
+
+  .ctrl{display:flex;flex-direction:column;gap:5px;}
+  .ctrl label{font-size:11px;color:var(--sub);letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center;}
+  .ctrl label span{font-family:var(--mono);color:var(--gold);}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--line);
+    border-radius:2px;outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;
+    background:var(--gold);cursor:pointer;border:none;
+  }
+  input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--gold);cursor:pointer;border:none;}
+
+  input[type=number]{
+    font-family:var(--mono);font-size:11px;color:var(--gold);width:64px;
+    background:#0D1428;border:0.5px solid var(--line);border-radius:6px;
+    padding:4px 6px;outline:none;text-align:right;
+  }
+  input[type=number]::-webkit-inner-spin-button{opacity:1;}
+
+  #views{display:flex;border:0.5px solid var(--line);border-radius:8px;overflow:hidden;}
+  .view{
+    flex:1;font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.12em;
+    color:var(--sub);background:transparent;border:none;
+    padding:8px 0;cursor:pointer;transition:all .25s;
+  }
+  .view.on{color:#070B1A;background:var(--gold);}
+
+  #modes{display:flex;gap:4px;}
+  .mode{
+    flex:1;font-family:var(--mono);font-size:10px;letter-spacing:.02em;
+    color:var(--sub);background:transparent;border:0.5px solid var(--line);
+    border-radius:7px;padding:5px 0;cursor:pointer;transition:all .25s;
+    display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.25;
+  }
+  .mode small{font-size:8px;opacity:.8;}
+  .mode.on{color:#070B1A;background:var(--gold);border-color:var(--gold);}
+
+  .toggle{
+    font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.1em;
+    background:transparent;border:0.5px solid var(--line);
+    border-radius:8px;padding:8px 12px;cursor:pointer;transition:all .25s;
+    display:flex;align-items:center;gap:7px;justify-content:center;
+  }
+  .toggle .sw{width:7px;height:7px;border-radius:50%;transition:all .25s;}
+  #tgBreath{color:var(--breathC);width:100%;} #tgBreath .sw{background:var(--breathC);box-shadow:0 0 6px var(--breathC);}
+  #tgSush{color:#C9A96A;width:100%;} #tgSush .sw{background:#C9A96A;box-shadow:0 0 6px #C9A96A;}
+  .toggle.off{color:var(--sub) !important;border-color:rgba(138,143,163,.25);}
+  .toggle.off .sw{background:var(--sub);box-shadow:none;opacity:.4;}
+  .twoCol{display:flex;gap:8px;}
+
+  select{
+    font-family:var(--mono);font-size:11px;color:var(--ink);width:100%;
+    background:#0D1428;border:0.5px solid var(--line);border-radius:8px;
+    padding:7px 8px;cursor:pointer;outline:none;
+  }
+  #pauseBtn{
+    font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.1em;width:100%;
+    color:var(--ink);background:transparent;border:0.5px solid var(--line);
+    border-radius:8px;padding:8px 0;cursor:pointer;
+  }
+  .caveatText{
+    font-size:9px;color:rgba(138,143,163,.65);letter-spacing:.04em;line-height:1.6;
+  }
+  /* 圖典 ATLAS(維度分頁) */
+  #atlasTabs{display:flex;gap:4px;}
+  .atab{
+    flex:1;font-family:'Noto Sans TC',sans-serif;font-size:10px;letter-spacing:.08em;
+    color:var(--sub);background:transparent;border:0.5px solid var(--line);
+    border-radius:7px;padding:5px 0;cursor:pointer;transition:all .25s;
+  }
+  .atab.on{color:#070B1A;background:var(--gold);border-color:var(--gold);}
+  .atlasItem{display:none;flex-direction:column;gap:6px;padding-top:4px;}
+  .atlasItem.show{display:flex;}
+  .atlasCv{width:100%;border:0.5px solid rgba(217,180,91,.12);border-radius:8px;background:rgba(4,7,18,.5);}
+  .atlasCap{font-size:9px;color:rgba(160,163,178,.8);letter-spacing:.04em;line-height:1.6;}
+  .atlasCap b{color:#E8C87A;font-weight:500;}
+
+  /* ============ 靜坐計時 SITTING + 專注/全螢幕 ============ */
+  /* 頂緣進度線:1px,不落入視野中心 */
+  #sitProg{
+    position:fixed;top:0;left:0;height:1px;width:0;z-index:40;pointer-events:none;
+    background:linear-gradient(90deg,rgba(232,200,122,.16),var(--gold));
+    opacity:0;transition:opacity .9s ease,width 1s linear;
+  }
+  #sitProg.on{opacity:.8;}
+  #sitRead{
+    position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:16;
+    text-align:center;pointer-events:none;opacity:0;transition:opacity 1.1s ease;
+  }
+  #sitRead.on{opacity:1;}
+  #sitRead .tNum{
+    font-family:var(--mono);font-size:15px;letter-spacing:.18em;text-indent:.18em;
+    color:var(--gold);text-shadow:0 0 10px rgba(7,11,26,.92);
+  }
+  #sitRead .tLab{
+    display:block;margin-top:4px;font-size:9px;letter-spacing:.28em;text-indent:.28em;
+    color:rgba(138,143,163,.9);text-shadow:0 0 8px rgba(7,11,26,.92);
+  }
+  #sitRead.done .tNum{color:var(--ink);}
+
+  #durGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+  .dbtn{
+    font-family:var(--mono);font-size:10px;letter-spacing:.02em;
+    color:var(--sub);background:transparent;border:0.5px solid var(--line);
+    border-radius:7px;padding:6px 0;cursor:pointer;transition:all .25s;
+  }
+  .dbtn:hover{color:var(--gold);}
+  .dbtn.on{color:#070B1A;background:var(--gold);border-color:var(--gold);}
+  #sitBtns{display:flex;gap:6px;}
+  #sitBtns button{
+    flex:1;font-family:'Noto Sans TC',sans-serif;font-size:12px;letter-spacing:.1em;
+    color:var(--ink);background:transparent;border:0.5px solid var(--line);
+    border-radius:8px;padding:8px 0;cursor:pointer;transition:all .25s;
+  }
+  #sitBtns button:hover{border-color:var(--gold);color:var(--gold);}
+  #sitBtns button:disabled{opacity:.3;cursor:default;}
+  #sitStart{color:var(--gold);border-color:rgba(232,200,122,.45);}
+  #tgZen{color:var(--breathC);width:100%;} #tgZen .sw{background:var(--breathC);box-shadow:0 0 6px var(--breathC);}
+  #tgFull{color:#B8BCC9;width:100%;} #tgFull .sw{background:#B8BCC9;box-shadow:0 0 6px #B8BCC9;}
+  .toggle:disabled{opacity:.32;cursor:default;}
+
+  /* 專注模式:介面淡出,只餘場域與一行讀數;指標移動可暫時喚回 */
+  #title,#legend,#zoomCtl,#freqInfo,#topBar,#siteCredit,#panelWrap{transition:opacity .9s ease;}
+  body.zen #title,body.zen #legend,body.zen #zoomCtl,body.zen #freqInfo,
+  body.zen #topBar,body.zen #siteCredit,body.zen #panelWrap{opacity:0;pointer-events:none;}
+  body.zen.peek #title,body.zen.peek #legend,body.zen.peek #zoomCtl,body.zen.peek #freqInfo,
+  body.zen.peek #topBar,body.zen.peek #siteCredit,body.zen.peek #panelWrap{
+    opacity:.92;pointer-events:auto;transition:opacity .3s ease;
+  }
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+
+<!-- 開場發心:一次浮現,隨息隱去 -->
+<div id="blessing">
+  <div class="bl1">願此一息,與天地同律</div>
+  <div class="bl2">光的釋放與回歸,映照創造與修行</div>
+</div>
+<canvas id="cv3"></canvas>
+
+<div id="title">
+  <h1>一息宇宙 <em>φ</em> One Breath Cosmos</h1>
+  <p id="subTitle">1D LINEAR CURRENT &middot; SCHUMANN MAPPING</p>
+</div>
+
+<!-- 圖例即開關:點擊切換釋放/回歸 -->
+<div id="legend">
+  <button class="legendBtn out" id="tgOut">創造 · 釋放<span class="dot"></span></button>
+  <button class="legendBtn in off" id="tgIn">修行 · 回歸<span class="dot"></span></button>
+</div>
+
+<!-- 置頂列:維度切換(極簡文字,不干擾主畫面) -->
+<div id="topBar">
+  <div id="views">
+    <button class="view on" data-v="1d">一維</button>
+    <button class="view" data-v="2d">二維</button>
+    <button class="view" data-v="3d">三維</button>
+    <button class="view" data-v="4d">四維</button>
+    <button class="view" data-v="5d">五維</button>
+    <button class="view" data-v="6d">六維</button>
+  </div>
+</div>
+
+<!-- 縮放控制:五個維度共用 -->
+<div id="zoomCtl">
+  <button class="zbtn" id="zIn">＋</button>
+  <button class="zbtn" id="zOut">－</button>
+  <button class="zbtn" id="zReset" title="重設縮放">⤾</button>
+  <div id="zVal">×1.00</div>
+</div>
+
+<div id="siteCredit">一息宇宙 One Breath Cosmos © 2026 初樸建築師事務所 ProtoPlain Architects</div>
+
+<!-- 靜坐計時:頂緣 1px 進度線 + 一行讀數(不入視野中心) -->
+<div id="sitProg"></div>
+<div id="sitRead"><span class="tNum">20:00</span><span class="tLab">入座</span></div>
+
+<div id="freqInfo">
+  <div>SR <span class="big" id="fiMode">n=1</span> · <span class="big" id="fiReal">7.83 Hz</span></div>
+  <div>縮時 <span class="big" id="fiVis">0.100 Hz</span> <span id="fiPeriod">(10.0 s/脈)</span></div>
+</div>
+
+<!-- ============ 可收合控制面板 ============ -->
+<div id="panelWrap">
+  <div id="panel">
+
+    <div class="sec" id="secTime">
+      <div class="secHead">時間 TIME<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <button id="pauseBtn">⏸ 暫停流動</button>
+        <div class="caveatText">暫停 = 凍結全域時鐘:波的行進、旋轉、相機、呼吸皆靜止於當下;所有設定仍可調整,按「繼續」自原處恢復。</div>
+      </div>
+    </div>
+
+    <div class="sec closed" id="secSit">
+      <div class="secHead">靜坐 SITTING<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <div class="ctrl">
+          <label>時長 Duration<span id="vDur">20 min</span></label>
+          <div id="durGrid">
+            <button class="dbtn" data-min="5">5</button>
+            <button class="dbtn" data-min="10">10</button>
+            <button class="dbtn" data-min="15">15</button>
+            <button class="dbtn on" data-min="20">20</button>
+            <button class="dbtn" data-min="30">30</button>
+            <button class="dbtn" data-min="45">45</button>
+            <button class="dbtn" data-min="60">60</button>
+            <button class="dbtn" data-min="0" title="開放式:不設終點,正向計時">∞</button>
+          </div>
+        </div>
+        <div class="ctrl">
+          <label>入座緩衝 Settle-in</label>
+          <select id="sitSettle">
+            <option value="0">無 · 立即起鐘</option>
+            <option value="15" selected>15 秒</option>
+            <option value="30">30 秒</option>
+            <option value="60">60 秒</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label>間隔鐘 Interval</label>
+          <select id="sitInterval">
+            <option value="0" selected>無</option>
+            <option value="5">每 5 分</option>
+            <option value="10">每 10 分</option>
+            <option value="15">每 15 分</option>
+          </select>
+        </div>
+        <div id="sitBtns">
+          <button id="sitStart">開始入座</button>
+          <button id="sitStop" disabled>結束</button>
+        </div>
+        <button class="toggle off" id="tgZen"><span class="sw"></span>專注模式(隱藏介面)</button>
+        <button class="toggle off" id="tgFull"><span class="sw"></span>全螢幕</button>
+        <div class="caveatText">開始入座即自動收合面板並進入專注模式;移動指標或觸碰螢幕可暫時喚回介面。鐘聲為 216 Hz 缽音(起鐘一響 · 圓滿三響 · 間隔一輕響),與「諧振呼吸」共用同一主音量;音訊需先有一次點擊方能發聲(瀏覽器政策)。快捷鍵:<b style="color:#E8C87A;">空白鍵</b> 入座/暫止 · <b style="color:#E8C87A;">Z</b> 專注 · <b style="color:#E8C87A;">F</b> 全螢幕 · <b style="color:#E8C87A;">Esc</b> 退出。<span id="fsNote"></span></div>
+        <div class="caveatText">誠實界線:分頁切換或螢幕關閉時,瀏覽器會暫停動畫迴圈 —— 回到本頁時計時會自動補回已流逝的時間,但鐘聲不會在背景響起。此計時器僅為護持一座的時間框架,不作境界評量;久暫與深淺並無必然關係,Anapana 的要點仍是不控制、只覺察。「⏸ 暫停流動」同時暫停計時。</div>
+      </div>
+    </div>
+
+    <div class="sec" id="secSR">
+      <div class="secHead">舒曼共振 SCHUMANN<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <div id="modes">
+          <button class="mode on" data-n="1" title="地球—電離層腔基頻,俗稱「地球頻率」">SR1<small>7.83 基頻</small></button>
+          <button class="mode" data-n="2">SR2<small>14.3</small></button>
+          <button class="mode" data-n="3">SR3<small>20.8</small></button>
+          <button class="mode" data-n="4">SR4<small>27.3</small></button>
+          <button class="mode" data-n="5">SR5<small>33.8</small></button>
+        </div>
+        <div class="caveatText">SR1 為地球—電離層腔的<b style="color:#E8C87A;">基頻</b>(7.83 Hz,俗稱「地球頻率」);SR2–SR5 為同一腔體的高階模態 —— 五者皆屬地球實測共振,SR1 最常被單獨引用。</div>
+        <div class="ctrl">
+          <label>縮時比 1 : K
+            <input type="number" id="scaleNum" min="10" max="320" step="0.1" value="78.0">
+          </label>
+          <input type="range" id="scale" min="10" max="320" step="0.5" value="78">
+        </div>
+      </div>
+    </div>
+
+    <div class="sec closed" id="secBreath">
+      <div class="secHead">諧振呼吸 BREATHING<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <button class="toggle" id="tgBreath"><span class="sw"></span>呼吸引導</button>
+        <button class="toggle off" id="tgSush"><span class="sw"></span>中脈模式(一維 · 直式)</button>
+        <div class="caveatText">中脈模式:一維轉為直式,沿軸依傳統位置佈七個定點(心輪居中,即中心之源;不用彩虹七色 —— 彩色對應為 1970 年代西方新時代之附加,傳統經典給的是花瓣數與種子字)。呼吸開啟時,光隨吸氣自根向頂逐點攀升、吐氣反向沉降。此為象徵層之觀想輔助;脈輪作為可測能量結構並無科學證據,經得起實證檢驗的仍是緩慢呼吸本身(HRV)。</div>
+        <div class="ctrl">
+          <label>呼吸法 Pattern</label>
+          <select id="bpat">
+            <option value="resonant" selected>諧振呼吸(吸—吐)</option>
+            <option value="478">4-7-8(吸 4 · 止 7 · 吐 8)</option>
+            <option value="box">箱式 Box(4-4-4-4)</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label>速率模式</label>
+          <select id="bmode">
+            <option value="sync" selected>同步舒曼縮時節律(一波一息,推薦)</option>
+            <option value="manual">手動</option>
+            <option value="fixed783">7.83 次/分(呼應基頻數字,象徵性)</option>
+          </select>
+        </div>
+        <div class="ctrl" id="bpmCtrl" style="opacity:.45;">
+          <label>速率 <span id="vBpm">6.0</span> 次/分</label>
+          <input type="range" id="bpm" min="3.0" max="8.0" step="0.1" value="5.5" disabled>
+        </div>
+        <div class="caveatText">同步模式:一次呼吸 = 一次波的釋放,速率 = 縮時節律 × 60。K=78 時 SR1 → 6.0 次/分;調 K 至 85–104 可落 4.5–5.5 次/分(諧振呼吸研究的常用區間)。7.83 次/分僅為數字呼應,略快於諧振區間。</div>
+        <div class="ctrl" id="ratioCtrl">
+          <label>吸 : 吐(僅諧振呼吸)</label>
+          <select id="ratio">
+            <option value="0.5" selected>5 : 5(等長諧振)</option>
+            <option value="0.444">4 : 5</option>
+            <option value="0.4">4 : 6</option>
+            <option value="0.364">4 : 7</option>
+            <option value="0.333">4 : 8(1:2 延長吐氣)</option>
+            <option value="0.3">3 : 7</option>
+            <option value="0.6">6 : 4(提振)</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label>吸氣音 Inhale</label>
+          <select id="sndIn">
+            <option value="bowl" selected>缽音(216 Hz)</option>
+            <option value="om">OM 音(136.1 Hz 持續低吟)</option>
+            <option value="silent">靜默</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label>吐氣音 Exhale</label>
+          <select id="sndOut">
+            <option value="pad" selected>低音墊</option>
+            <option value="ocean">海息(濾波氣流,如遠浪)</option>
+            <option value="silent">靜默</option>
+          </select>
+        </div>
+        <div class="caveatText">136.1 Hz「OM 音」出自 Cousto「宇宙八度」—— 將地球公轉週期倍頻移入可聽域的推算,屬象徵系統而非聲學標準;選用取其低沉安定的音色與文化意涵。4-7-8 與箱式呼吸為廣泛流傳的呼吸練習,放鬆效果的臨床證據仍在累積中,不及慢速諧振呼吸(HRV)充分。</div>
+        <div class="ctrl">
+          <label>音量 <span id="vVol">0.5</span></label>
+          <input type="range" id="vol" min="0" max="1" step="0.05" value="0.5">
+        </div>
+      </div>
+    </div>
+
+    <div class="sec closed" id="secConcept">
+      <div class="secHead">概念 CONCEPT<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <div class="caveatText" style="color:rgba(200,195,180,.8);">
+          <b style="color:#E8C87A;">發心 · INTENTION</b><br>
+          幾何、頻率、聲響與息,皆是指月之指 —— 若有一次呼吸因此更深、一刻覺察因此更明,此頁便已完成它的意義。<br><br>
+          <b style="color:#E8C87A;">骨架 · φ</b><br>
+          以 Vogel 葉序模型佈點(r = c√n、θ = n×137.507° 黃金角),同餘連線形成 13 條費氏彎臂 —— 向日葵、松果、星系共通的生長幾何。場域延伸出畫框:所見僅是無界之場的一窗。<br><br>
+          <b style="color:#E8C87A;">雙流 · 創造與修行</b><br>
+          金白光自中心恆湧而出 —— 創造,光成為形;氧化鐵紅自宇宙恆流歸心 —— 修行,形煉回光。兩股流在同一條臂上交錯而行,持續不息,可獨立開關。<br><br>
+          <b style="color:#E8C87A;">節律 · 舒曼共振</b><br>
+          流速與波形不各自為政,統一由地球—電離層腔的駐波頻率導出:模態 n 決定波峰密度(D=8n)與銳度,頻率 f_n 經 1:K 縮時決定節律 —— 選一個模態、縮一個時,整場動態隨之定調。<br><br>
+          <b style="color:#E8C87A;">身體 · 諧振呼吸</b><br>
+          在天地之律上疊己身之息:4.5–6.5 次/分的緩慢呼吸,吸氣缽音浮現、中心之源脹放;吐氣低音墊沉入、場域收斂。畫面即是呼吸引導,無需文字。<br><br>
+          <b style="color:#E8C87A;">維度 · 一至六維</b><br>
+          五個視圖共用同一全域相位與全部設定 —— 切換的只是空間維度:一維是流的截面,二維是葉序之場,三維是佈滿空間的螺旋,四維是 S³ 上的 Hopf 纖維閉環(立體投影為互相勾連的光環,φ 比雙旋轉使結構永不重複、由內翻外地呼吸)。五維佈點於 S⁴,以 13 條大圓為臂、經雙重投影顯形 —— 五維的新事物不是更多的動:R⁵ 的旋轉仍只有兩個平面,多出的第五軸不被任何旋轉觸及,畫面中那條金色靜軸即是它 —— 萬象翻騰,見者不動。六維為系列終章:R⁶ = C³,S⁵ 重獲圓纖維結構(複 Hopf 纖維化 S⁵→CP²),且首度容納三個獨立旋轉平面、不再有固定軸 —— 五維的見者在此亦入流,能所俱泯。三平面各繫一律:天地(舒曼)、己身(息)、第三階 ω/φ²(黃金級聯,預留月相)。而六維方體的 64 個頂點,恰與六十四卦一一對應(結構同構為數學事實,卦義為象徵層)。所見皆為高維幾何的投影,如同球的影子是圓、影子的影子仍是形。同一道流,六種顯形。<br><br><b style="color:#E8C87A;">尺度 · 碎形迴繞</b><br>六個視圖的縮放皆為對數週期自相似:尺度以 φ² 為週期迴繞,放大或縮小可無限延續 —— 每跨一層,即進入同構的下一個尺度,如碎形之於自身。誠實界線:黃金結構(對數螺旋、Vogel 場)為「統計自相似」而非嚴格數學碎形;跨層以交叉淡化銜接,即是承接此近似的手法。
+        </div>
+      </div>
+    </div>
+
+    <div class="sec closed" id="secAtlas">
+      <div class="secHead">圖典 ATLAS<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <div class="caveatText">各維度動態視圖在數學史上的靜像根源 —— 以本作視覺語言重繪。切換主畫面維度時,圖典自動翻至對應頁。</div>
+        <div id="atlasTabs">
+          <button class="atab on" data-a="1">一維</button>
+          <button class="atab" data-a="2">二維</button>
+          <button class="atab" data-a="3">三維</button>
+          <button class="atab" data-a="4">四維</button>
+          <button class="atab" data-a="5">五維</button>
+          <button class="atab" data-a="6">六維</button>
+        </div>
+        <div class="atlasItem show" data-pane="1">
+          <canvas class="atlasCv" id="at1" width="230" height="90"></canvas>
+          <div class="atlasCap"><b>一維 · 黃金分割</b> Golden Section<br>線段依 φ 遞迴分割 —— 一切螺旋的種子,藏在一條線裡。</div>
+        </div>
+        <div class="atlasItem" data-pane="2">
+          <canvas class="atlasCv" id="at2" width="230" height="170"></canvas>
+          <div class="atlasCap"><b>二維 · Vogel 葉序</b> Vogel Model (1979)<br>r = c√n、θ = n×137.507° —— 向日葵與松果的生長律,本作二維視圖的原型。</div>
+        </div>
+        <div class="atlasItem" data-pane="3">
+          <canvas class="atlasCv" id="at3" width="230" height="170"></canvas>
+          <div class="atlasCap"><b>三維 · 費氏球面</b> Fibonacci Sphere<br>黃金角將點均勻鋪滿球面 —— 三維螺旋臂的方向骨架。</div>
+        </div>
+        <div class="atlasItem" data-pane="4">
+          <canvas class="atlasCv" id="at4" width="230" height="170"></canvas>
+          <div class="atlasCap"><b>四維 · Hopf 纖維化</b> Hopf Fibration (1931)<br>S³ 上的閉環經立體投影,顯形為互相勾連的 Villarceau 圓 —— 「四維的 Vogel 圖」,本作四維視圖的原型。另一著名靜像為超立方體(Tesseract)。</div>
+        </div>
+        <div class="atlasItem" data-pane="5">
+          <canvas class="atlasCv" id="at5" width="230" height="180"></canvas>
+          <div class="atlasCap"><b>五維 · 五維方體 Petrie 投影</b> Penteract, Petrie Projection<br>32 頂點、80 邊沿 Petrie 方向投影,呈十重對稱 —— 而正十邊形的幾何即是 φ 的幾何:五維方體的影子,天生帶著黃金比例。</div>
+        </div>
+        <div class="atlasItem" data-pane="6">
+          <canvas class="atlasCv" id="at6" width="230" height="200"></canvas>
+          <div class="atlasCap"><b>六維 · 六十四卦方體</b> Hexeract, Petrie Projection<br>六維方體的 64 個頂點沿 Petrie 方向投影,呈十二重對稱。每頂點為一組六位陰陽(6-bit)—— <b>六十四卦恰為六維方體的 64 頂點,爻變即沿一條邊移動</b>:此為組合結構上的嚴格同構(卦義詮釋屬象徵層)。乾(六陽)與坤(六陰)以鐵紅標記,遙相對極。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec closed" id="secNote">
+      <div class="secHead">說明 NOTES<span class="arrow">▾</span></div>
+      <div class="secBody">
+        <div class="caveatText">
+          舒曼共振頻率為地球—電離層腔實測值(基頻約 7.83 Hz,隨晝夜與雷暴活動微幅漂移);畫面為 1:K 縮時之象徵性映射,非物理模擬。緩慢諧振呼吸(約 4.5–6.5 次/分)對心率變異(HRV)之影響有臨床研究支持;與舒曼頻率之關聯則屬流行說法,尚無充分實證。所有聲響(缽音/OM/低音墊/海息)皆由 Web Audio 即時合成,無外部音檔;呼吸節奏由中心之源脹縮與場域明暗潮汐暗示,不使用文字提示。<br><br><b style="color:#E8C87A;">CREDIT</b><br>一息宇宙 One Breath Cosmos —— 為修行者而作<br>概念與設計:葉育鑫 · 初樸建築師事務所 ProtoPlain Architects<br>實作:HTML5 Canvas · WebGL · Web Audio(與 Claude AI 協作生成)<br>© 2026 ProtoPlain Architects. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <button id="panelToggle">☰ 控制</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============================================================
+   費氏葉序 · 宇宙之流 v2
+   ────────────────────────────────────────────
+   本版變更:
+   · 控制列整體移至右下、可一鍵收合為「☰ 控制」膠囊,
+     預設收合 —— 畫面完全不受遮擋;各區(視圖/舒曼/呼吸/說明)
+     另可獨立摺疊。
+   · 縮時比 K 精準化:滑桿(步進 0.5)+ 數字欄(步進 0.1,
+     範圍 10–320)雙向同步,可逐 0.1 微調節律。
+   · 諧振呼吸:吸吐比擴充為七檔(5:5/4:5/4:6/4:7/4:8/3:7/6:4),
+     速率步進細化至 0.1 次/分(3.0–8.0)。
+   · 聲響沉穩化(v3):
+       吸氣 = 缽音 —— 基音降至 216 Hz、泛音減至三層、
+         起音放緩至 120ms,如缽音自遠處浮現而非被敲響;
+       吐氣 = 低音墊 —— 108→72 Hz 雙層正弦緩升緩降,
+         低通緩閉,慢起慢收,無打擊性起音,沉入而不打斷。
+   · 呼吸暗示(v3):移除「吸/吐」文字與縮放圓圈,改由
+     畫面本身承載 —— 吸氣時中心之源脹大、全場光度如潮汐
+     微升(×0.85–1.20);吐氣時源收斂、場沉靜。
+   · 三維可讀性(v3):底光 0.10→0.03、光點縮小、alpha 減半、
+     波峰銳化(q×1.7+0.6)、中心收斂處加衰減 —— 釋放與回歸
+     的行進節奏清晰可辨,不再糊成光束。
+   其餘(三視圖共用同一相位與舒曼映射、雙流開關、色彩象徵)
+   沿用前版。
+   ============================================================ */
+
+const PHI = (1 + Math.sqrt(5)) / 2;
+const PHI2 = PHI * PHI;   // 碎形縮放週期
+const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+const SR_MODES = [
+  { n:1, f:7.83 }, { n:2, f:14.3 }, { n:3, f:20.8 },
+  { n:4, f:27.3 }, { n:5, f:33.8 }
+];
+
+const params = {
+  view: '1d',
+  mode: 0,
+  timeScale: 78,
+  para: 13,
+  flowOut: true,
+  flowIn: false,
+  paused: false,
+  slowSpin: 0.005,
+  zoomLog: 0,                // 碎形縮放層級(實際值,每幀向 target 平滑趨近)
+  zoomTarget: 0,             // 碎形縮放層級(目標值;輸入僅改此值)
+  sushumna: false,           // 中脈模式(僅一維):直式軸 + 七定點 + 息光升降
+  breath: { on:true, mode:'sync', bpm:5.5, inFrac:0.5, vol:0.5,
+            pattern:'resonant', sndIn:'bowl', sndOut:'pad' }
+};
+
+function derived(){
+  const m = SR_MODES[params.mode];
+  const fVis = m.f / params.timeScale;
+  const D = 8 * m.n;
+  const T = D / fVis;
+  const q = 0.9 + (m.n - 1) * 1.35;
+  return { fVis, D, T, q, fReal:m.f, n:m.n };
+}
+
+const OUT_CORE = {r:255,g:246,b:220}, OUT_MAIN = {r:232,g:200,b:122};
+const IN_CORE  = {r:230,g:126,b:98},  IN_MAIN  = {r:156,g:61, b:44};
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+let W, H, CX, CY, FIELD_R;
+let seedsXY = [], arms = [], stars = [], lineSamples = [];
+
+function resize(){
+  const dpr = Math.min(devicePixelRatio, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W*dpr; cv.height = H*dpr;
+  cv.style.width = W+'px'; cv.style.height = H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  CX = W/2; CY = H/2;
+  FIELD_R = Math.hypot(W,H) * 0.78;
+  buildGeometry2D();
+  buildGeometry1D();
+  buildStars();
+  if (three.ready) threeResize();
+}
+addEventListener('resize', resize);
+
+let skelCv = null, skelScale = 1;   // 二維骨架離屏快取
+
+function buildGeometry2D(){
+  // 密度上限:種子數封頂 9000,超大螢幕以加大間距取代裁切場域
+  let c = 13.5;
+  let N = Math.floor((FIELD_R / c) ** 2);
+  if (N > 9000){ c = FIELD_R / Math.sqrt(9000); N = 9000; }
+  seedsXY = [];
+  for (let n = 1; n <= N; n++){
+    const r = c * Math.sqrt(n), t = n * GOLDEN_ANGLE;
+    seedsXY.push({ x: Math.cos(t)*r, y: Math.sin(t)*r });
+  }
+  const F = params.para;
+  arms = [];
+  for (let k = 0; k < F; k++){
+    const pts = [];
+    for (let n = (k===0?F:k); n <= N; n += F) pts.push(seedsXY[n-1]);
+    if (pts.length < 2) continue;
+    const cum = [0];
+    for (let i = 1; i < pts.length; i++)
+      cum.push(cum[i-1] + Math.hypot(pts[i].x-pts[i-1].x, pts[i].y-pts[i-1].y));
+    const len = cum[cum.length-1];
+    const STEP = 9;
+    const samples = [];
+    let seg = 0;
+    for (let d = 0; d <= len; d += STEP){
+      while (seg < cum.length-2 && cum[seg+1] < d) seg++;
+      const t = (d - cum[seg]) / ((cum[seg+1]-cum[seg]) || 1);
+      const x = pts[seg].x + (pts[seg+1].x-pts[seg].x)*t;
+      const y = pts[seg].y + (pts[seg+1].y-pts[seg].y)*t;
+      const r = Math.hypot(x,y);
+      samples.push({ x, y, s:d/len, rT:Math.min(1, r/(FIELD_R*0.5)), rN:r/FIELD_R, fade:Math.max(0.10, 1 - r/FIELD_R) });
+    }
+    arms.push({ pts, samples });
+  }
+
+  // ── 離屏骨架:臂線 + 種子點一次畫定(含徑向漸隱),每幀僅貼圖 ──
+  const dim = Math.min(2800, Math.ceil(FIELD_R * 2) + 8);
+  skelScale = dim / (FIELD_R * 2 + 8);
+  skelCv = document.createElement('canvas');
+  skelCv.width = skelCv.height = dim;
+  const sg = skelCv.getContext('2d');
+  sg.translate(dim/2, dim/2);
+  sg.scale(skelScale, skelScale);
+  sg.lineCap = 'round';
+  // v8 靜態環帶:骨架亮度以中距環帶(rN≈0.32)為峰、外圈收為餘韻 ——
+  // 外圈摩爾紋與均亮噪音由此消解;呼吸推移僅作用於動的流場
+  const bandS = rN => { const t = (rN - 0.30)/0.21; return 0.09 + 0.91 * Math.exp(-t*t); };
+  for (const arm of arms){
+    const pts = arm.pts;
+    for (let i = 0; i < pts.length-1; i++){
+      const midR = Math.hypot((pts[i].x+pts[i+1].x)/2,(pts[i].y+pts[i+1].y)/2);
+      const fade = Math.max(0.03, 0.22*(1 - midR/FIELD_R)) * bandS(midR/FIELD_R);
+      sg.strokeStyle = `rgba(217,180,91,${fade})`;
+      sg.lineWidth = 1.0 / skelScale;
+      sg.beginPath();
+      sg.moveTo(pts[i].x,pts[i].y); sg.lineTo(pts[i+1].x,pts[i+1].y);
+      sg.stroke();
+    }
+  }
+  for (const p of seedsXY){
+    const r = Math.hypot(p.x,p.y);
+    const a = Math.max(0.03, 0.30*(1 - r/FIELD_R)) * bandS(r/FIELD_R);
+    sg.fillStyle = `rgba(200,178,120,${a})`;
+    sg.beginPath(); sg.arc(p.x,p.y,1.2/skelScale,0,Math.PI*2); sg.fill();
+  }
+}
+
+function buildGeometry1D(){
+  lineSamples = [];
+  const half = W * 0.5 + 40;
+  for (let side of [-1, 1]){
+    for (let d = 0; d <= half; d += 5){
+      const s = d / half;
+      lineSamples.push({
+        x: CX + side*d, y: CY, s,
+        rT: Math.min(1, d/(half*0.5)),
+        fade: Math.max(0.15, 1 - (d/half)*0.55)
+      });
+    }
+  }
+}
+
+function buildStars(){
+  stars = [];
+  const n = Math.floor(W*H/9000);
+  for (let i = 0; i < n; i++){
+    stars.push({ x:Math.random()*W, y:Math.random()*H, r:0.4+Math.random()*0.9,
+      a:0.15+Math.random()*0.35, tw:Math.random()*Math.PI*2 });
+  }
+}
+
+const lerpC = (a,b,t) => ({ r:(a.r+(b.r-a.r)*t)|0, g:(a.g+(b.g-a.g)*t)|0, b:(a.b+(b.b-a.b)*t)|0 });
+const crest = (x,q) => Math.pow(0.5 + 0.5*Math.cos(2*Math.PI*x), q);
+
+/* ── Three.js(懶初始化)── */
+const three = { ready:false };
+function initThree(){
+  const cv3 = document.getElementById('cv3');
+  const renderer = new THREE.WebGLRenderer({ canvas:cv3, antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, 0.1, 100);
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const F = params.para, PER = 220, TURNS = 2.6;
+  const total = F * PER;
+  const positions = new Float32Array(total*3);
+  const aS = new Float32Array(total);
+  const aT = new Float32Array(total);
+  const aFade = new Float32Array(total);
+  const up = new THREE.Vector3(0,1,0);
+  let k = 0;
+  const armLines = [];
+  for (let a = 0; a < F; a++){
+    const y = 1 - (2*(a+0.5))/F;
+    const rr = Math.sqrt(Math.max(0,1-y*y));
+    const th = GOLDEN_ANGLE * a;
+    const dir = new THREE.Vector3(Math.cos(th)*rr, y, Math.sin(th)*rr);
+    const t1 = new THREE.Vector3().crossVectors(dir, Math.abs(dir.y)>0.92?new THREE.Vector3(1,0,0):up).normalize();
+    const t2 = new THREE.Vector3().crossVectors(dir, t1).normalize();
+    const spin = GOLDEN_ANGLE * a;
+    const linePts = [];
+    for (let p = 0; p < PER; p++){
+      const u = p/(PER-1);
+      const theta = u*TURNS*Math.PI*2 + spin;
+      const rN = (Math.pow(PHI, u*TURNS*4)-1)/(Math.pow(PHI,TURNS*4)-1);
+      const pos = new THREE.Vector3()
+        .addScaledVector(t1, Math.cos(theta)*rN)
+        .addScaledVector(t2, Math.sin(theta)*rN)
+        .addScaledVector(dir, rN*0.85)
+        .normalize().multiplyScalar(0.15 + 5.6*rN);
+      positions[k*3]=pos.x; positions[k*3+1]=pos.y; positions[k*3+2]=pos.z;
+      // 近中心臂線收斂、加法混色易過曝 → 乘上中心衰減,保住波峰節奏可讀性
+      const centerAtt = 0.25 + 0.75*Math.min(1, rN/0.12);
+      aS[k]=u; aT[k]=Math.min(1, rN/0.5); aFade[k]=Math.max(0.10, 1-rN*0.75)*centerAtt;
+      if (rN > 0.14) linePts.push(pos.clone());   // 根部收束區不畫骨架線(免中心糾結)
+      k++;
+    }
+    armLines.push(linePts);
+  }
+  // 骨架 = 冷色靛藍(數學結構),與暖色能量流(金/鐵紅)明確分工
+  // v8:透明度 0.20 → 0.09 —— 骨架退為隱約的「圖紙」,不與流爭讀
+  const lineMat = new THREE.LineBasicMaterial({ color:0x6FA3B8, transparent:true, opacity:0.10, blending:THREE.AdditiveBlending, depthWrite:false });
+  for (const lp of armLines){
+    const g = new THREE.BufferGeometry().setFromPoints(lp);
+    group.add(new THREE.Line(g, lineMat));
+  }
+  const makeFlowMat = (dirSign, cCore, cMain) => new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{
+      uPhase:{value:0}, uD:{value:8}, uQ:{value:0.9}, uBase:{value:0.02},
+      uDir:{value:dirSign}, uOn:{value:1}, uTide:{value:1.0},
+      uCore:{value:new THREE.Color(cCore)}, uMain:{value:new THREE.Color(cMain)}
+    },
+    vertexShader:`
+      attribute float aS; attribute float aT; attribute float aFade;
+      uniform float uPhase,uD,uQ,uBase,uDir;
+      varying float vI; varying float vT;
+      void main(){
+        float x = (aS - uDir*uPhase)*uD + (uDir<0.0 ? 0.5 : 0.0);
+        float c = 0.5 + 0.5*cos(6.28318*x);
+        float I = uBase + (1.0-uBase)*pow(c, uQ);
+        vI = I*aFade; vT = aT;
+        // 臂向流光:釋放流由根至端漸亮(向外),回歸流反之(向內)——
+        // 臂成為「有方向的流」而非靜態線束
+        float along = (uDir > 0.0) ? aS : (1.0 - aS);
+        vI *= 0.60 + 0.40*along;
+        vec4 mv = modelViewMatrix * vec4(position,1.0);
+        // 近鏡淡出 + 尺寸上限:靠近鏡頭的臂段不再疊成光束
+        float nearFade = smoothstep(1.5, 5.0, -mv.z);
+        // 深度霧:遠端臂段淡入底色、點徑收縮 —— 前後臂分層,空間感浮現
+        float farFog = smoothstep(22.0, 10.0, -mv.z);
+        // 中心衰減:13 臂於原點收束,近心點降權 —— 錐形結構自糾結中浮出
+        float cAtt = 0.22 + 0.78*smoothstep(0.35, 1.8, length(position));
+        vI *= nearFade * (0.40 + 0.60*farFog) * cAtt * 1.45;
+        gl_PointSize = min(14.0, (1.0 + I*2.4) * (240.0 / -mv.z)) * (0.55 + 0.45*farFog);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uCore,uMain; uniform float uOn,uDir,uTide;
+      varying float vI; varying float vT;
+      void main(){
+        if (uOn < 0.5) discard;
+        vec2 d = gl_PointCoord - 0.5;
+        float m = smoothstep(0.5, 0.05, length(d));
+        vec3 col = (uDir > 0.0) ? mix(uCore,uMain,vT) : mix(uMain,uCore,1.0-vT);
+        gl_FragColor = vec4(col, vI * m * 0.32 * uTide);
+      }`
+  });
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('aS', new THREE.BufferAttribute(aS,1));
+  geo.setAttribute('aT', new THREE.BufferAttribute(aT,1));
+  geo.setAttribute('aFade', new THREE.BufferAttribute(aFade,1));
+  const matOut = makeFlowMat(+1, 0xFFF6DC, 0xE8C87A);
+  const matIn  = makeFlowMat(-1, 0xE67E62, 0x9C3D2C);
+  group.add(new THREE.Points(geo, matOut));
+  group.add(new THREE.Points(geo, matIn));
+
+  /* ── 中心之源(能量發送點)三層強化 ──
+     1) core:亮核(近白金)
+     2) coreHalo:大範圍柔暈,標定「源」的存在感
+     3) emitRing:釋放環 —— 每次波峰自中心發出的瞬間,
+        一圈光環自源向外擴散並淡去,能量的「發送」具象可見 */
+  const c64 = document.createElement('canvas'); c64.width=c64.height=64;
+  const g2 = c64.getContext('2d');
+  const gr = g2.createRadialGradient(32,32,0,32,32,32);
+  gr.addColorStop(0,'rgba(255,246,220,1)'); gr.addColorStop(0.4,'rgba(232,200,122,0.5)'); gr.addColorStop(1,'rgba(232,200,122,0)');
+  g2.fillStyle=gr; g2.fillRect(0,0,64,64);
+  const glowTex = new THREE.CanvasTexture(c64);
+
+  const coreMat = new THREE.SpriteMaterial({ map:glowTex, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false });
+  const core = new THREE.Sprite(coreMat);
+  scene.add(core);
+
+  const haloMat = new THREE.SpriteMaterial({ map:glowTex, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.18 });
+  const coreHalo = new THREE.Sprite(haloMat);
+  scene.add(coreHalo);
+
+  // 釋放環貼圖:細環,內外緣漸隱
+  const cR = document.createElement('canvas'); cR.width=cR.height=128;
+  const gR = cR.getContext('2d');
+  const grR = gR.createRadialGradient(64,64,0,64,64,64);
+  grR.addColorStop(0.58,'rgba(255,246,220,0)');
+  grR.addColorStop(0.70,'rgba(255,240,200,0.9)');
+  grR.addColorStop(0.82,'rgba(232,200,122,0)');
+  gR.fillStyle = grR; gR.fillRect(0,0,128,128);
+  const ringMat = new THREE.SpriteMaterial({ map:new THREE.CanvasTexture(cR), transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0 });
+  const emitRing = new THREE.Sprite(ringMat);
+  scene.add(emitRing);
+  /* ────────────────────────────────────────────
+     四維:S³ 上的 Hopf 纖維臂 × 立體投影 × φ 比雙旋轉
+     ────────────────────────────────────────────
+     · 13 個基點依費氏球面佈於 S²(與二/三維同一佈點邏輯),
+       每個基點升起一條 Hopf 纖維 —— S³ 上的大圓閉環。
+       投影後成為互相勾連的 Villarceau 圓環。
+     · 纖維是閉環:s ∈ [0,1) 週期化,D=8n 為整數 → 波場
+       繞環無縫連續 —— 釋放與回歸成為兩股反向循環,無始無終。
+     · 每幀於 vertex shader 施作 4D 雙旋轉(xy 平面角速度 ω、
+       zw 平面 ω/φ,黃金比 → 永不重複),再以立體投影
+       (自 w=+1 極點)降至三維。近極點的部分投向無窮遠,
+       以距離淡出 —— 結構因此「由內翻外」地呼吸,
+       這是三維旋轉做不到的運動。 */
+  const group4 = new THREE.Group();
+  group4.visible = false;
+  scene.add(group4);
+
+  const FIB = 13, SAMP = 260;
+  const total4 = FIB * SAMP;
+  const aP4 = new Float32Array(total4 * 4);
+  const aS4 = new Float32Array(total4);
+  const aFib4 = new Float32Array(total4);   // 纖維 id(相扣脈衝用)
+  let k4 = 0;
+  for (let a = 0; a < FIB; a++){
+    // 基點:費氏球面第 a 個方向
+    const by = 1 - (2*(a+0.5))/FIB;
+    const brr = Math.sqrt(Math.max(0, 1 - by*by));
+    const bth = GOLDEN_ANGLE * a;
+    const b = { x: Math.cos(bth)*brr, y: Math.sin(bth)*brr, z: by };
+    // 由基點反解 S³ 代表點:z1 = cosη, z2 = sinη·e^{iφb},cos2η = bz
+    const eta = Math.acos(Math.max(-1, Math.min(1, b.z))) / 2;
+    const phb = Math.atan2(b.y, b.x);
+    const c1 = Math.cos(eta), s1 = Math.sin(eta);
+    for (let p = 0; p < SAMP; p++){
+      const t = (p / SAMP) * Math.PI * 2;      // 纖維參數(閉環)
+      // (z1, z2)·e^{it}
+      const ct = Math.cos(t), st = Math.sin(t);
+      const x = c1*ct;                          // Re z1
+      const y = c1*st;                          // Im z1
+      const z = s1*Math.cos(t + phb);           // Re z2
+      const w = s1*Math.sin(t + phb);           // Im z2
+      aP4[k4*4+0]=x; aP4[k4*4+1]=y; aP4[k4*4+2]=z; aP4[k4*4+3]=w;
+      aS4[k4] = p / SAMP;
+      aFib4[k4] = a;
+      k4++;
+    }
+  }
+
+  const makeFlowMat4 = (dirSign, cCore, cMain) => new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{
+      uPhase:{value:0}, uD:{value:8}, uQ:{value:0.9}, uBase:{value:0.02},
+      uDir:{value:dirSign}, uOn:{value:1}, uTide:{value:1.0},
+      uA1:{value:0}, uA2:{value:0},
+      uHiA:{value:-1}, uHiB:{value:-1}, uHiE:{value:0},
+      uCore:{value:new THREE.Color(cCore)}, uMain:{value:new THREE.Color(cMain)}
+    },
+    vertexShader:`
+      attribute vec4 aP4; attribute float aS; attribute float aFib;
+      uniform float uPhase,uD,uQ,uBase,uDir,uA1,uA2,uHiA,uHiB,uHiE;
+      varying float vI; varying float vT;
+      void main(){
+        // 4D 雙旋轉:xy 平面轉 uA1,zw 平面轉 uA2(角速度比 = φ)
+        vec4 p = aP4;
+        float c1 = cos(uA1), s1 = sin(uA1);
+        float c2 = cos(uA2), s2 = sin(uA2);
+        vec4 r;
+        r.x = c1*p.x - s1*p.y;  r.y = s1*p.x + c1*p.y;
+        r.z = c2*p.z - s2*p.w;  r.w = s2*p.z + c2*p.w;
+        // 立體投影(自 w=+1 極點;denom 加 0.06 偏移避免奇點)
+        float denom = 1.06 - r.w;
+        vec3 q3 = vec3(r.x, r.y, r.z) / denom * 2.6;
+        float dist = length(q3);
+        // 外環淡出加地板:外層花瓣保有 12% 存在感,玫瑰完整
+        float fade = 0.12 + 0.88*smoothstep(16.0, 5.0, dist);
+        // 波場(閉環週期,與各維同一相位)
+        float x = (aS - uDir*uPhase)*uD + (uDir<0.0 ? 0.5 : 0.0);
+        float c = 0.5 + 0.5*cos(6.28318*x);
+        float I = uBase + (1.0-uBase)*pow(c, uQ);
+        vI = I * fade; vT = clamp(dist / 6.0, 0.0, 1.0);
+        // 核心衰減:加法混色於中心疊爆 → 近心點降權,結構自光霧中浮出
+        vI *= 0.30 + 0.70*smoothstep(0.45, 2.3, dist);
+        // 相扣脈衝:週期性點亮一對纖維 —— Hopf 纖維任兩環鏈環數 = 1,
+        // 「勾連」由碰巧看見變成被指出(數學事實,呈現為導覽)
+        float hi = (abs(aFib - uHiA) < 0.5 || abs(aFib - uHiB) < 0.5) ? 1.0 : 0.0;
+        vI *= 1.0 + uHiE * hi * 1.1;
+        vec4 mv = modelViewMatrix * vec4(q3, 1.0);
+        // 近鏡淡出 + 尺寸上限:飛掠鏡頭的環不再炸成一片光
+        float nearFade = smoothstep(1.5, 5.0, -mv.z);
+        vI *= nearFade;
+        gl_PointSize = min(14.0, (1.0 + I*2.4) * (240.0 / -mv.z)) * (1.0 + uHiE*hi*0.30);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uCore,uMain; uniform float uOn,uDir,uTide;
+      varying float vI; varying float vT;
+      void main(){
+        if (uOn < 0.5) discard;
+        vec2 d = gl_PointCoord - 0.5;
+        float m = smoothstep(0.5, 0.05, length(d));
+        vec3 col = (uDir > 0.0) ? mix(uCore,uMain,vT) : mix(uMain,uCore,1.0-vT);
+        gl_FragColor = vec4(col, vI * m * 0.32 * uTide);
+      }`
+  });
+
+  const geo4 = new THREE.BufferGeometry();
+  geo4.setAttribute('aP4', new THREE.BufferAttribute(aP4, 4));
+  geo4.setAttribute('aS', new THREE.BufferAttribute(aS4, 1));
+  geo4.setAttribute('aFib', new THREE.BufferAttribute(aFib4, 1));
+  // position 為必要屬性(僅佔位,實際位置由 aP4 於 shader 計算)
+  geo4.setAttribute('position', new THREE.BufferAttribute(new Float32Array(total4*3), 3));
+  const matOut4 = makeFlowMat4(+1, 0xFFF6DC, 0xE8C87A);
+  const matIn4  = makeFlowMat4(-1, 0xE67E62, 0x9C3D2C);
+  const pts4a = new THREE.Points(geo4, matOut4);
+  const pts4b = new THREE.Points(geo4, matIn4);
+  pts4a.frustumCulled = false; pts4b.frustumCulled = false;  // 位置在 shader 內計算,關閉視錐剔除
+  group4.add(pts4a); group4.add(pts4b);
+
+  /* ────────────────────────────────────────────
+     五維:S⁴ 大圓臂 × 雙重投影 × 雙旋轉 + 如如不動之軸
+     ────────────────────────────────────────────
+     · 點佈於 R⁵ 中的超球面 S⁴。S⁴ 沒有 Hopf 圓纖維化
+       (Hopf 纖維化僅存在於 S³/S⁷/S¹⁵),臂改為 13 條大圓:
+       每條由一組正交向量對 (u,v) 展成,u·v 以黃金比序列
+       決定方向,確定性佈滿五維方向空間。
+     · 關鍵數學事實:R⁵ 的旋轉仍只有兩個獨立平面(SO(5) 秩 2),
+       多出的第五軸不被任何旋轉觸及 —— 五維的新事物不是
+       更多的動,而是「不動」。畫面中以一條恆定金色靜軸
+       表徵:萬象翻騰,見者不動。
+     · 呈現鏈:5D 雙旋轉(x₁x₂ 平面 ω、x₃x₄ 平面 ω/φ,x₅ 固定)
+       → 透視投影至 4D(自 x₅ 軸)→ 透視投影至 3D。
+       兩層投影皆有損 —— 所見是影子的影子,誠實如斯。 */
+  const group5 = new THREE.Group();
+  group5.visible = false;
+  scene.add(group5);
+
+  const FIB5 = 13, SAMP5 = 240;
+  const total5 = FIB5 * SAMP5;
+  const aP4_5 = new Float32Array(total5 * 4);   // 前四維
+  const aW5   = new Float32Array(total5);        // 第五維
+  const aS5   = new Float32Array(total5);
+
+  // 黃金比序列生成 R⁵ 方向(確定性、低差異)
+  function dir5(seed){
+    const g = GOLDEN_ANGLE;
+    const v = [
+      Math.cos(seed*g),          Math.sin(seed*g),
+      Math.cos(seed*g/PHI + 1),  Math.sin(seed*g/PHI + 1),
+      Math.cos(seed*g*PHI + 2)
+    ];
+    const n = Math.hypot(...v);
+    return v.map(x => x/n);
+  }
+  const dot5 = (a,b) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2]+a[3]*b[3]+a[4]*b[4];
+
+  let k5 = 0;
+  for (let a = 0; a < FIB5; a++){
+    const u = dir5(a + 1);
+    let v0 = dir5(a + 1 + 0.5*FIB5 + 3);
+    const d = dot5(v0, u);
+    v0 = v0.map((x,i) => x - d*u[i]);
+    const nv = Math.hypot(...v0);
+    const v = v0.map(x => x/nv);
+    for (let p = 0; p < SAMP5; p++){
+      const t = (p / SAMP5) * Math.PI * 2;    // 大圓閉環
+      const ct = Math.cos(t), st = Math.sin(t);
+      const P = u.map((ux,i) => ux*ct + v[i]*st);
+      aP4_5[k5*4+0]=P[0]; aP4_5[k5*4+1]=P[1];
+      aP4_5[k5*4+2]=P[2]; aP4_5[k5*4+3]=P[3];
+      aW5[k5]=P[4];
+      aS5[k5]=p/SAMP5;
+      k5++;
+    }
+  }
+
+  const makeFlowMat5 = (dirSign, cCore, cMain) => new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{
+      uPhase:{value:0}, uD:{value:8}, uQ:{value:0.9}, uBase:{value:0.02},
+      uDir:{value:dirSign}, uOn:{value:1}, uTide:{value:1.0},
+      uA1:{value:0}, uA2:{value:0},
+      uCore:{value:new THREE.Color(cCore)}, uMain:{value:new THREE.Color(cMain)}
+    },
+    vertexShader:`
+      attribute vec4 aP4; attribute float aW5; attribute float aS;
+      uniform float uPhase,uD,uQ,uBase,uDir,uA1,uA2;
+      varying float vI; varying float vT;
+      void main(){
+        // 5D 雙旋轉:x1x2 平面轉 uA1,x3x4 平面轉 uA2;x5 如如不動
+        vec4 p = aP4;
+        float w5 = aW5;
+        float c1 = cos(uA1), s1 = sin(uA1);
+        float c2 = cos(uA2), s2 = sin(uA2);
+        vec4 r;
+        r.x = c1*p.x - s1*p.y;  r.y = s1*p.x + c1*p.y;
+        r.z = c2*p.z - s2*p.w;  r.w = s2*p.z + c2*p.w;
+        // 5D → 4D 透視(自 x5 軸;d1 ∈ [0.25, 2.25],無奇點)
+        float d1 = 1.25 - w5;
+        vec4 q4 = r * (2.0 / d1);
+        // 4D → 3D 透視
+        float d2 = max(0.4, 3.2 - q4.w * 0.6);
+        vec3 q3 = q4.xyz * (3.4 / d2);
+        float dist = length(q3);
+        float fade = smoothstep(16.0, 5.0, dist);
+        // 波場(閉環週期,與各維同一相位)
+        float x = (aS - uDir*uPhase)*uD + (uDir<0.0 ? 0.5 : 0.0);
+        float c = 0.5 + 0.5*cos(6.28318*x);
+        float I = uBase + (1.0-uBase)*pow(c, uQ);
+        vI = I * fade; vT = clamp(dist / 6.0, 0.0, 1.0);
+        // 核心衰減:壓下中心疊爆的白團 —— 翻騰以形的複雜度而非光量表達
+        vI *= 0.28 + 0.72*smoothstep(0.5, 2.5, dist);
+        // 寧靜走廊:靠近靜軸(y 軸)的大圓輕微降亮 ——
+        // 動的世界為不動者讓出一道空,「見者不動」自然浮現
+        vI *= 0.35 + 0.65*smoothstep(0.20, 1.05, length(q3.xz));
+        vec4 mv = modelViewMatrix * vec4(q3, 1.0);
+        float nearFade = smoothstep(1.5, 5.0, -mv.z);
+        vI *= nearFade;
+        gl_PointSize = min(14.0, (1.0 + I*2.4) * (240.0 / -mv.z));
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uCore,uMain; uniform float uOn,uDir,uTide;
+      varying float vI; varying float vT;
+      void main(){
+        if (uOn < 0.5) discard;
+        vec2 d = gl_PointCoord - 0.5;
+        float m = smoothstep(0.5, 0.05, length(d));
+        vec3 col = (uDir > 0.0) ? mix(uCore,uMain,vT) : mix(uMain,uCore,1.0-vT);
+        gl_FragColor = vec4(col, vI * m * 0.32 * uTide);
+      }`
+  });
+
+  const geo5 = new THREE.BufferGeometry();
+  geo5.setAttribute('aP4', new THREE.BufferAttribute(aP4_5, 4));
+  geo5.setAttribute('aW5', new THREE.BufferAttribute(aW5, 1));
+  geo5.setAttribute('aS', new THREE.BufferAttribute(aS5, 1));
+  geo5.setAttribute('position', new THREE.BufferAttribute(new Float32Array(total5*3), 3));
+  const matOut5 = makeFlowMat5(+1, 0xFFF6DC, 0xE8C87A);
+  const matIn5  = makeFlowMat5(-1, 0xE67E62, 0x9C3D2C);
+  const pts5a = new THREE.Points(geo5, matOut5);
+  const pts5b = new THREE.Points(geo5, matIn5);
+  pts5a.frustumCulled = false; pts5b.frustumCulled = false;
+  group5.add(pts5a); group5.add(pts5b);
+
+  /* ── 如如不動之軸(v8 升格)──
+     · 延伸 ±30(遠超畫框):無始無終,非場中一根短棒
+     · 三線一暈:月白芯線 + 兩側金色伴線 + 縱向柔光柱(拉長 sprite)
+     · 唯一與「息」同步的元素:動的世界隨舒曼,不動的軸隨息(見 render5D)
+     · 「靜軸 = 觀者」為詮釋層類比,不改變其認識論層級 */
+  const axisGroup = new THREE.Group();
+  const mkLine = (x, colr, op) => {
+    const g = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(x,-30,0), new THREE.Vector3(x,30,0)
+    ]);
+    const m = new THREE.LineBasicMaterial({ color:colr, transparent:true, opacity:op });
+    axisGroup.add(new THREE.Line(g, m));
+    return m;
+  };
+  const axisCoreMat  = mkLine(0,     0xFFF6DC, 0.55);
+  const axisFlankMatA = mkLine(-0.05, 0xE8C87A, 0.26);
+  const axisFlankMatB = mkLine( 0.05, 0xE8C87A, 0.26);
+  const axisGlowSprMat = new THREE.SpriteMaterial({ map:glowTex, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, opacity:0.10 });
+  const axisGlowSpr = new THREE.Sprite(axisGlowSprMat);
+  axisGlowSpr.scale.set(1.4, 42, 1);   // 極窄極長 → 縱向光柱
+  axisGroup.add(axisGlowSpr);
+  group5.add(axisGroup);
+
+  /* ────────────────────────────────────────────
+     六維:S⁵ 複 Hopf 纖維 × 三旋轉黃金級聯(系列終章)
+     ────────────────────────────────────────────
+     · R⁶ = C³:S⁵ 擁有複 Hopf 纖維化 S⁵ → CP²(圓纖維化
+       存在於所有奇維球面)—— 四維的勾連閉環結構在六維重現,
+       底空間由 S² 升為複射影平面 CP²。
+     · 13 條纖維:振幅 (a₁,a₂,a₃) 與相位差依黃金序列
+       確定性佈於 CP²;纖維即 (z₁,z₂,z₃)·e^{it} 的圓軌。
+     · 三旋轉:SO(6) 秩為 3 —— 六維是第一個容納三個獨立
+       旋轉平面的維度,且不再有固定軸(五維的靜軸在此消失,
+       能所俱泯)。三平面即 C³ 三個複座標的相位:
+         平面一 ω(天地之律,舒曼縮時)
+         平面二 ω/φ(己身之息,吸氣推動)
+         平面三 ω/φ²(黃金級聯第三階,預留繫於月相)
+       轉速比 1 : 1/φ : 1/φ² —— 軌跡稠密、永不重複。
+     · 投影:六維 → 三維採黃金正交基底(Gram–Schmidt 正交化
+       後烘入 shader),旋轉在六維內進行、投影固定 ——
+       形狀的流變全部來自第六維自身的轉動。 */
+  const group6 = new THREE.Group();
+  group6.visible = false;
+  scene.add(group6);
+
+  // 黃金正交基底(R⁶ → R³)
+  const seeds6 = [[],[],[]];
+  for (let j = 0; j < 6; j++){
+    seeds6[0].push(Math.cos(2*Math.PI*j/6));
+    seeds6[1].push(Math.sin(2*Math.PI*j/6));
+    seeds6[2].push(Math.cos(4*Math.PI*j/6 + 1/PHI));
+  }
+  const d6 = (a,b) => a.reduce((s,x,i)=>s+x*b[i],0);
+  const B6 = [];
+  for (let k = 0; k < 3; k++){
+    let v = seeds6[k].slice();
+    for (const b of B6){
+      const c = d6(v,b);
+      v = v.map((x,i)=> x - c*b[i]);
+    }
+    const n = Math.sqrt(d6(v,v));
+    B6.push(v.map(x=>x/n));
+  }
+  const bStr = k => B6[k].map(x=>x.toFixed(6)).join(',');
+
+  const FIB6 = 13, SAMP6 = 240;
+  const total6 = FIB6 * SAMP6;
+  const aP6a = new Float32Array(total6 * 3);   // x1 x2 x3
+  const aP6b = new Float32Array(total6 * 3);   // x4 x5 x6
+  const aS6  = new Float32Array(total6);
+  const aW6  = new Float32Array(total6 * 3);   // 三平面能量權重 (a₁²,a₂²,a₃²)
+  const frac = x => x - Math.floor(x);
+  let k6 = 0;
+  for (let a = 0; a < FIB6; a++){
+    // CP² 基點:振幅依黃金低差異序列佈於單純形
+    const eta = frac((a+1)*(PHI-1)) * Math.PI/2;
+    const xi  = frac((a+1)*(PHI-1)*(PHI-1) + 0.37) * Math.PI/2;
+    const a1 = Math.cos(eta), a2 = Math.sin(eta)*Math.cos(xi), a3 = Math.sin(eta)*Math.sin(xi);
+    const wSum = a1*a1 + a2*a2 + a3*a3;   // = 1(S⁵ 正規化),仍除以保險
+    const w1 = a1*a1/wSum, w2 = a2*a2/wSum, w3 = a3*a3/wSum;
+    const p1 = a * GOLDEN_ANGLE;               // 相位差(φ₃ = 0,整體相位由纖維參數吸收)
+    const p2 = a * GOLDEN_ANGLE * PHI;
+    for (let p = 0; p < SAMP6; p++){
+      const t = (p / SAMP6) * Math.PI * 2;     // 纖維閉環
+      aP6a[k6*3+0] = a1 * Math.cos(p1 + t);    // Re z1
+      aP6a[k6*3+1] = a1 * Math.sin(p1 + t);    // Im z1
+      aP6a[k6*3+2] = a2 * Math.cos(p2 + t);    // Re z2
+      aP6b[k6*3+0] = a2 * Math.sin(p2 + t);    // Im z2
+      aP6b[k6*3+1] = a3 * Math.cos(t);         // Re z3
+      aP6b[k6*3+2] = a3 * Math.sin(t);         // Im z3
+      aS6[k6] = p / SAMP6;
+      aW6[k6*3+0] = w1; aW6[k6*3+1] = w2; aW6[k6*3+2] = w3;
+      k6++;
+    }
+  }
+
+  /* v8 三平面三色階:每條纖維的振幅 (a₁²,a₂²,a₃²) 決定其色相 ——
+     θ₁ 天地之律 → 金 #E8C87A|θ₂ 己身之息 → 鐵紅 #C4573F|
+     θ₃ 第三階 → 冷月 #A8C4D4(站內既有結構冷色系;為月相掛點預留)。
+     三個獨立旋轉平面第一次「可被看見」;此為結構標色,非新增敘事色。
+     速率殘影感:快平面(θ₁)主導的點略大略柔 —— 轉速差成為質感差
+     (樣式化近似,非真實運動模糊,如實標註)。 */
+  const makeFlowMat6 = (dirSign, cCore, cMain) => new THREE.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    uniforms:{
+      uPhase:{value:0}, uD:{value:8}, uQ:{value:0.9}, uBase:{value:0.02},
+      uDir:{value:dirSign}, uOn:{value:1}, uTide:{value:1.0},
+      uA1:{value:0}, uA2:{value:0}, uA3:{value:0},
+      uP1:{value:new THREE.Color(0xE8C87A)},
+      uP2:{value:new THREE.Color(0xC4573F)},
+      uP3:{value:new THREE.Color(0xA8C4D4)},
+      uCore:{value:new THREE.Color(cCore)}, uMain:{value:new THREE.Color(cMain)}
+    },
+    vertexShader:`
+      attribute vec3 aP6a; attribute vec3 aP6b; attribute float aS; attribute vec3 aW6;
+      uniform float uPhase,uD,uQ,uBase,uDir,uA1,uA2,uA3;
+      varying float vI; varying float vT; varying vec3 vW;
+      const vec3 B1a = vec3(${bStr(0).split(',').slice(0,3).join(',')});
+      const vec3 B1b = vec3(${bStr(0).split(',').slice(3,6).join(',')});
+      const vec3 B2a = vec3(${bStr(1).split(',').slice(0,3).join(',')});
+      const vec3 B2b = vec3(${bStr(1).split(',').slice(3,6).join(',')});
+      const vec3 B3a = vec3(${bStr(2).split(',').slice(0,3).join(',')});
+      const vec3 B3b = vec3(${bStr(2).split(',').slice(3,6).join(',')});
+      void main(){
+        // 三旋轉:C³ 三個複座標各轉一角(黃金級聯 1 : 1/φ : 1/φ²)
+        float c1=cos(uA1), s1=sin(uA1);
+        float c2=cos(uA2), s2=sin(uA2);
+        float c3=cos(uA3), s3=sin(uA3);
+        vec3 ra, rb;
+        ra.x = c1*aP6a.x - s1*aP6a.y;  ra.y = s1*aP6a.x + c1*aP6a.y;   // z1
+        ra.z = c2*aP6a.z - s2*aP6b.x;  rb.x = s2*aP6a.z + c2*aP6b.x;   // z2
+        rb.y = c3*aP6b.y - s3*aP6b.z;  rb.z = s3*aP6b.y + c3*aP6b.z;   // z3
+        // 黃金正交基底投影 R⁶ → R³
+        vec3 q3 = vec3(
+          dot(ra,B1a) + dot(rb,B1b),
+          dot(ra,B2a) + dot(rb,B2b),
+          dot(ra,B3a) + dot(rb,B3b)
+        ) * 4.6;
+        float dist = length(q3);
+        float fade = 0.10 + 0.90*smoothstep(15.0, 5.0, dist);
+        // 波場(閉環週期,與各維同一相位)
+        float x = (aS - uDir*uPhase)*uD + (uDir<0.0 ? 0.5 : 0.0);
+        float c = 0.5 + 0.5*cos(6.28318*x);
+        float I = uBase + (1.0-uBase)*pow(c, uQ);
+        vI = I * fade; vT = clamp(dist / 5.0, 0.0, 1.0);
+        vW = aW6;
+        // 核心衰減:結構自光霧中浮出
+        vI *= 0.28 + 0.72*smoothstep(0.5, 2.4, dist);
+        // 速率殘影感:θ₁(最快)主導的點 → 略大略柔
+        vI *= 1.0 - 0.16*aW6.x;
+        vec4 mv = modelViewMatrix * vec4(q3, 1.0);
+        float nearFade = smoothstep(1.5, 5.0, -mv.z);
+        vI *= nearFade;
+        gl_PointSize = min(14.0, (1.0 + I*2.4) * (240.0 / -mv.z)) * (1.0 + 0.24*aW6.x);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      uniform vec3 uCore,uMain,uP1,uP2,uP3; uniform float uOn,uDir,uTide;
+      varying float vI; varying float vT; varying vec3 vW;
+      void main(){
+        if (uOn < 0.5) discard;
+        vec2 d = gl_PointCoord - 0.5;
+        float m = smoothstep(0.5, 0.05, length(d));
+        vec3 col = (uDir > 0.0) ? mix(uCore,uMain,vT) : mix(uMain,uCore,1.0-vT);
+        // 三平面標色:釋放流以平面色為主(0.82),回歸流保留鐵紅可讀性(0.45)
+        vec3 plane = uP1*vW.x + uP2*vW.y + uP3*vW.z;
+        col = mix(col, plane, (uDir > 0.0) ? 0.82 : 0.45);
+        gl_FragColor = vec4(col, vI * m * 0.32 * uTide);
+      }`
+  });
+
+  const geo6 = new THREE.BufferGeometry();
+  geo6.setAttribute('aP6a', new THREE.BufferAttribute(aP6a, 3));
+  geo6.setAttribute('aP6b', new THREE.BufferAttribute(aP6b, 3));
+  geo6.setAttribute('aS', new THREE.BufferAttribute(aS6, 1));
+  geo6.setAttribute('aW6', new THREE.BufferAttribute(aW6, 3));
+  geo6.setAttribute('position', new THREE.BufferAttribute(new Float32Array(total6*3), 3));
+  const matOut6 = makeFlowMat6(+1, 0xFFF6DC, 0xE8C87A);
+  const matIn6  = makeFlowMat6(-1, 0xE67E62, 0x9C3D2C);
+  const pts6a = new THREE.Points(geo6, matOut6);
+  const pts6b = new THREE.Points(geo6, matIn6);
+  pts6a.frustumCulled = false; pts6b.frustumCulled = false;
+  group6.add(pts6a); group6.add(pts6b);
+
+  Object.assign(three, { ready:true, renderer, scene, camera, group, matOut, matIn, core, coreMat, coreHalo, haloMat, emitRing, ringMat, group4, matOut4, matIn4, group5, matOut5, matIn5, group6, matOut6, matIn6,
+    axisCoreMat, axisFlankMatA, axisFlankMatB, axisGlowSprMat, coreDamp:1 });
+}
+function threeResize(){
+  three.camera.aspect = innerWidth/innerHeight;
+  three.camera.updateProjectionMatrix();
+  three.renderer.setSize(innerWidth, innerHeight);
+}
+
+/* ============================================================
+   諧振呼吸 · 聲響引擎(事件式:鈴聲吸 / 水滴聲吐)
+   ============================================================ */
+const breath = { ac:null, master:null, clock:0, lastPhase:-1 };
+
+function initAudio(){
+  if (breath.ac) return;
+  const AC = new (window.AudioContext || window.webkitAudioContext)();
+  const master = AC.createGain();
+  master.gain.value = params.breath.vol * 0.5;
+  master.connect(AC.destination);
+  Object.assign(breath, { ac:AC, master });
+}
+
+/* ── 吸氣 = 缽音(柔起,非敲擊):
+     基音降至 216 Hz(低八度)、泛音減至三層、
+     起音放緩至 120ms —— 如缽音自遠處浮現而非被敲響。 */
+function playBell(dur){
+  const { ac, master } = breath;
+  const t0 = ac.currentTime;
+  const base = 216;
+  const partials = [
+    { ratio:1.0,   gain:0.30 },
+    { ratio:2.005, gain:0.10 },
+    { ratio:3.01,  gain:0.035 }
+  ];
+  const decay = Math.min(4.5, Math.max(1.8, dur * 0.95));
+  for (const p of partials){
+    const osc = ac.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(base * p.ratio * 1.0015, t0);
+    osc.frequency.exponentialRampToValueAtTime(base * p.ratio, t0 + decay);
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(p.gain, t0 + 0.12);   // 柔起 120ms
+    g.gain.exponentialRampToValueAtTime(0.0006, t0 + decay);
+    osc.connect(g); g.connect(master);
+    osc.start(t0); osc.stop(t0 + decay + 0.05);
+  }
+}
+
+/* ── 吐氣 = 低音墊 + 氣息(v7 可聞度改善):
+     原 108→72 Hz 在手機/筆電小喇叭幾乎無法重現(多數小喇叭
+     於 ~150–200 Hz 以下急遽衰減)。改善三管齊下:
+     1) 頻率整體上移一個八度:主層 196→131 Hz(G3→C3),
+        高八度層 392→262 Hz 比重提高 —— 落入小喇叭可重現頻段;
+     2) 音量 0.22 → 0.34;
+     3) 疊一層帶通濾波的「氣息噪音」(中心 600→350 Hz 緩降),
+        如緩緩呼出的氣流 —— 噪音頻譜寬,任何喇叭都聽得見,
+        同時音色仍是沉穩的「嘆息」而非打擊音。 */
+function playExhalePad(dur){
+  const { ac, master } = breath;
+  const t0 = ac.currentTime;
+
+  // 音高層:雙正弦下行
+  const filt = ac.createBiquadFilter();
+  filt.type = 'lowpass'; filt.Q.value = 0.5;
+  filt.frequency.setValueAtTime(900, t0);
+  filt.frequency.linearRampToValueAtTime(420, t0 + dur);
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(0.34, t0 + dur * 0.28);          // 慢起
+  g.gain.setValueAtTime(0.34, t0 + dur * 0.60);
+  g.gain.exponentialRampToValueAtTime(0.0006, t0 + dur * 0.98);   // 慢收
+  filt.connect(g); g.connect(master);
+  const layers = [
+    { f0:196, f1:131, vol:1.0 },    // G3 → C3
+    { f0:392, f1:262, vol:0.45 }    // 高八度,比重提高
+  ];
+  for (const L of layers){
+    const osc = ac.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(L.f0, t0);
+    osc.frequency.exponentialRampToValueAtTime(L.f1, t0 + dur);
+    const lg = ac.createGain(); lg.gain.value = L.vol;
+    osc.connect(lg); lg.connect(filt);
+    osc.start(t0); osc.stop(t0 + dur + 0.1);
+  }
+
+  // 氣息噪音層:帶通白噪,如呼出的氣流
+  if (!breath.noiseBuf){
+    const len = ac.sampleRate * 2;
+    const buf = ac.createBuffer(1, len, ac.sampleRate);
+    const ch = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+    breath.noiseBuf = buf;
+  }
+  const src = ac.createBufferSource();
+  src.buffer = breath.noiseBuf; src.loop = true;
+  const bp = ac.createBiquadFilter();
+  bp.type = 'bandpass'; bp.Q.value = 0.8;
+  bp.frequency.setValueAtTime(600, t0);
+  bp.frequency.linearRampToValueAtTime(350, t0 + dur);
+  const ng = ac.createGain();
+  ng.gain.setValueAtTime(0, t0);
+  ng.gain.linearRampToValueAtTime(0.10, t0 + dur * 0.30);
+  ng.gain.setValueAtTime(0.10, t0 + dur * 0.55);
+  ng.gain.exponentialRampToValueAtTime(0.0004, t0 + dur * 0.97);
+  src.connect(bp); bp.connect(ng); ng.connect(master);
+  src.start(t0); src.stop(t0 + dur + 0.1);
+}
+
+/* ── 吸氣選項 B:OM 音(136.1 Hz 持續低吟)──
+     基音 + 2/3 次諧波,極緩顫音(±1 Hz @ 0.25 Hz)似人聲吟誦,
+     慢起(25%)持續、尾端 20% 收 —— 貫穿整段吸氣的一聲 OM。 */
+function playOm(dur){
+  const { ac, master } = breath;
+  const t0 = ac.currentTime;
+  const base = 136.1;
+  const lfo = ac.createOscillator(); lfo.frequency.value = 0.25;
+  const lfoG = ac.createGain(); lfoG.gain.value = 1.0;   // ±1 Hz 顫幅
+  lfo.connect(lfoG); lfo.start(t0); lfo.stop(t0 + dur + 0.4);
+  const parts = [
+    { ratio:1, gain:0.30 },
+    { ratio:2, gain:0.10 },
+    { ratio:3, gain:0.04 }
+  ];
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(1.0, t0 + dur * 0.25);
+  g.gain.setValueAtTime(1.0, t0 + dur * 0.80);
+  g.gain.linearRampToValueAtTime(0.0001, t0 + dur + 0.3);
+  g.connect(master);
+  for (const p of parts){
+    const osc = ac.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = base * p.ratio;
+    lfoG.connect(osc.frequency);           // 共享顫音
+    const pg = ac.createGain(); pg.gain.value = p.gain;
+    osc.connect(pg); pg.connect(g);
+    osc.start(t0); osc.stop(t0 + dur + 0.4);
+  }
+}
+
+/* ── 吐氣選項 B:海息(純濾波氣流,如遠方退浪)── */
+function playOcean(dur){
+  const { ac, master } = breath;
+  const t0 = ac.currentTime;
+  if (!breath.noiseBuf){
+    const len = ac.sampleRate * 2;
+    const buf = ac.createBuffer(1, len, ac.sampleRate);
+    const ch = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+    breath.noiseBuf = buf;
+  }
+  const src = ac.createBufferSource();
+  src.buffer = breath.noiseBuf; src.loop = true;
+  const lp = ac.createBiquadFilter();
+  lp.type = 'lowpass'; lp.Q.value = 0.6;
+  lp.frequency.setValueAtTime(700, t0);
+  lp.frequency.linearRampToValueAtTime(280, t0 + dur);
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(0.20, t0 + dur * 0.32);
+  g.gain.setValueAtTime(0.20, t0 + dur * 0.55);
+  g.gain.exponentialRampToValueAtTime(0.0004, t0 + dur * 0.98);
+  src.connect(lp); lp.connect(g); g.connect(master);
+  src.start(t0); src.stop(t0 + dur + 0.1);
+}
+
+/* 音場分派 */
+function playInhaleSound(dur){
+  const s = params.breath.sndIn;
+  if (s === 'bowl') playBell(dur);
+  else if (s === 'om') playOm(dur);
+}
+function playExhaleSound(dur){
+  const s = params.breath.sndOut;
+  if (s === 'pad') playExhalePad(dur);
+  else if (s === 'ocean') playOcean(dur);
+}
+
+function silenceBreath(){
+  breath.lastPhase = -1;
+}
+
+/* 呼吸速率由模式導出:
+   sync     — 一波一息:速率 = 縮時後節律 × 60(隨模態與 K 連動)
+   fixed783 — 7.83 次/分(數字呼應基頻,象徵性)
+   manual   — 手動滑桿 */
+function getBpm(){
+  const b = params.breath;
+  if (b.mode === 'sync'){
+    const bpm = derived().fVis * 60;
+    return Math.min(12, Math.max(2, bpm));
+  }
+  if (b.mode === 'fixed783') return 7.83;
+  return b.bpm;
+}
+
+/* 呼吸暗示:不再使用文字與圓圈,改由畫面本身承載 ——
+   吸氣:中心之源緩緩脹大、整場光度如潮汐微升;
+   吐氣:源收斂、場沉靜。回傳包絡 env(0 吐盡 → 1 吸滿)。 */
+/* 呼吸法相位表:各段 [型別, 佔比]
+   in = 吸(0→1)/ holdF = 滿息止(1)/ out = 吐(1→0)/ holdE = 空息止(0)
+   4-7-8 與箱式的段長依傳統計數比例分配於整個週期。 */
+function breathSegments(){
+  const b = params.breath;
+  if (b.pattern === '478')
+    return [ ['in', 4/19], ['holdF', 7/19], ['out', 8/19] ];
+  if (b.pattern === 'box')
+    return [ ['in', .25], ['holdF', .25], ['out', .25], ['holdE', .25] ];
+  return [ ['in', b.inFrac], ['out', 1 - b.inFrac] ];   // 諧振
+}
+
+function updateBreath(dt){
+  const b = params.breath;
+  if (!b.on) return null;
+
+  const cycle = 60 / getBpm();
+  breath.clock = (breath.clock + dt) % cycle;
+  const ph = breath.clock / cycle;
+
+  // 定位當前段
+  const segs = breathSegments();
+  let acc = 0, idx = 0, segT = 0, segDur = segs[0][1];
+  for (let i = 0; i < segs.length; i++){
+    if (ph < acc + segs[i][1] || i === segs.length - 1){
+      idx = i; segT = (ph - acc) / segs[i][1]; segDur = segs[i][1];
+      break;
+    }
+    acc += segs[i][1];
+  }
+  const kind = segs[idx][0];
+
+  // 段切換 → 音場分派(止息段靜默,任前音自然收尾)
+  if (idx !== breath.lastPhase && breath.ac){
+    if (kind === 'in')  playInhaleSound(cycle * segDur);
+    if (kind === 'out') playExhaleSound(cycle * segDur);
+    breath.lastPhase = idx;
+  }
+
+  // 包絡:吸 0→1、滿止 1、吐 1→0、空止 0
+  const ss = segT*segT*(3-2*segT);
+  if (kind === 'in')    return ss;
+  if (kind === 'holdF') return 1;
+  if (kind === 'out')   return 1 - ss;
+  return 0;
+}
+
+/* ============================================================
+   主迴圈
+   ============================================================ */
+/* ============================================================
+   靜坐計時 SITTING TIMER
+   —— 護持一座的時間框架:入座緩衝 → 起鐘 → 靜坐 → 圓滿三響。
+   狀態機:idle → settle → run → done。
+   時間源採「真實經過時間 rawDt」(不受主迴圈的 0.05s 上限鉗制),
+   故分頁重回前景時可補回已流逝的時間;params.paused 時計時同止。
+   ============================================================ */
+const sit = {
+  state:'idle',        // idle | settle | run | done
+  totalSec: 20 * 60,   // 0 = 開放式(正向計時,無終點)
+  settleSec: 15,
+  intervalSec: 0,
+  left: 0, elapsed: 0, nextBell: Infinity, _shown: null
+};
+
+/* 靜坐鐘:與呼吸缽音同源(216 Hz),起音較明、餘韻較長,
+   以四層泛音維持缽的音色而非打擊音。 */
+function playSitBell(vol){
+  initAudio();
+  if (breath.ac.state === 'suspended') breath.ac.resume();
+  const { ac, master } = breath;
+  const t0 = ac.currentTime, base = 216, decay = 7.5;
+  const partials = [
+    { ratio:1.0,   gain:0.42 * vol },
+    { ratio:2.005, gain:0.16 * vol },
+    { ratio:3.01,  gain:0.070 * vol },
+    { ratio:4.03,  gain:0.028 * vol }
+  ];
+  for (const p of partials){
+    const osc = ac.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(base * p.ratio * 1.002, t0);
+    osc.frequency.exponentialRampToValueAtTime(base * p.ratio, t0 + decay);
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(p.gain, t0 + 0.045);
+    g.gain.exponentialRampToValueAtTime(0.0005, t0 + decay);
+    osc.connect(g); g.connect(master);
+    osc.start(t0); osc.stop(t0 + decay + 0.05);
+  }
+}
+function ringTriple(){
+  playSitBell(1);
+  setTimeout(() => playSitBell(0.82), 3600);
+  setTimeout(() => playSitBell(0.66), 7200);
+}
+
+const fmtT = s => {
+  s = Math.max(0, Math.ceil(s));
+  const h = (s / 3600) | 0, m = ((s % 3600) / 60) | 0, ss = s % 60;
+  const p = n => String(n).padStart(2, '0');
+  return h ? h + ':' + p(m) + ':' + p(ss) : p(m) + ':' + p(ss);
+};
+
+function sitRender(){
+  const read = document.getElementById('sitRead');
+  const prog = document.getElementById('sitProg');
+  if (!read || !prog) return;
+  const num = read.querySelector('.tNum'), lab = read.querySelector('.tLab');
+  read.classList.toggle('on', sit.state !== 'idle');
+  read.classList.toggle('done', sit.state === 'done');
+  prog.classList.toggle('on', sit.state === 'run' && sit.totalSec > 0);
+  if (sit.state === 'settle'){
+    num.textContent = fmtT(sit.left);
+    lab.textContent = '入座 · 安定';
+  } else if (sit.state === 'run'){
+    num.textContent = sit.totalSec > 0 ? fmtT(sit.left) : fmtT(sit.elapsed);
+    lab.textContent = params.paused ? '暫止' : (sit.totalSec > 0 ? '靜坐' : '靜坐 · 開放');
+    if (sit.totalSec > 0) prog.style.width = (100 * Math.min(1, sit.elapsed / sit.totalSec)) + '%';
+  } else if (sit.state === 'done'){
+    num.textContent = fmtT(sit.elapsed);
+    lab.textContent = '圓滿';
+  }
+}
+
+function sitEnterRun(){
+  sit.state = 'run';
+  sit.left = sit.totalSec;
+  sit.elapsed = 0;
+  sit.nextBell = sit.intervalSec > 0 ? sit.intervalSec : Infinity;
+  playSitBell(1);
+  sitRender();
+}
+function sitStart(){
+  const prog = document.getElementById('sitProg');
+  if (prog) prog.style.width = '0%';
+  document.getElementById('sitStop').disabled = false;
+  document.getElementById('sitStart').textContent = '重新入座';
+  panel.classList.remove('open');
+  document.getElementById('panelToggle').textContent = '☰ 控制';
+  setZen(true);
+  if (sit.settleSec > 0){
+    sit.state = 'settle'; sit.left = sit.settleSec; sit._shown = null;
+    initAudio();
+    if (breath.ac.state === 'suspended') breath.ac.resume();
+    sitRender();
+  } else {
+    sitEnterRun();
+  }
+}
+function sitFinish(natural){
+  sit.state = 'done';
+  sit._shown = null;
+  if (natural) ringTriple(); else playSitBell(0.8);
+  sitRender();
+  setTimeout(() => setZen(false), 6000);
+  setTimeout(() => {
+    if (sit.state === 'done'){ sit.state = 'idle'; sitRender(); }
+    const b = document.getElementById('sitStart'); if (b) b.textContent = '開始入座';
+    const s = document.getElementById('sitStop'); if (s) s.disabled = true;
+  }, 20000);
+}
+function updateSit(rawDt){
+  if (params.paused || sit.state === 'idle' || sit.state === 'done') return;
+  if (sit.state === 'settle'){
+    sit.left -= rawDt;
+    if (sit.left <= 0){ sitEnterRun(); return; }
+  } else if (sit.state === 'run'){
+    sit.elapsed += rawDt;
+    if (sit.totalSec > 0){
+      sit.left = sit.totalSec - sit.elapsed;
+      if (sit.left <= 0){ sit.elapsed = sit.totalSec; sitFinish(true); return; }
+    }
+    // 間隔鐘:若因分頁休眠而錯過多次,僅補一響並對齊下一個節點
+    if (sit.intervalSec > 0 && sit.elapsed >= sit.nextBell){
+      const missed = Math.floor((sit.elapsed - sit.nextBell) / sit.intervalSec) + 1;
+      sit.nextBell += missed * sit.intervalSec;
+      if (missed === 1) playSitBell(0.5);
+    }
+  }
+  // 讀數僅於顯示秒數變動時重繪(避免每幀寫 DOM)
+  const shown = Math.ceil(sit.state === 'settle' ? sit.left
+                        : (sit.totalSec > 0 ? sit.left : sit.elapsed));
+  if (shown !== sit._shown){ sit._shown = shown; sitRender(); }
+}
+
+let last = performance.now();
+let phase = 0;
+
+function frame(now){
+  requestAnimationFrame(frame);
+  const rawDt = (now - last)/1000;
+  const dt = Math.min(0.05, rawDt);
+  last = now;
+  updateSit(rawDt);
+  const dv = derived();
+  // 縮放慣性:實際層級以指數趨近目標 —— 任何輸入皆化為絲滑滑行
+  const dz = params.zoomTarget - params.zoomLog;
+  if (Math.abs(dz) > 1e-5){
+    params.zoomLog += dz * (1 - Math.exp(-dt * 7));
+    updateZoomReadout();
+  }
+  if (!params.paused) phase += dt / dv.T;
+  const breathEnv = params.paused ? null : updateBreath(dt);
+  if (params.view === '3d') render3D(dv, breathEnv);
+  else if (params.view === '4d') render4D(dv, breathEnv);
+  else if (params.view === '5d') render5D(dv, breathEnv);
+  else if (params.view === '6d') render6D(dv, breathEnv);
+  else render2DCanvas(dv, breathEnv);
+}
+
+function drawSpace(simTime, tide){
+  tide = tide || 1.0;
+  ctx.fillStyle = '#070B1A';
+  ctx.fillRect(0,0,W,H);
+  const bgGlow = ctx.createRadialGradient(CX,CY,0,CX,CY,Math.min(W,H)*0.7);
+  bgGlow.addColorStop(0,`rgba(20,28,58,${0.45*tide + 0.10})`);
+  bgGlow.addColorStop(1,'rgba(20,28,58,0)');
+  ctx.fillStyle = bgGlow; ctx.fillRect(0,0,W,H);
+  for (const st of stars){
+    const a = st.a * (0.7 + 0.3*Math.sin(simTime*0.3 + st.tw));
+    ctx.fillStyle = `rgba(220,228,245,${a})`;
+    ctx.beginPath(); ctx.arc(st.x, st.y, st.r, 0, Math.PI*2); ctx.fill();
+  }
+}
+
+function drawSource(x, y, dv, breathEnv){
+  const breathing = (breathEnv !== null && breathEnv !== undefined);
+
+  if (breathing){
+    /* 呼吸模式(簡化 + 瀰漫):一息一動作 ——
+       吸氣時光體自源瀰漫至整個宇宙(畫面對角線尺度),
+       吐氣時收回源點;僅此一個動作,無其他光環。 */
+    const Rfull = Math.hypot(W, H) * 0.62;   // 源不隨層縮放,恆覆蓋全畫面
+    const R = 26 + breathEnv * Rfull;
+    const pulse = 0.20 + breathEnv * 0.20;
+    const g0 = ctx.createRadialGradient(x,y,0,x,y,R);
+    g0.addColorStop(0, `rgba(255,246,220,${pulse})`);
+    g0.addColorStop(0.22, `rgba(232,200,122,${pulse*0.38})`);
+    g0.addColorStop(1, 'rgba(232,200,122,0)');
+    ctx.fillStyle = g0;
+    ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.fill();
+    return;
+  }
+
+  const srcBeat = crest(-phase * dv.D, Math.max(1.2, dv.q*0.7));
+  const pulse = 0.20 + 0.05*Math.sin(phase*dv.T*0.3)
+              + (params.flowOut ? srcBeat*0.32 : 0.08);
+  const R = 34;
+  const g0 = ctx.createRadialGradient(x,y,0,x,y,R);
+  g0.addColorStop(0, `rgba(255,246,220,${pulse})`);
+  g0.addColorStop(0.5, `rgba(232,200,122,${pulse*0.4})`);
+  g0.addColorStop(1, 'rgba(232,200,122,0)');
+  ctx.fillStyle = g0;
+  ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.fill();
+}
+
+/* ── 二維徑向呼吸帶(v8)──
+   均勻亮度使外圈成紋理噪音、摩爾紋浮現。改以「亮度環帶」聚焦:
+   中距離環帶(螺旋最可讀的尺度)最亮,向外指數式收為餘韻。
+   呼吸開啟時,環帶中心隨息推移 —— 吸氣向外推、吐氣收回:場域如花開合。
+   高斯環帶以查表近似?樣本數 ≤9000×2 流,Math.exp 直算即可。 */
+function drawFlowSamples(samples, dv, tide, env){
+  tide = tide || 1.0;
+  const D = dv.D, q = dv.q, BASE = 0.10;
+  const bandC = 0.28 + 0.09 * (env || 0);   // 環帶中心(呼吸推移)
+  const invW2 = 1 / (2 * 0.22 * 0.22);      // 環帶寬 σ=0.22
+  for (const sm of samples){
+    const dr = sm.rN - bandC;
+    const band = 0.14 + 0.86 * Math.exp(-dr*dr*invW2);
+    if (params.flowOut){
+      const I = BASE + (1-BASE)*crest((sm.s - phase)*D, q);
+      const a = I * sm.fade * band * 0.75 * tide;
+      if (a > 0.015){
+        const col = lerpC(OUT_CORE, OUT_MAIN, sm.rT);
+        ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${a})`;
+        ctx.beginPath(); ctx.arc(sm.x, sm.y, 1.6 + I*2.0, 0, Math.PI*2); ctx.fill();
+      }
+    }
+    if (params.flowIn){
+      const I = BASE + (1-BASE)*crest((sm.s + phase)*D + 0.5, q);
+      const a = I * sm.fade * band * 0.75 * tide;
+      if (a > 0.015){
+        const col = lerpC(IN_MAIN, IN_CORE, 1 - sm.rT);
+        ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${a})`;
+        ctx.beginPath(); ctx.arc(sm.x, sm.y, 1.6 + I*2.0, 0, Math.PI*2); ctx.fill();
+      }
+    }
+  }
+}
+
+function render2DCanvas(dv, breathEnv){
+  const simTime = phase * dv.T;
+  const tide = (breathEnv !== null && breathEnv !== undefined) ? (0.85 + breathEnv*0.35) : 1.0;
+  drawSpace(simTime, tide);
+
+  if (params.view === '2d'){
+    /* ── 二維:碎形雙層交叉淡化(對數週期自相似,統計近似)── */
+    const f = params.zoomLog - Math.floor(params.zoomLog);
+    const fw = f*f*f*(f*(f*6 - 15) + 10);
+    const layers = [
+      { s: Math.pow(PHI2, f),        a: 1 - fw, dom: fw < 0.5 },
+      { s: Math.pow(PHI2, f) / PHI2, a: fw,     dom: fw >= 0.5 }
+    ];
+    for (const L of layers){
+      if (L.a < 0.02) continue;
+      ctx.save();
+      ctx.translate(CX, CY); ctx.scale(L.s, L.s); ctx.translate(-CX, -CY);
+      ctx.globalAlpha = L.a;
+
+      // 骨架:離屏快取一幀貼圖(臂線 + 種子點皆含於圖中)
+      ctx.save();
+      ctx.translate(CX, CY);
+      ctx.rotate(simTime * params.slowSpin);
+      const half = skelCv.width / (2 * skelScale);
+      ctx.drawImage(skelCv, -half, -half, half*2, half*2);
+      ctx.restore();
+      // 流場:主導層全繪;副層僅在權重足夠時繪(省去近隱形的整輪計算)
+      if (L.dom || L.a > 0.15){
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.save();
+        ctx.translate(CX, CY);
+        ctx.rotate(simTime * params.slowSpin);
+        const env2 = (breathEnv !== null && breathEnv !== undefined) ? breathEnv : 0;
+        for (const arm of arms) drawFlowSamples(arm.samples, dv, tide, env2);
+        ctx.restore();
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+  } else {
+    draw1DGolden(dv, tide);
+  }
+
+  // 中脈七定點(僅一維 × 中脈模式;身體尺度錨點,不隨縮放)
+  if (params.view !== '2d' && params.sushumna){
+    drawSushumna(breathEnv);
+  }
+
+  // 中心之源:存在於一切尺度 —— 恆駐畫面中心
+  ctx.globalCompositeOperation = 'lighter';
+  drawSource(CX, CY, dv, breathEnv);
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+/* ============================================================
+   一維 · 黃金尺無限縮放(嚴格自相似 —— 點位視覺完全連續)
+   ────────────────────────────────────────────
+   一維的刻度集 {d₀·(√φ)^k, k∈ℤ} 在「乘以 √φ」的縮放下
+   嚴格映回自身 —— 這使一維不需要跨層交叉淡化:
+   · 刻度以「螢幕座標程序式生成」:第 k 點位於 d₀·Z·(√φ)^k,
+     Z 連續變化時,每一顆點各自連續滑行 —— 放大時,
+     新點自中心之源不斷誕生、既有點流向宇宙邊緣淡去;
+     縮小時反向。沒有任何一顆點跳變,無限延續。
+   · k 為偶數者即 φ 的整數次方 —— 以較大亮點標示,
+     形成 √φ 細分、φ 主級的雙層節律。
+   · 波場改於「對數座標」計算:u = ln(d / d₀Z) / ln φ²,
+     I = crest(u·K ∓ 時鐘)—— 尺度不變性使縮放與流動
+     成為同一種運動:縮放時,波亦如呼吸般沿尺滑行。
+   ============================================================ */
+function draw1DGolden(dv, tide){
+  const Z = Math.pow(PHI2, params.zoomLog);
+  const d0 = 13.5;
+  const lnR = Math.log(PHI) / 2;            // √φ 級距
+  const halfSpan = Math.max(W, H) * 0.55;   // 直式/橫式皆足以溢出畫框
+  const D = dv.D, q = dv.q, BASE = 0.10;
+  const K = Math.max(2.5, D / 6);           // 每 φ² 級距的波峰數
+  const AMP = Math.min(150, H * 0.22) * tide;
+
+  ctx.save();
+  if (params.sushumna){
+    ctx.translate(CX, CY); ctx.rotate(-Math.PI/2); ctx.translate(-CX, -CY);
+  }
+
+  // 軸線
+  ctx.strokeStyle = 'rgba(111,163,184,0.25)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(CX - halfSpan, CY); ctx.lineTo(CX + halfSpan, CY); ctx.stroke();
+
+  // 端點生滅包絡:近源誕生、近緣歸墟
+  const born = d => Math.min(1, Math.max(0, (d - 3) / 24));
+  const gone = d => 1 - Math.min(1, Math.max(0, (d - halfSpan*0.82) / (halfSpan*0.22)));
+
+  // ── 黃金刻度:程序式生成,點位嚴格連續 ──
+  const kMin = Math.ceil(Math.log(2 / (d0 * Z)) / lnR);
+  const kMax = Math.floor(Math.log(halfSpan * 1.04 / (d0 * Z)) / lnR);
+  ctx.globalCompositeOperation = 'lighter';
+  for (let k = Math.max(kMin, kMax - 220); k <= kMax; k++){
+    const d = d0 * Z * Math.exp(k * lnR);
+    const env = born(d) * gone(d);
+    if (env <= 0.02) continue;
+    const major = ((k % 2) + 2) % 2 === 0;   // 偶 k = φ 整數次方(主級)
+    const a = env * (major ? 0.55 : 0.28);
+    const r = major ? 2.1 : 1.3;
+    ctx.fillStyle = `rgba(111,163,184,${a})`;
+    for (const side of [-1, 1]){
+      ctx.beginPath(); ctx.arc(CX + side*d, CY, r, 0, Math.PI*2); ctx.fill();
+      if (major){   // 主級點附細暈
+        ctx.fillStyle = `rgba(160,200,215,${a*0.25})`;
+        ctx.beginPath(); ctx.arc(CX + side*d, CY, r*3, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = `rgba(111,163,184,${a})`;
+      }
+    }
+  }
+
+  // 軸心微光帶
+  const band = ctx.createLinearGradient(0, CY-24, 0, CY+24);
+  band.addColorStop(0, 'rgba(232,200,122,0)');
+  band.addColorStop(0.5, `rgba(232,200,122,${0.06*tide})`);
+  band.addColorStop(1, 'rgba(156,61,44,0)');
+  ctx.fillStyle = band;
+  ctx.fillRect(CX - halfSpan, CY-24, halfSpan*2, 48);
+
+  // ── 波場(對數座標 → 尺度不變,縮放即流動)──
+  /* v8 水鏡倒影:某一流的對側留白時,以 ~10% 透明度繪其鏡像 ——
+     留白仍在,但空成「映照」而非「缺席」;鏡像即對稱法則的視覺註腳。
+     中脈模式(直式,升降語義)不啟用,雙流皆開時互不鏡射。 */
+  const mirrorOut = !params.sushumna && params.flowOut && !params.flowIn;
+  const mirrorIn  = !params.sushumna && params.flowIn  && !params.flowOut;
+  for (let d = 4; d <= halfSpan; d += 5){
+    const u = Math.log(d / (d0 * Z)) / Math.log(PHI2);
+    const envd = born(d) * gone(d);
+    if (envd <= 0.02) continue;
+    const rT = Math.min(1, d / (halfSpan * 0.5));
+    for (const side of [-1, 1]){
+      const x = CX + side * d;
+      if (params.flowOut){
+        const I = BASE + (1-BASE)*crest(u*K - phase*D/4, q);
+        const hgt = I * AMP * envd;
+        if (hgt > 1.5){
+          const col = lerpC(OUT_CORE, OUT_MAIN, rT);
+          const a = I * envd * 0.40 * tide;
+          const gcol = ctx.createLinearGradient(0, CY, 0, CY - hgt);
+          gcol.addColorStop(0, `rgba(${col.r},${col.g},${col.b},${a})`);
+          gcol.addColorStop(1, `rgba(${col.r},${col.g},${col.b},0)`);
+          ctx.fillStyle = gcol;
+          ctx.fillRect(x - 2.5, CY - hgt, 5, hgt);
+          ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${Math.min(0.9, I * envd * 0.9 * tide)})`;
+          ctx.beginPath(); ctx.arc(x, CY - hgt, 1.2 + I*2.2, 0, Math.PI*2); ctx.fill();
+          if (mirrorOut){
+            const mh = hgt * 0.45, ma = a * 0.24;
+            const gm = ctx.createLinearGradient(0, CY, 0, CY + mh);
+            gm.addColorStop(0, `rgba(${col.r},${col.g},${col.b},${ma})`);
+            gm.addColorStop(1, `rgba(${col.r},${col.g},${col.b},0)`);
+            ctx.fillStyle = gm;
+            ctx.fillRect(x - 2.5, CY, 5, mh);
+            ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${I * envd * 0.11 * tide})`;
+            ctx.beginPath(); ctx.arc(x, CY + mh, 1.6 + I*2.6, 0, Math.PI*2); ctx.fill();
+          }
+        }
+      }
+      if (params.flowIn){
+        const I = BASE + (1-BASE)*crest(u*K + phase*D/4 + 0.5, q);
+        const hgt = I * AMP * envd;
+        if (hgt > 1.5){
+          const col = lerpC(IN_MAIN, IN_CORE, 1 - rT);
+          const a = I * envd * 0.40 * tide;
+          const gcol = ctx.createLinearGradient(0, CY, 0, CY + hgt);
+          gcol.addColorStop(0, `rgba(${col.r},${col.g},${col.b},${a})`);
+          gcol.addColorStop(1, `rgba(${col.r},${col.g},${col.b},0)`);
+          ctx.fillStyle = gcol;
+          ctx.fillRect(x - 2.5, CY, 5, hgt);
+          ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${Math.min(0.9, I * envd * 0.9 * tide)})`;
+          ctx.beginPath(); ctx.arc(x, CY + hgt, 1.2 + I*2.2, 0, Math.PI*2); ctx.fill();
+          if (mirrorIn){
+            const mh = hgt * 0.45, ma = a * 0.24;
+            const gm = ctx.createLinearGradient(0, CY, 0, CY - mh);
+            gm.addColorStop(0, `rgba(${col.r},${col.g},${col.b},${ma})`);
+            gm.addColorStop(1, `rgba(${col.r},${col.g},${col.b},0)`);
+            ctx.fillStyle = gm;
+            ctx.fillRect(x - 2.5, CY - mh, 5, mh);
+            ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${I * envd * 0.11 * tide})`;
+            ctx.beginPath(); ctx.arc(x, CY - mh, 1.6 + I*2.6, 0, Math.PI*2); ctx.fill();
+          }
+        }
+      }
+    }
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.restore();
+}
+
+/* ── 中脈 Sushumna:七定點 + 息光升降 ──
+   位置:心輪居中(與中心之源重合),上列 喉/眉心/頂,下列 臍/骶/根,
+   依對稱比例 ±0.32 / ±0.62 / ±0.92 佈於軸半長。
+   色彩:不用彩虹七色(該對應為 1970 年代新時代附加),
+   以同一金色、七階明度自根至頂遞增 —— 一色而七明。
+   息光:呼吸開啟時,亮點位置 p = −0.92 + env×1.84 ——
+   吸氣自根攀至頂,吐氣自頂沉回根;各定點以高斯響應迎光。 */
+const CHAKRAS = [
+  { u:-0.92, name:'根' }, { u:-0.62, name:'骶' }, { u:-0.32, name:'臍' },
+  { u: 0.00, name:'心' },
+  { u: 0.32, name:'喉' }, { u: 0.62, name:'眉' }, { u: 0.92, name:'頂' }
+];
+function drawSushumna(breathEnv){
+  const half = Math.min(W, H) * 0.42;
+  const breathing = (breathEnv !== null && breathEnv !== undefined);
+  const p = breathing ? (-0.92 + breathEnv * 1.84) : null;   // 息光位置(根→頂)
+
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+
+  // 中脈細線(直式,貫穿七點)
+  ctx.strokeStyle = 'rgba(232,200,122,0.22)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(CX, CY + half * 1.02);
+  ctx.lineTo(CX, CY - half * 1.02);
+  ctx.stroke();
+
+  for (let i = 0; i < CHAKRAS.length; i++){
+    const ck = CHAKRAS[i];
+    const y = CY - ck.u * half;               // +u 向上(頂)
+    // 七階明度:根 0.35 → 頂 0.95(一色而七明)
+    const lum = 0.35 + (i / 6) * 0.60;
+    // 息光響應:亮點行經時綻放
+    let lit = 0;
+    if (p !== null){
+      const dd = (ck.u - p) / 0.16;
+      lit = Math.exp(-dd * dd);
+    }
+    const a = (0.20 + lit * 0.75) * lum;
+    const R = 3.2 + lit * 7;
+
+    const g = ctx.createRadialGradient(CX, y, 0, CX, y, R * 3);
+    g.addColorStop(0, `rgba(255,246,220,${a})`);
+    g.addColorStop(0.5, `rgba(232,200,122,${a * 0.4})`);
+    g.addColorStop(1, 'rgba(232,200,122,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(CX, y, R * 3, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = `rgba(232,200,122,${Math.min(0.95, a + 0.15)})`;
+    ctx.beginPath(); ctx.arc(CX, y, 1.6 + lit * 1.6, 0, Math.PI * 2); ctx.fill();
+
+    // 名(極淡,置右)
+    ctx.fillStyle = `rgba(200,178,120,${0.18 + lit * 0.4})`;
+    ctx.font = '9px "Noto Sans TC", sans-serif';
+    ctx.fillText(ck.name, CX + 16, y + 3);
+  }
+
+  // 息光本體:沿脈行走的一枚光
+  if (p !== null){
+    const py = CY - p * half;
+    const g2 = ctx.createRadialGradient(CX, py, 0, CX, py, 14);
+    g2.addColorStop(0, 'rgba(255,246,220,0.55)');
+    g2.addColorStop(1, 'rgba(232,200,122,0)');
+    ctx.fillStyle = g2;
+    ctx.beginPath(); ctx.arc(CX, py, 14, 0, Math.PI * 2); ctx.fill();
+  }
+
+  ctx.restore();
+  ctx.globalCompositeOperation = 'source-over';
+}
+function render3D(dv, breathEnv){
+  if (!three.ready) initThree();
+  const simTime = phase * dv.T;
+  const { renderer, scene, camera, group, group4, group5, group6, matOut, matIn, core, coreMat } = three;
+  group.visible = true; group4.visible = false; group5.visible = false; group6.visible = false; core.visible = true;
+  three.coreDamp = 1.0;
+  const tide = (breathEnv !== null && breathEnv !== undefined) ? (0.85 + breathEnv*0.35) : 1.0;
+  for (const m of [matOut, matIn]){
+    m.uniforms.uPhase.value = phase;
+    m.uniforms.uD.value = dv.D;
+    m.uniforms.uQ.value = dv.q * 1.7 + 0.6;   // 三維波峰較銳,行進節奏清晰可辨
+    m.uniforms.uTide.value = tide;
+  }
+  matOut.uniforms.uOn.value = params.flowOut ? 1 : 0;
+  matIn.uniforms.uOn.value  = params.flowIn ? 1 : 0;
+  group.rotation.y = simTime * 0.05;
+  group.rotation.x = Math.sin(simTime * 0.05 / PHI) * 0.25;
+  const srcBeat = crest(-phase*dv.D, Math.max(1.2, dv.q*0.7));
+  updateSourceGL(dv, breathEnv, srcBeat);
+  const camA = simTime * 0.03;
+  camera.position.set(Math.sin(camA)*12.5, 4.6 + Math.sin(simTime*0.05)*0.9, Math.cos(camA)*12.5);
+  camera.lookAt(0,0,0);
+  renderFractalGL(group, [matOut, matIn], tide);
+}
+
+/* ── GL 碎形雙 pass:結構以 φ²^f 與 φ²^(f−1) 兩個尺度
+     同時渲染,透明度 (1−f):f 交叉淡化 —— 相機不動,
+     縮放由結構自身的尺度迴繞承載,無限延續。
+     中心之源等 sprite 僅在第一 pass 顯示,避免疊亮。 */
+function renderFractalGL(activeGroup, mats, tide){
+  const { renderer, scene, camera, core, coreHalo, emitRing } = three;
+  const f = params.zoomLog - Math.floor(params.zoomLog);
+  const fw = f*f*f*(f*(f*6 - 15) + 10);      // smootherstep 與 2D 同曲線
+  const S1 = Math.pow(PHI2, f);
+  const passes = [
+    { s: S1,        a: 1 - fw, sprites: true },
+    { s: S1 / PHI2, a: fw,     sprites: false }
+  ];
+  let first = true;
+  for (const P of passes){
+    if (P.a < 0.02) continue;
+    activeGroup.scale.setScalar(P.s);
+    for (const m of mats) m.uniforms.uTide.value = tide * P.a;
+    core.visible = P.sprites; coreHalo.visible = P.sprites; emitRing.visible = P.sprites;
+    renderer.autoClear = first;
+    renderer.render(scene, camera);
+    first = false;
+  }
+  renderer.autoClear = true;
+  activeGroup.scale.setScalar(1);
+  core.visible = true; coreHalo.visible = true; emitRing.visible = true;
+}
+
+/* ── 中心之源(三維/四維共用)──
+   平時:亮核隨釋放節拍脈動 + 外暈 + 釋放環(每波發出時擴散)。
+   呼吸開啟時「簡化」:只剩單一動作 —— 核與暈隨息平滑脹縮,
+   釋放環與節拍閃動全部關閉,避免多重光環互相干擾。 */
+function updateSourceGL(dv, breathEnv, srcBeat){
+  const { core, coreMat, coreHalo, haloMat, emitRing, ringMat } = three;
+  const breathing = (breathEnv !== null && breathEnv !== undefined);
+  const damp = three.coreDamp || 1;   // 各維度核心阻尼(5D/6D 壓低,讓結構主導)
+
+  if (breathing){
+    // 呼吸模式:一息一脹縮,吸氣時外暈瀰漫至整個視野
+    const coreS = 0.7 + breathEnv * 3.0;
+    core.scale.set(coreS, coreS, 1);
+    coreMat.opacity = (0.6 + breathEnv * 0.2) * damp;
+    const haloS = 2.5 + breathEnv * 34;      // 吸滿時覆蓋全景
+    coreHalo.scale.set(haloS, haloS, 1);
+    haloMat.opacity = (0.06 + breathEnv * 0.13) * damp;
+    ringMat.opacity = 0;
+    return;
+  }
+
+  // 1) 亮核:隨釋放節拍脹縮
+  const coreS = 1.2 + (params.flowOut ? srcBeat*1.0 : 0.2);
+  core.scale.set(coreS, coreS, 1);
+  coreMat.opacity = (0.7 + srcBeat*0.3) * damp;
+
+  // 2) 外暈:源的恆在感,約核心 3 倍
+  const haloS = coreS * 3.2;
+  coreHalo.scale.set(haloS, haloS, 1);
+  haloMat.opacity = (0.12 + srcBeat*0.10) * damp;
+
+  // 3) 釋放環:每次波峰發出瞬間,自源向外擴散並淡去
+  const ep = ((phase * dv.D) % 1 + 1) % 1;      // 0 = 剛釋放
+  const ringS = 1.2 + ep * 7.5;
+  emitRing.scale.set(ringS, ringS, 1);
+  ringMat.opacity = params.flowOut ? Math.pow(1 - ep, 1.6) * 0.5 : 0;
+}
+
+/* ── 四維渲染:雙旋轉角度每幀更新,投影於 shader 內完成 ── */
+function render4D(dv, breathEnv){
+  if (!three.ready) initThree();
+  const simTime = phase * dv.T;
+  const { renderer, scene, camera, group, group4, group5, group6, matOut4, matIn4, core, coreMat } = three;
+  group.visible = false; group4.visible = true; group5.visible = false; group6.visible = false; core.visible = true;
+  three.coreDamp = 0.85;
+
+  const tide = (breathEnv !== null && breathEnv !== undefined) ? (0.85 + breathEnv*0.35) : 1.0;
+  // 雙旋轉:xy 平面角速度 ω,zw 平面 ω/φ(黃金比 → 永不重複)
+  // 呼吸開啟時,吸氣微幅推快 zw 平面 —— 己身之息轉動第二平面
+  const omega = 0.045;
+  const a1 = simTime * omega;
+  let a2 = simTime * omega / PHI;
+  if (breathEnv !== null && breathEnv !== undefined) a2 += breathEnv * 0.12;
+
+  for (const m of [matOut4, matIn4]){
+    m.uniforms.uPhase.value = phase;
+    m.uniforms.uD.value = dv.D;
+    m.uniforms.uQ.value = dv.q * 1.7 + 0.6;
+    m.uniforms.uTide.value = tide;
+    m.uniforms.uA1.value = a1;
+    m.uniforms.uA2.value = a2;
+  }
+  matOut4.uniforms.uOn.value = params.flowOut ? 1 : 0;
+  matIn4.uniforms.uOn.value  = params.flowIn ? 1 : 0;
+
+  /* 相扣脈衝:每 9 秒輪流點亮相鄰一對纖維(i, i+1)——
+     Hopf 纖維化中任兩條纖維鏈環數皆為 1(數學事實),
+     脈衝僅為導覽性強調:「此二環,正相扣」。 */
+  const CYC = 9.0;
+  const cyc = (simTime / CYC) % 13;
+  const pi4 = Math.floor(((cyc % 13) + 13) % 13);
+  const cf = ((cyc % 1) + 1) % 1;
+  // 包絡:前 55% 緩升緩降(sin 半波),其後歸零 —— 有呼吸感的「指出」
+  const hiE = cf < 0.55 ? Math.sin(cf/0.55*Math.PI) * 0.9 : 0;
+  for (const m of [matOut4, matIn4]){
+    m.uniforms.uHiA.value = pi4;
+    m.uniforms.uHiB.value = (pi4 + 1) % 13;
+    m.uniforms.uHiE.value = hiE;
+  }
+
+  const srcBeat = crest(-phase*dv.D, Math.max(1.2, dv.q*0.7));
+  updateSourceGL(dv, breathEnv, srcBeat);
+
+  // 相機較遠、緩慢環繞 —— 讓「由內翻外」的投影呼吸完整入鏡
+  const camA = simTime * 0.02;
+  camera.position.set(Math.sin(camA)*13, 3.0 + Math.sin(simTime*0.04)*1.2, Math.cos(camA)*13);
+  camera.lookAt(0,0,0);
+  renderFractalGL(group4, [matOut4, matIn4], tide);
+}
+
+/* ── 五維渲染:雙旋轉之中,一軸如如不動 ── */
+function render5D(dv, breathEnv){
+  if (!three.ready) initThree();
+  const simTime = phase * dv.T;
+  const { renderer, scene, camera, group, group4, group5, group6, matOut5, matIn5, core, coreMat } = three;
+  group.visible = false; group4.visible = false; group5.visible = true; group6.visible = false; core.visible = true;
+  three.coreDamp = 0.55;
+
+  const tide = (breathEnv !== null && breathEnv !== undefined) ? (0.85 + breathEnv*0.35) : 1.0;
+  // 雙旋轉:x1x2 平面 ω、x3x4 平面 ω/φ;x5(靜軸)恆不轉。
+  // 呼吸開啟時,吸氣微幅推動第二平面(與四維同一約定)。
+  const omega = 0.045;
+  const a1 = simTime * omega;
+  let a2 = simTime * omega / PHI;
+  if (breathEnv !== null && breathEnv !== undefined) a2 += breathEnv * 0.12;
+
+  for (const m of [matOut5, matIn5]){
+    m.uniforms.uPhase.value = phase;
+    m.uniforms.uD.value = dv.D;
+    m.uniforms.uQ.value = dv.q * 1.7 + 0.6;
+    m.uniforms.uTide.value = tide;
+    m.uniforms.uA1.value = a1;
+    m.uniforms.uA2.value = a2;
+  }
+  matOut5.uniforms.uOn.value = params.flowOut ? 1 : 0;
+  matIn5.uniforms.uOn.value  = params.flowIn ? 1 : 0;
+
+  const srcBeat = crest(-phase*dv.D, Math.max(1.2, dv.q*0.7));
+  updateSourceGL(dv, breathEnv, srcBeat);
+
+  /* 靜軸微光:唯一與「息」同步的元素 ——
+     動的世界隨舒曼縮時,不動的軸隨息(呼吸關閉時僅極緩恆光)。 */
+  const shim = (breathEnv !== null && breathEnv !== undefined)
+             ? (0.70 + 0.45*breathEnv)
+             : (0.88 + 0.12*Math.sin(simTime*0.35));
+  three.axisCoreMat.opacity   = 0.55 * shim;
+  three.axisFlankMatA.opacity = 0.26 * shim;
+  three.axisFlankMatB.opacity = 0.26 * shim;
+  three.axisGlowSprMat.opacity = 0.10 * shim;
+
+  // 相機緩慢環繞;靜軸(垂直金線)始終不動 —— 萬象翻騰,見者不動
+  const camA = simTime * 0.018;
+  camera.position.set(Math.sin(camA)*11.0, 3.0 + Math.sin(simTime*0.035)*1.2, Math.cos(camA)*11.0);
+  camera.lookAt(0,0,0);
+  renderFractalGL(group5, [matOut5, matIn5], tide);
+}
+
+/* ── 六維渲染:三旋轉,三律交織,無固定軸 ──
+   平面一 = 天地之律(隨舒曼縮時的全域時間)
+   平面二 = 己身之息(吸氣推動,與四/五維同一約定)
+   平面三 = 黃金級聯第三階 ω/φ²(預留繫於月相) */
+function render6D(dv, breathEnv){
+  if (!three.ready) initThree();
+  const simTime = phase * dv.T;
+  const { renderer, scene, camera, group, group4, group5, group6, matOut6, matIn6, core, coreMat } = three;
+  group.visible = false; group4.visible = false; group5.visible = false; group6.visible = true; core.visible = true;
+  three.coreDamp = 0.70;
+
+  const tide = (breathEnv !== null && breathEnv !== undefined) ? (0.85 + breathEnv*0.35) : 1.0;
+  const omega = 0.045;
+  const a1 = simTime * omega;                       // 平面一:天地之律
+  let a2 = simTime * omega / PHI;                   // 平面二:己身之息
+  if (breathEnv !== null && breathEnv !== undefined) a2 += breathEnv * 0.12;
+  const a3 = simTime * omega / (PHI * PHI);         // 平面三:第三階(預留月相)
+
+  for (const m of [matOut6, matIn6]){
+    m.uniforms.uPhase.value = phase;
+    m.uniforms.uD.value = dv.D;
+    m.uniforms.uQ.value = dv.q * 1.7 + 0.6;
+    m.uniforms.uTide.value = tide;
+    m.uniforms.uA1.value = a1;
+    m.uniforms.uA2.value = a2;
+    m.uniforms.uA3.value = a3;
+  }
+  matOut6.uniforms.uOn.value = params.flowOut ? 1 : 0;
+  matIn6.uniforms.uOn.value  = params.flowIn ? 1 : 0;
+
+  const srcBeat = crest(-phase*dv.D, Math.max(1.2, dv.q*0.7));
+  updateSourceGL(dv, breathEnv, srcBeat);
+
+  const camA = simTime * 0.016;
+  camera.position.set(Math.sin(camA)*11.5, 3.2 + Math.sin(simTime*0.03)*1.2, Math.cos(camA)*11.5);
+  camera.lookAt(0,0,0);
+  renderFractalGL(group6, [matOut6, matIn6], tide);
+}
+
+resize();
+requestAnimationFrame(frame);
+
+// 開場發心:動畫結束後自 DOM 移除
+setTimeout(() => { const b = document.getElementById('blessing'); if (b) b.remove(); }, 9500);
+
+/* ============================================================
+   圖典 ATLAS:五張靜像,各維度的數學史根源
+   ============================================================ */
+function drawAtlas(){
+  const GOLD = 'rgba(232,200,122,';
+  const RED  = 'rgba(181,52,42,';
+
+  // ── 一維:黃金分割遞迴 ──
+  (() => {
+    const c = document.getElementById('at1'); if (!c) return;
+    const g = c.getContext('2d');
+    const y = 40, x0 = 18, x1 = 212;
+    g.strokeStyle = GOLD + '0.7)'; g.lineWidth = 1.2;
+    g.beginPath(); g.moveTo(x0, y); g.lineTo(x1, y); g.stroke();
+    // 遞迴分割:每段於 1/φ 處落一刻
+    let a = x0, b = x1;
+    for (let i = 0; i < 6; i++){
+      const cut = a + (b - a) / PHI;
+      const h = 14 - i * 2;
+      g.strokeStyle = GOLD + (0.8 - i*0.11) + ')';
+      g.beginPath(); g.moveTo(cut, y - h); g.lineTo(cut, y + h); g.stroke();
+      g.fillStyle = RED + (0.9 - i*0.12) + ')';
+      g.beginPath(); g.arc(cut, y, 2.4 - i*0.25, 0, Math.PI*2); g.fill();
+      a = cut;   // 向較短段遞迴
+    }
+    g.fillStyle = GOLD + '0.85)';
+    g.font = '10px JetBrains Mono, monospace';
+    g.fillText('1', x0 + 55, y + 26);
+    g.fillText('1/φ', x0 + 128, y + 26);
+    g.fillText('φ = 1.618…', x1 - 72, y - 22);
+  })();
+
+  // ── 二維:Vogel 葉序 ──
+  (() => {
+    const c = document.getElementById('at2'); if (!c) return;
+    const g = c.getContext('2d');
+    const cx = 115, cy = 85, N = 420, sc = 3.85;
+    for (let n = 1; n <= N; n++){
+      const r = sc * Math.sqrt(n);
+      const t = n * GOLDEN_ANGLE;
+      const x = cx + Math.cos(t)*r, y = cy + Math.sin(t)*r;
+      g.fillStyle = (n % 13 === 0) ? RED + '0.85)' : GOLD + '0.55)';
+      g.beginPath(); g.arc(x, y, 1.4, 0, Math.PI*2); g.fill();
+    }
+  })();
+
+  // ── 三維:費氏球面(正交投影,前後以明暗分層)──
+  (() => {
+    const c = document.getElementById('at3'); if (!c) return;
+    const g = c.getContext('2d');
+    const cx = 115, cy = 85, R = 62, N = 340;
+    // 球輪廓
+    g.strokeStyle = GOLD + '0.18)'; g.lineWidth = 1;
+    g.beginPath(); g.arc(cx, cy, R, 0, Math.PI*2); g.stroke();
+    const tilt = 0.45;
+    for (let i = 0; i < N; i++){
+      const y = 1 - (2*(i+0.5))/N;
+      const rr = Math.sqrt(Math.max(0,1-y*y));
+      const th = GOLDEN_ANGLE * i;
+      const p = { x: Math.cos(th)*rr, y, z: Math.sin(th)*rr };
+      // 傾斜後正交投影
+      const py = p.y*Math.cos(tilt) - p.z*Math.sin(tilt);
+      const pz = p.y*Math.sin(tilt) + p.z*Math.cos(tilt);
+      const front = pz > 0;
+      g.fillStyle = front ? GOLD + '0.75)' : GOLD + '0.16)';
+      g.beginPath();
+      g.arc(cx + p.x*R, cy - py*R, front ? 1.5 : 1.1, 0, Math.PI*2);
+      g.fill();
+    }
+  })();
+
+  // ── 四維:Hopf 纖維化(同緯度 12 條纖維 → 勾連的 Villarceau 圓)──
+  (() => {
+    const c = document.getElementById('at4'); if (!c) return;
+    const g = c.getContext('2d');
+    const cx = 115, cy = 85;
+    const NF = 12, NP = 120, eta = Math.PI/3.4;
+    const c1 = Math.cos(eta/1), s1 = Math.sin(eta);
+    const tilt = 0.9;
+    for (let f = 0; f < NF; f++){
+      const phb = (f / NF) * Math.PI * 2;
+      g.strokeStyle = (f % 3 === 0) ? RED + '0.55)' : GOLD + '0.45)';
+      g.lineWidth = 1.1;
+      g.beginPath();
+      for (let p = 0; p <= NP; p++){
+        const t = (p / NP) * Math.PI * 2;
+        // S³ 纖維 → 立體投影(與主程式同法)
+        const x = Math.cos(eta)*Math.cos(t);
+        const y = Math.cos(eta)*Math.sin(t);
+        const z = Math.sin(eta)*Math.cos(t + phb);
+        const w = Math.sin(eta)*Math.sin(t + phb);
+        const d = 1.25 - w;
+        let X = x/d, Y = y/d, Z = z/d;
+        // 傾斜 + 正交投影
+        const Y2 = Y*Math.cos(tilt) - Z*Math.sin(tilt);
+        const sc = 46;
+        const px = cx + X*sc, py = cy - Y2*sc;
+        if (p === 0) g.moveTo(px, py); else g.lineTo(px, py);
+      }
+      g.stroke();
+    }
+  })();
+
+  // ── 五維:Penteract Petrie 投影(32 頂點 80 邊,十重對稱)──
+  (() => {
+    const c = document.getElementById('at5'); if (!c) return;
+    const g = c.getContext('2d');
+    const cx = 115, cy = 90;
+    // Petrie 基底:θ_j = πj/5(j=0..4)→ 十邊形對稱
+    const U = [], V = [];
+    for (let j = 0; j < 5; j++){
+      U.push(Math.cos(Math.PI * j / 5));
+      V.push(Math.sin(Math.PI * j / 5));
+    }
+    const verts = [];
+    for (let m = 0; m < 32; m++){
+      const s = [];
+      for (let j = 0; j < 5; j++) s.push((m >> j & 1) ? 1 : -1);
+      let px = 0, py = 0;
+      for (let j = 0; j < 5; j++){ px += s[j]*U[j]; py += s[j]*V[j]; }
+      verts.push({ s, x: px, y: py });
+    }
+    // 正規化縮放
+    let maxR = 0;
+    for (const v of verts) maxR = Math.max(maxR, Math.hypot(v.x, v.y));
+    const sc = 74 / maxR;
+    // 邊:漢明距離 1
+    g.lineWidth = 0.7;
+    for (let a = 0; a < 32; a++){
+      for (let b = a+1; b < 32; b++){
+        let diff = 0;
+        for (let j = 0; j < 5; j++) if (verts[a].s[j] !== verts[b].s[j]) diff++;
+        if (diff !== 1) continue;
+        g.strokeStyle = GOLD + '0.30)';
+        g.beginPath();
+        g.moveTo(cx + verts[a].x*sc, cy - verts[a].y*sc);
+        g.lineTo(cx + verts[b].x*sc, cy - verts[b].y*sc);
+        g.stroke();
+      }
+    }
+    // 頂點
+    for (const v of verts){
+      const r = Math.hypot(v.x, v.y) / maxR;
+      g.fillStyle = (r > 0.96) ? RED + '0.9)' : GOLD + '0.7)';
+      g.beginPath();
+      g.arc(cx + v.x*sc, cy - v.y*sc, r > 0.96 ? 2.2 : 1.6, 0, Math.PI*2);
+      g.fill();
+    }
+  })();
+
+  // ── 六維:Hexeract Petrie 投影(64 頂點 = 六十四卦,乾坤對極)──
+  (() => {
+    const c = document.getElementById('at6'); if (!c) return;
+    const g = c.getContext('2d');
+    const cx = 115, cy = 100;
+    // Petrie 基底:θ_j = πj/6(j=0..5)→ 十二重對稱
+    const U = [], V = [];
+    for (let j = 0; j < 6; j++){
+      U.push(Math.cos(Math.PI * j / 6));
+      V.push(Math.sin(Math.PI * j / 6));
+    }
+    const verts = [];
+    for (let m = 0; m < 64; m++){
+      const s = [];
+      for (let j = 0; j < 6; j++) s.push((m >> j & 1) ? 1 : -1);
+      let px = 0, py = 0;
+      for (let j = 0; j < 6; j++){ px += s[j]*U[j]; py += s[j]*V[j]; }
+      verts.push({ s, x: px, y: py, m });
+    }
+    let maxR = 0;
+    for (const v of verts) maxR = Math.max(maxR, Math.hypot(v.x, v.y));
+    const sc = 84 / maxR;
+    // 邊:漢明距離 1(爻變一位 = 一條邊,共 192 條)
+    g.lineWidth = 0.55;
+    for (let a = 0; a < 64; a++){
+      for (let b = a+1; b < 64; b++){
+        let diff = 0;
+        for (let j = 0; j < 6; j++) if (verts[a].s[j] !== verts[b].s[j]) diff++;
+        if (diff !== 1) continue;
+        g.strokeStyle = GOLD + '0.20)';
+        g.beginPath();
+        g.moveTo(cx + verts[a].x*sc, cy - verts[a].y*sc);
+        g.lineTo(cx + verts[b].x*sc, cy - verts[b].y*sc);
+        g.stroke();
+      }
+    }
+    // 頂點:乾(全陽 m=63)與坤(全陰 m=0)標紅,餘為金
+    for (const v of verts){
+      const isPole = (v.m === 0 || v.m === 63);
+      g.fillStyle = isPole ? RED + '0.95)' : GOLD + '0.6)';
+      g.beginPath();
+      g.arc(cx + v.x*sc, cy - v.y*sc, isPole ? 3.0 : 1.5, 0, Math.PI*2);
+      g.fill();
+    }
+    // 乾/坤 標註
+    g.font = '9px Noto Sans TC, sans-serif';
+    const qian = verts[63], kun = verts[0];
+    g.fillStyle = RED + '0.9)';
+    g.fillText('乾', cx + qian.x*sc + 5, cy - qian.y*sc + 3);
+    g.fillText('坤', cx + kun.x*sc + 5, cy - kun.y*sc + 3);
+  })();
+}
+drawAtlas();
+
+/* ============================================================
+   縮放(五維度共用):按鈕 / 滾輪 / 雙指捏合
+   ============================================================ */
+function setZoomLog(l){
+  params.zoomTarget = Math.max(-40, Math.min(40, l));   // 只設目標,實際值由每幀緩動趨近
+}
+let lastZShown = null;
+function updateZoomReadout(){
+  const zl = params.zoomLog;
+  if (lastZShown !== null && Math.abs(zl - lastZShown) < 0.005) return;
+  lastZShown = zl;
+  const Z = Math.pow(PHI2, zl);
+  const zStr = (Math.abs(Math.log10(Z)) > 3) ? Z.toExponential(1) : Z.toFixed(2);
+  document.getElementById('zVal').innerHTML = 'φ<sup>2·' + zl.toFixed(2) + '</sup><br>×' + zStr;
+}
+document.getElementById('zIn').addEventListener('click', () => setZoomLog(params.zoomTarget + 0.25));
+document.getElementById('zOut').addEventListener('click', () => setZoomLog(params.zoomTarget - 0.25));
+document.getElementById('zReset').addEventListener('click', () => setZoomLog(0));
+setZoomLog(0);
+updateZoomReadout();
+
+// 滾輪縮放(僅作用於畫布,不攔截面板捲動)
+for (const el of [cv, document.getElementById('cv3')]){
+  el.addEventListener('wheel', e => {
+    e.preventDefault();
+    setZoomLog(params.zoomTarget - e.deltaY * 0.0018);
+  }, { passive:false });
+}
+
+// 觸控雙指捏合
+let pinchD = null;
+addEventListener('touchmove', e => {
+  if (e.touches.length !== 2) return;
+  if (e.target !== cv && e.target !== document.getElementById('cv3')) return;
+  e.preventDefault();
+  const d = Math.hypot(
+    e.touches[0].clientX - e.touches[1].clientX,
+    e.touches[0].clientY - e.touches[1].clientY
+  );
+  if (pinchD !== null) setZoomLog(params.zoomTarget + Math.log(d / pinchD) / Math.log(PHI2));
+  pinchD = d;
+}, { passive:false });
+addEventListener('touchend', () => { pinchD = null; });
+
+// 鍵盤:+ 放大、− 縮小、0 重設
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === '+' || e.key === '=') setZoomLog(params.zoomTarget + 0.25);
+  if (e.key === '-' || e.key === '_') setZoomLog(params.zoomTarget - 0.25);
+  if (e.key === '0') setZoomLog(0);
+  // 靜坐 / 專注 / 全螢幕
+  if (e.key === 'f' || e.key === 'F') toggleFull();
+  if (e.key === 'z' || e.key === 'Z') setZen(!document.body.classList.contains('zen'));
+  if (e.key === 'Escape') setZen(false);
+  if (e.code === 'Space'){
+    e.preventDefault();
+    if (sit.state === 'idle' || sit.state === 'done') sitStart();
+    else $('pauseBtn').click();
+  }
+updateZoomReadout();
+});
+// 雙擊畫布:放大;Shift+雙擊:縮小
+for (const el of [cv, document.getElementById('cv3')]){
+  el.addEventListener('dblclick', e => {
+    setZoomLog(params.zoomTarget + (e.shiftKey ? -0.5 : 0.5));
+  });
+}
+
+/* 圖典分頁:手動切換 + 隨主視圖自動翻頁 */
+function setAtlasPane(n){
+  document.querySelectorAll('.atab').forEach(b => b.classList.toggle('on', +b.dataset.a === n));
+  document.querySelectorAll('.atlasItem').forEach(it => it.classList.toggle('show', +it.dataset.pane === n));
+}
+const PANE2VIEW = {1:'1d',2:'2d',3:'3d',4:'4d',5:'5d',6:'6d'};
+document.querySelectorAll('.atab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const n = +btn.dataset.a;
+    setAtlasPane(n);
+    // 雙向同步:圖典選頁即切換主畫面維度
+    const vbtn = document.querySelector(`.view[data-v="${PANE2VIEW[n]}"]`);
+    if (vbtn && !vbtn.classList.contains('on')) vbtn.click();
+  });
+});
+const VIEW2PANE = {'1d':1,'2d':2,'3d':3,'4d':4,'5d':5,'6d':6};
+setAtlasPane(VIEW2PANE[params.view]);   // 載入即對齊當前維度
+// 展開圖典區時,自動翻至當前維度(即使先前手動瀏覽過他頁)
+// 註:此監聽先於通用摺疊處理器執行,故以「點擊當下仍為收合」判定即將展開
+document.querySelector('#secAtlas .secHead').addEventListener('click', () => {
+  if (document.getElementById('secAtlas').classList.contains('closed')){
+    setAtlasPane(VIEW2PANE[params.view]);
+  }
+});
+
+/* 瀏覽器自動播放政策:AudioContext 需使用者手勢後才能發聲。
+   呼吸「視覺」自載入即運行;首次任意點擊/觸碰畫面時啟動聲響。 */
+const armAudio = () => {
+  if (params.breath.on){
+    initAudio();
+    if (breath.ac.state === 'suspended') breath.ac.resume();
+    breath.lastPhase = -1;   // 下一相位起播聲
+  }
+  removeEventListener('pointerdown', armAudio);
+};
+addEventListener('pointerdown', armAudio);
+
+/* ============================================================
+   UI
+   ============================================================ */
+const $ = id => document.getElementById(id);
+
+function updateFreqInfo(){
+  const dv = derived();
+  $('fiMode').textContent = 'n=' + dv.n;
+  $('fiReal').textContent = dv.fReal.toFixed(2) + ' Hz';
+  $('fiVis').textContent = dv.fVis.toFixed(4) + ' Hz';
+  $('fiPeriod').textContent = '(' + (1/dv.fVis).toFixed(2) + ' s/脈)';
+  $('vBpm').textContent = getBpm().toFixed(2);
+}
+updateFreqInfo();
+
+/* 面板收合 */
+const panel = $('panel');
+$('panelToggle').addEventListener('click', () => {
+  const open = panel.classList.toggle('open');
+  $('panelToggle').textContent = open ? '✕ 收合' : '☰ 控制';
+});
+
+/* 各區摺疊 */
+document.querySelectorAll('.secHead').forEach(head => {
+  head.addEventListener('click', () => head.parentElement.classList.toggle('closed'));
+});
+
+/* 視圖 */
+const SUBTITLES = {
+  '1d':'1D LINEAR CURRENT · SCHUMANN MAPPING',
+  '2d':'2D VOGEL FIELD · SCHUMANN MAPPING',
+  '3d':'3D PHYLLOTAXIS · SCHUMANN MAPPING',
+  '4d':'4D HOPF FIBRATION · STEREOGRAPHIC PROJECTION',
+  '5d':'5D GREAT CIRCLES · DOUBLE PROJECTION · STILL AXIS',
+  '6d':'6D COMPLEX HOPF · TRIPLE ROTATION · φ CASCADE'
+};
+document.querySelectorAll('.view').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    params.view = btn.dataset.v;
+    $('subTitle').textContent = SUBTITLES[params.view];
+    const isGL = ['3d','4d','5d','6d'].includes(params.view);
+    cv.style.display = isGL ? 'none' : 'block';
+    $('cv3').style.display = isGL ? 'block' : 'none';
+    if (isGL && !three.ready){ initThree(); threeResize(); }
+    setAtlasPane({'1d':1,'2d':2,'3d':3,'4d':4,'5d':5,'6d':6}[params.view]);
+  });
+});
+
+/* 舒曼模態 */
+document.querySelectorAll('.mode').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    params.mode = (+btn.dataset.n) - 1;
+    updateFreqInfo();
+  });
+});
+
+/* 縮時比:滑桿(粗調)+ 數字欄(0.1 精調)雙向同步 */
+function setTimeScale(v){
+  v = Math.min(320, Math.max(10, v));
+  params.timeScale = v;
+  $('scale').value = v;
+  $('scaleNum').value = v.toFixed(1);
+  updateFreqInfo();
+}
+$('scale').addEventListener('input', e => setTimeScale(+e.target.value));
+$('scaleNum').addEventListener('change', e => setTimeScale(+e.target.value));
+
+/* 雙流開關 */
+$('tgOut').addEventListener('click', () => {
+  params.flowOut = !params.flowOut;
+  $('tgOut').classList.toggle('off', !params.flowOut);
+});
+$('tgIn').addEventListener('click', () => {
+  params.flowIn = !params.flowIn;
+  $('tgIn').classList.toggle('off', !params.flowIn);
+});
+$('pauseBtn').addEventListener('click', () => {
+  params.paused = !params.paused;
+  $('pauseBtn').textContent = params.paused ? '▶ 繼續流動' : '⏸ 暫停流動';
+  if (params.paused) silenceBreath();
+  else { last = performance.now(); breath.lastPhase = -1; }
+  sitRender();   // 「暫止」標示與計時同步
+});
+
+/* 呼吸 */
+$('tgBreath').addEventListener('click', () => {
+  const b = params.breath;
+  b.on = !b.on;
+  $('tgBreath').classList.toggle('off', !b.on);
+  if (b.on){
+    initAudio();
+    if (breath.ac.state === 'suspended') breath.ac.resume();
+    breath.clock = 0;
+    breath.lastPhase = -1;
+  } else {
+    silenceBreath();
+
+  }
+});
+$('bmode').addEventListener('change', e => {
+  params.breath.mode = e.target.value;
+  const manual = params.breath.mode === 'manual';
+  $('bpm').disabled = !manual;
+  $('bpmCtrl').style.opacity = manual ? '1' : '.45';
+  $('vBpm').textContent = getBpm().toFixed(2);
+});
+$('bpm').addEventListener('input', e => {
+  params.breath.bpm = +e.target.value;
+  $('vBpm').textContent = getBpm().toFixed(2);
+});
+$('ratio').addEventListener('change', e => {
+  params.breath.inFrac = +e.target.value;
+});
+$('bpat').addEventListener('change', e => {
+  params.breath.pattern = e.target.value;
+  const res = params.breath.pattern === 'resonant';
+  $('ratio').disabled = !res;
+  $('ratioCtrl').style.opacity = res ? '1' : '.45';
+  breath.lastPhase = -1;   // 重新對相
+});
+$('sndIn').addEventListener('change', e => { params.breath.sndIn = e.target.value; });
+$('tgSush').addEventListener('click', () => {
+  params.sushumna = !params.sushumna;
+  $('tgSush').classList.toggle('off', !params.sushumna);
+});
+$('sndOut').addEventListener('change', e => { params.breath.sndOut = e.target.value; });
+$('vol').addEventListener('input', e => {
+  params.breath.vol = +e.target.value;
+  $('vVol').textContent = params.breath.vol.toFixed(2);
+  if (breath.master) breath.master.gain.setTargetAtTime(params.breath.vol * 0.5, breath.ac.currentTime, 0.1);
+});
+
+/* ============================================================
+   靜坐 SITTING · 專注模式 ZEN · 全螢幕 FULLSCREEN
+   ============================================================ */
+
+/* 時長 / 緩衝 / 間隔鐘 */
+document.querySelectorAll('.dbtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.dbtn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    sit.totalSec = (+btn.dataset.min) * 60;
+    $('vDur').textContent = sit.totalSec ? (sit.totalSec / 60) + ' min' : '開放式 ∞';
+  });
+});
+$('sitSettle').addEventListener('change', e => { sit.settleSec = +e.target.value; });
+$('sitInterval').addEventListener('change', e => { sit.intervalSec = (+e.target.value) * 60; });
+$('sitStart').addEventListener('click', sitStart);
+$('sitStop').addEventListener('click', () => { if (sit.state !== 'idle') sitFinish(false); });
+
+/* 專注模式:介面淡出;指標移動暫時喚回(面板展開時不自動隱去) */
+let peekT = null;
+function setZen(on){
+  document.body.classList.toggle('zen', on);
+  if (!on){ document.body.classList.remove('peek'); clearTimeout(peekT); }
+  $('tgZen').classList.toggle('off', !on);
+}
+function peek(){
+  if (!document.body.classList.contains('zen')) return;
+  document.body.classList.add('peek');
+  clearTimeout(peekT);
+  peekT = setTimeout(function hide(){
+    if (panel.classList.contains('open')){ peekT = setTimeout(hide, 2600); return; }
+    document.body.classList.remove('peek');
+  }, 2600);
+}
+addEventListener('pointermove', peek);
+addEventListener('touchstart', peek, { passive:true });
+$('tgZen').addEventListener('click', () => setZen(!document.body.classList.contains('zen')));
+
+/* 全螢幕:標準 API + WebKit 前綴;不支援時誠實標示(iOS Safari) */
+const fsEl = document.documentElement;
+const fsAvail = !!(fsEl.requestFullscreen || fsEl.webkitRequestFullscreen);
+function isFull(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+function toggleFull(){
+  if (!fsAvail) return;
+  if (!isFull()){
+    const req = fsEl.requestFullscreen || fsEl.webkitRequestFullscreen;
+    const p = req.call(fsEl);
+    if (p && p.catch) p.catch(() => {});
+  } else {
+    const ex = document.exitFullscreen || document.webkitExitFullscreen;
+    if (ex) ex.call(document);
+  }
+}
+function syncFull(){
+  $('tgFull').classList.toggle('off', !isFull());
+  setTimeout(() => { resize(); if (three.ready) threeResize(); }, 80);
+}
+document.addEventListener('fullscreenchange', syncFull);
+document.addEventListener('webkitfullscreenchange', syncFull);
+$('tgFull').addEventListener('click', toggleFull);
+if (!fsAvail){
+  $('tgFull').disabled = true;
+  $('fsNote').textContent = '　本瀏覽器不支援網頁全螢幕 API(iOS Safari 為已知限制);專注模式仍可正常使用,iOS 可將本頁「加入主畫面」以取得近似全螢幕。';
+}
+
+sitRender();   // 載入即對齊(idle:讀數隱藏)
+</script>
+</body>
+</html>
