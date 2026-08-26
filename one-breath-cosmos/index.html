@@ -200,6 +200,7 @@
   .toggle .sw{width:7px;height:7px;border-radius:50%;transition:all .25s;}
   #tgBreath{color:var(--breathC);width:100%;} #tgBreath .sw{background:var(--breathC);box-shadow:0 0 6px var(--breathC);}
   #tgSush{color:#C9A96A;width:100%;} #tgSush .sw{background:#C9A96A;box-shadow:0 0 6px #C9A96A;}
+  #tgShep{color:#8FA8C4;width:100%;} #tgShep .sw{background:#8FA8C4;box-shadow:0 0 6px #8FA8C4;}
   .toggle.off{color:var(--sub) !important;border-color:rgba(138,143,163,.25);}
   .toggle.off .sw{background:var(--sub);box-shadow:none;opacity:.4;}
   .twoCol{display:flex;gap:8px;}
@@ -383,6 +384,15 @@
             <option value="15">每 15 分</option>
           </select>
         </div>
+        <div class="ctrl">
+          <label>聲熄 Sound Fade</label>
+          <select id="sitFade">
+            <option value="0" selected>引導音持續</option>
+            <option value="60">1 分後聲熄(45 秒淡出)</option>
+            <option value="120">2 分後聲熄</option>
+            <option value="180">3 分後聲熄</option>
+          </select>
+        </div>
         <div id="sitBtns">
           <button id="sitStart">開始入座</button>
           <button id="sitStop" disabled>結束</button>
@@ -390,7 +400,7 @@
         <button class="toggle off" id="tgZen"><span class="sw"></span>專注模式(隱藏介面)</button>
         <button class="toggle off" id="tgFull"><span class="sw"></span>全螢幕</button>
         <div class="caveatText">開始入座即自動收合面板並進入專注模式;移動指標或觸碰螢幕可暫時喚回介面。鐘聲為 216 Hz 缽音(起鐘一響 · 圓滿三響 · 間隔一輕響),與「諧振呼吸」共用同一主音量;音訊需先有一次點擊方能發聲(瀏覽器政策)。快捷鍵:<b style="color:#E8C87A;">空白鍵</b> 入座/暫止 · <b style="color:#E8C87A;">Z</b> 專注 · <b style="color:#E8C87A;">F</b> 全螢幕 · <b style="color:#E8C87A;">Esc</b> 退出。<span id="fsNote"></span></div>
-        <div class="caveatText">誠實界線:分頁切換或螢幕關閉時,瀏覽器會暫停動畫迴圈 —— 回到本頁時計時會自動補回已流逝的時間,但鐘聲不會在背景響起。此計時器僅為護持一座的時間框架,不作境界評量;久暫與深淺並無必然關係,Anapana 的要點仍是不控制、只覺察。「⏸ 暫停流動」同時暫停計時。</div>
+        <div class="caveatText">誠實界線:分頁切換或螢幕關閉時,瀏覽器會暫停動畫迴圈 —— 回到本頁時計時會自動補回已流逝的時間,但鐘聲不會在背景響起。此計時器僅為護持一座的時間框架,不作境界評量;久暫與深淺並無必然關係,Anapana 的要點仍是不控制、只覺察。「⏸ 暫停流動」同時暫停計時。<b style="color:#E8C87A;">聲熄</b>:引導音於設定時間後以 45 秒緩慢淡至全靜 —— 聲音承認自己是鷹架,先引息,再退場,只留圓滿鐘;此即簡報「兩段式靜坐」(引導息 → 聲熄純觀)的網頁內建版。</div>
       </div>
     </div>
 
@@ -419,6 +429,7 @@
       <div class="secBody">
         <button class="toggle" id="tgBreath"><span class="sw"></span>呼吸引導</button>
         <button class="toggle off" id="tgSush"><span class="sw"></span>中脈模式(一維 · 直式)</button>
+        <button class="toggle off" id="tgShep"><span class="sw"></span>縮放音(一維 · Shepard-φ²)</button>
         <div class="caveatText">中脈模式:一維轉為直式,沿軸依傳統位置佈七個定點(心輪居中,即中心之源;不用彩虹七色 —— 彩色對應為 1970 年代西方新時代之附加,傳統經典給的是花瓣數與種子字)。呼吸開啟時,光隨吸氣自根向頂逐點攀升、吐氣反向沉降。此為象徵層之觀想輔助;脈輪作為可測能量結構並無科學證據,經得起實證檢驗的仍是緩慢呼吸本身(HRV)。</div>
         <div class="ctrl">
           <label>呼吸法 Pattern</label>
@@ -457,6 +468,7 @@
           <label>吸氣音 Inhale</label>
           <select id="sndIn">
             <option value="bowl" selected>缽音(216 Hz)</option>
+            <option value="phibowl">φ 缽(黃金泛音 1:φ:φ²:φ³)</option>
             <option value="om">OM 音(136.1 Hz 持續低吟)</option>
             <option value="silent">靜默</option>
           </select>
@@ -469,7 +481,7 @@
             <option value="silent">靜默</option>
           </select>
         </div>
-        <div class="caveatText">136.1 Hz「OM 音」出自 Cousto「宇宙八度」—— 將地球公轉週期倍頻移入可聽域的推算,屬象徵系統而非聲學標準;選用取其低沉安定的音色與文化意涵。4-7-8 與箱式呼吸為廣泛流傳的呼吸練習,放鬆效果的臨床證據仍在累積中,不及慢速諧振呼吸(HRV)充分。</div>
+        <div class="caveatText">音源認識論:<b style="color:#E8C87A;">φ 缽</b>泛音比 1:φ:φ²:φ³ —— φ 最難被有理數逼近,四層泛音永不同相、拍頻永不重複,與六維三旋轉、葉序 137.5° 為同一定理的聲音版;φ 音程無任何療癒上的特殊地位,唯一主張是「與畫面同構」。<b style="color:#E8C87A;">縮放音</b>為 Shepard 聽覺錯覺(循環比 φ²),與一維黃金尺「乘 φ² 映回自身」同一數學,僅縮放時淡入。氣息與海息底層為<b style="color:#E8C87A;">粉紅噪音(1/f)</b>:每八度能量相等的統計自相似(實證層)。136.1 Hz「OM 音」出自 Cousto「宇宙八度」推算,屬象徵系統;216 Hz 缽為傳統 108 系象徵。4-7-8 與箱式呼吸的臨床證據仍在累積中,不及慢速諧振呼吸(HRV)充分 —— 實證錨點始終是呼吸節奏本身,音色是載具,不是療效來源。</div>
         <div class="ctrl">
           <label>音量 <span id="vVol">0.5</span></label>
           <input type="range" id="vol" min="0" max="1" step="0.05" value="0.5">
@@ -540,7 +552,7 @@
       <div class="secHead">說明 NOTES<span class="arrow">▾</span></div>
       <div class="secBody">
         <div class="caveatText">
-          舒曼共振頻率為地球—電離層腔實測值(基頻約 7.83 Hz,隨晝夜與雷暴活動微幅漂移);畫面為 1:K 縮時之象徵性映射,非物理模擬。緩慢諧振呼吸(約 4.5–6.5 次/分)對心率變異(HRV)之影響有臨床研究支持;與舒曼頻率之關聯則屬流行說法,尚無充分實證。所有聲響(缽音/OM/低音墊/海息)皆由 Web Audio 即時合成,無外部音檔;呼吸節奏由中心之源脹縮與場域明暗潮汐暗示,不使用文字提示。<br><br><b style="color:#E8C87A;">CREDIT</b><br>一息宇宙 One Breath Cosmos —— 為修行者而作<br>概念與設計:葉育鑫 · 初樸建築師事務所 ProtoPlain Architects<br>實作:HTML5 Canvas · WebGL · Web Audio(與 Claude AI 協作生成)<br>© 2026 ProtoPlain Architects. All rights reserved.
+          舒曼共振頻率為地球—電離層腔實測值(基頻約 7.83 Hz,隨晝夜與雷暴活動微幅漂移);畫面為 1:K 縮時之象徵性映射,非物理模擬。緩慢諧振呼吸(約 4.5–6.5 次/分)對心率變異(HRV)之影響有臨床研究支持;與舒曼頻率之關聯則屬流行說法,尚無充分實證。所有聲響(缽音/φ 缽/OM/低音墊/海息/縮放音)皆由 Web Audio 即時合成,無外部音檔;φ 缽與縮放音為畫面數學(φ 級聯/φ² 自相似)之聽覺化,無療癒宣稱;氣息底層為 1/f 粉紅噪音(統計自相似,實證層);呼吸節奏由中心之源脹縮與場域明暗潮汐暗示,不使用文字提示。<br><br><b style="color:#E8C87A;">CREDIT</b><br>一息宇宙 One Breath Cosmos —— 為修行者而作<br>概念與設計:葉育鑫 · 初樸建築師事務所 ProtoPlain Architects<br>實作:HTML5 Canvas · WebGL · Web Audio(與 Claude AI 協作生成)<br>© 2026 ProtoPlain Architects. All rights reserved.
         </div>
       </div>
     </div>
@@ -1315,7 +1327,12 @@ function initAudio(){
   const master = AC.createGain();
   master.gain.value = params.breath.vol * 0.5;
   master.connect(AC.destination);
-  Object.assign(breath, { ac:AC, master });
+  // guide = 引導音匯流排(缽/OM/墊/海息/縮放音)→ 聲熄模式僅淡出此路;
+  // 靜坐鐘(playSitBell)直掛 master,圓滿三響不受聲熄影響。
+  const guide = AC.createGain();
+  guide.gain.value = 1;
+  guide.connect(master);
+  Object.assign(breath, { ac:AC, master, guide });
 }
 
 /* ── 吸氣 = 缽音(柔起,非敲擊):
@@ -1340,7 +1357,38 @@ function playBell(dur){
     g.gain.setValueAtTime(0, t0);
     g.gain.linearRampToValueAtTime(p.gain, t0 + 0.12);   // 柔起 120ms
     g.gain.exponentialRampToValueAtTime(0.0006, t0 + decay);
-    osc.connect(g); g.connect(master);
+    osc.connect(g); g.connect(breath.guide);
+    osc.start(t0); osc.stop(t0 + decay + 0.05);
+  }
+}
+
+/* ── 吸氣選項 C:φ 缽(黃金泛音級聯)──
+   泛音比 1 : φ : φ² : φ³ —— φ 為最難被有理數逼近的比例,
+   四層泛音永不同相,拍頻緩慢漂移、永不重複:
+   與六維三旋轉(1:1/φ:1/φ²)、葉序 137.507° 是同一個定理的聲音版。
+   誠實界線:φ 音程無任何心理聲學或療癒上的特殊地位,
+   此選項唯一的主張是 —— 它與畫面是同一個數學物件。 */
+function playPhiBell(dur){
+  const { ac } = breath;
+  const t0 = ac.currentTime;
+  const base = 216;
+  const partials = [
+    { ratio:1.0,             gain:0.30 },
+    { ratio:PHI,             gain:0.13 },
+    { ratio:PHI*PHI,         gain:0.055 },
+    { ratio:PHI*PHI*PHI,     gain:0.022 }
+  ];
+  const decay = Math.min(4.5, Math.max(1.8, dur * 0.95));
+  for (const p of partials){
+    const osc = ac.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(base * p.ratio * 1.0015, t0);
+    osc.frequency.exponentialRampToValueAtTime(base * p.ratio, t0 + decay);
+    const g = ac.createGain();
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(p.gain, t0 + 0.12);
+    g.gain.exponentialRampToValueAtTime(0.0006, t0 + decay);
+    osc.connect(g); g.connect(breath.guide);
     osc.start(t0); osc.stop(t0 + decay + 0.05);
   }
 }
@@ -1368,7 +1416,7 @@ function playExhalePad(dur){
   g.gain.linearRampToValueAtTime(0.34, t0 + dur * 0.28);          // 慢起
   g.gain.setValueAtTime(0.34, t0 + dur * 0.60);
   g.gain.exponentialRampToValueAtTime(0.0006, t0 + dur * 0.98);   // 慢收
-  filt.connect(g); g.connect(master);
+  filt.connect(g); g.connect(breath.guide);
   const layers = [
     { f0:196, f1:131, vol:1.0 },    // G3 → C3
     { f0:392, f1:262, vol:0.45 }    // 高八度,比重提高
@@ -1383,12 +1431,26 @@ function playExhalePad(dur){
     osc.start(t0); osc.stop(t0 + dur + 0.1);
   }
 
-  // 氣息噪音層:帶通白噪,如呼出的氣流
+  // 氣息噪音層:帶通粉紅噪音(1/f),如呼出的氣流
   if (!breath.noiseBuf){
-    const len = ac.sampleRate * 2;
+    // 粉紅噪音(1/f):每八度能量相等 → 時間軸上的統計自相似 ——
+    // 聲音世界的 Vogel 場(實證層:明確定義的頻譜性質,
+    // 雨聲/浪聲/風聲多近似 1/f)。Paul Kellett 濾波近似。
+    const len = ac.sampleRate * 4;
     const buf = ac.createBuffer(1, len, ac.sampleRate);
     const ch = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for (let i = 0; i < len; i++){
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      ch[i] = (b0+b1+b2+b3+b4+b5+b6 + w*0.5362) * 0.11;
+      b6 = w*0.115926;
+    }
     breath.noiseBuf = buf;
   }
   const src = ac.createBufferSource();
@@ -1402,7 +1464,7 @@ function playExhalePad(dur){
   ng.gain.linearRampToValueAtTime(0.10, t0 + dur * 0.30);
   ng.gain.setValueAtTime(0.10, t0 + dur * 0.55);
   ng.gain.exponentialRampToValueAtTime(0.0004, t0 + dur * 0.97);
-  src.connect(bp); bp.connect(ng); ng.connect(master);
+  src.connect(bp); bp.connect(ng); ng.connect(breath.guide);
   src.start(t0); src.stop(t0 + dur + 0.1);
 }
 
@@ -1426,7 +1488,7 @@ function playOm(dur){
   g.gain.linearRampToValueAtTime(1.0, t0 + dur * 0.25);
   g.gain.setValueAtTime(1.0, t0 + dur * 0.80);
   g.gain.linearRampToValueAtTime(0.0001, t0 + dur + 0.3);
-  g.connect(master);
+  g.connect(breath.guide);
   for (const p of parts){
     const osc = ac.createOscillator();
     osc.type = 'sine';
@@ -1438,15 +1500,29 @@ function playOm(dur){
   }
 }
 
-/* ── 吐氣選項 B:海息(純濾波氣流,如遠方退浪)── */
+/* ── 吐氣選項 B:海息(濾波粉紅噪音,如遠方退浪)── */
 function playOcean(dur){
   const { ac, master } = breath;
   const t0 = ac.currentTime;
   if (!breath.noiseBuf){
-    const len = ac.sampleRate * 2;
+    // 粉紅噪音(1/f):每八度能量相等 → 時間軸上的統計自相似 ——
+    // 聲音世界的 Vogel 場(實證層:明確定義的頻譜性質,
+    // 雨聲/浪聲/風聲多近似 1/f)。Paul Kellett 濾波近似。
+    const len = ac.sampleRate * 4;
     const buf = ac.createBuffer(1, len, ac.sampleRate);
     const ch = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for (let i = 0; i < len; i++){
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      ch[i] = (b0+b1+b2+b3+b4+b5+b6 + w*0.5362) * 0.11;
+      b6 = w*0.115926;
+    }
     breath.noiseBuf = buf;
   }
   const src = ac.createBufferSource();
@@ -1460,14 +1536,66 @@ function playOcean(dur){
   g.gain.linearRampToValueAtTime(0.20, t0 + dur * 0.32);
   g.gain.setValueAtTime(0.20, t0 + dur * 0.55);
   g.gain.exponentialRampToValueAtTime(0.0004, t0 + dur * 0.98);
-  src.connect(lp); lp.connect(g); g.connect(master);
+  src.connect(lp); lp.connect(g); g.connect(breath.guide);
   src.start(t0); src.stop(t0 + dur + 0.1);
+}
+
+/* ── 縮放音:Shepard-φ² 無限音梯(嚴格自相似的聽覺孿生)──
+   傳統 Shepard 音以八度(2:1)循環製造無限升降錯覺;
+   此處循環比改為 φ²(≈2.618)並綁定 zoomLog ——
+   縮放時音高無限升降卻永遠映回自身,
+   與一維黃金尺「乘 φ² 映回自身」是同一條數學。
+   僅於一維視圖、縮放操作期間淡入;預設關。 */
+const shep = { on:false, nodes:null, lastMove:0, N:7, F0:216, sigma:1.5 };
+function shepEnsure(){
+  if (shep.nodes || !breath.ac) return;
+  const { ac } = breath;
+  const bus = ac.createGain(); bus.gain.value = 0;
+  bus.connect(breath.guide);
+  const nodes = [];
+  for (let k = 0; k < shep.N; k++){
+    const osc = ac.createOscillator(); osc.type = 'sine';
+    const g = ac.createGain(); g.gain.value = 0;
+    osc.connect(g); g.connect(bus);
+    osc.start();
+    nodes.push({ osc, g });
+  }
+  shep.nodes = { bus, layers:nodes };
+}
+function shepUpdate(){
+  if (!shep.on || !shep.nodes) return;
+  const { ac } = breath;
+  const t = ac.currentTime;
+  const active = (params.view === '1d') &&
+                 (performance.now() - shep.lastMove < 900) && !params.paused;
+  shep.nodes.bus.gain.setTargetAtTime(active ? 0.16 : 0, t, active ? 0.10 : 0.30);
+  if (!active) return;
+  const fr = params.zoomLog - Math.floor(params.zoomLog);
+  const half = shep.N / 2;
+  for (let k = 0; k < shep.N; k++){
+    // 環繞位置:fr 前進一格 = 音層整體上滑一階,首尾接續 → 無限音梯
+    let pos = k - Math.floor(half) + fr;
+    pos = ((pos + half) % shep.N + shep.N) % shep.N - half;
+    const f = shep.F0 * Math.pow(PHI2, pos);
+    const w = Math.exp(-(pos*pos) / (2 * shep.sigma * shep.sigma));
+    const L = shep.nodes.layers[k];
+    L.osc.frequency.setTargetAtTime(f, t, 0.02);
+    L.g.gain.setTargetAtTime(w / shep.N * 2.2, t, 0.04);
+  }
+}
+function setShepard(on){
+  shep.on = on;
+  if (on){ initAudio(); if (breath.ac.state === 'suspended') breath.ac.resume(); shepEnsure(); }
+  else if (shep.nodes && breath.ac) shep.nodes.bus.gain.setTargetAtTime(0, breath.ac.currentTime, 0.15);
+  const b = document.getElementById('tgShep');
+  if (b) b.classList.toggle('off', !on);
 }
 
 /* 音場分派 */
 function playInhaleSound(dur){
   const s = params.breath.sndIn;
   if (s === 'bowl') playBell(dur);
+  else if (s === 'phibowl') playPhiBell(dur);
   else if (s === 'om') playOm(dur);
 }
 function playExhaleSound(dur){
@@ -1559,8 +1687,25 @@ const sit = {
   totalSec: 20 * 60,   // 0 = 開放式(正向計時,無終點)
   settleSec: 15,
   intervalSec: 0,
+  fadeAfter: 0,        // 聲熄:N 秒後引導音淡出(0 = 持續)
+  faded: false,
   left: 0, elapsed: 0, nextBell: Infinity, _shown: null
 };
+
+/* 聲熄控制:僅作用於 guide 匯流排(引導音),鐘聲不受影響 */
+function guideRestore(){
+  if (!breath.ac || !breath.guide) return;
+  const t = breath.ac.currentTime;
+  breath.guide.gain.cancelScheduledValues(t);
+  breath.guide.gain.setTargetAtTime(1, t, 0.8);
+}
+function guideFadeOut(sec){
+  if (!breath.ac || !breath.guide) return;
+  const t = breath.ac.currentTime;
+  breath.guide.gain.cancelScheduledValues(t);
+  breath.guide.gain.setValueAtTime(breath.guide.gain.value, t);
+  breath.guide.gain.linearRampToValueAtTime(0.0001, t + sec);
+}
 
 /* 靜坐鐘:與呼吸缽音同源(216 Hz),起音較明、餘韻較長,
    以四層泛音維持缽的音色而非打擊音。 */
@@ -1626,7 +1771,9 @@ function sitEnterRun(){
   sit.state = 'run';
   sit.left = sit.totalSec;
   sit.elapsed = 0;
+  sit.faded = false;
   sit.nextBell = sit.intervalSec > 0 ? sit.intervalSec : Infinity;
+  guideRestore();
   playSitBell(1);
   sitRender();
 }
@@ -1650,6 +1797,7 @@ function sitStart(){
 function sitFinish(natural){
   sit.state = 'done';
   sit._shown = null;
+  guideRestore();   // 座畢引導音回復(圓滿鐘走 master,本不受聲熄影響)
   if (natural) ringTriple(); else playSitBell(0.8);
   sitRender();
   setTimeout(() => setZen(false), 6000);
@@ -1669,6 +1817,11 @@ function updateSit(rawDt){
     if (sit.totalSec > 0){
       sit.left = sit.totalSec - sit.elapsed;
       if (sit.left <= 0){ sit.elapsed = sit.totalSec; sitFinish(true); return; }
+    }
+    // 聲熄:到達設定時間 → 引導音 45 秒淡至全靜(鐘聲不受影響)
+    if (sit.fadeAfter > 0 && !sit.faded && sit.elapsed >= sit.fadeAfter){
+      sit.faded = true;
+      guideFadeOut(45);
     }
     // 間隔鐘:若因分頁休眠而錯過多次,僅補一響並對齊下一個節點
     if (sit.intervalSec > 0 && sit.elapsed >= sit.nextBell){
@@ -1692,6 +1845,7 @@ function frame(now){
   const dt = Math.min(0.05, rawDt);
   last = now;
   updateSit(rawDt);
+  shepUpdate();
   const dv = derived();
   // 縮放慣性:實際層級以指數趨近目標 —— 任何輸入皆化為絲滑滑行
   const dz = params.zoomTarget - params.zoomLog;
@@ -2495,6 +2649,7 @@ drawAtlas();
    ============================================================ */
 function setZoomLog(l){
   params.zoomTarget = Math.max(-40, Math.min(40, l));   // 只設目標,實際值由每幀緩動趨近
+  shep.lastMove = performance.now();
 }
 let lastZShown = null;
 function updateZoomReadout(){
@@ -2746,6 +2901,8 @@ document.querySelectorAll('.dbtn').forEach(btn => {
 });
 $('sitSettle').addEventListener('change', e => { sit.settleSec = +e.target.value; });
 $('sitInterval').addEventListener('change', e => { sit.intervalSec = (+e.target.value) * 60; });
+$('sitFade').addEventListener('change', e => { sit.fadeAfter = +e.target.value; });
+$('tgShep').addEventListener('click', () => setShepard(!shep.on));
 $('sitStart').addEventListener('click', sitStart);
 $('sitStop').addEventListener('click', () => { if (sit.state !== 'idle') sitFinish(false); });
 
