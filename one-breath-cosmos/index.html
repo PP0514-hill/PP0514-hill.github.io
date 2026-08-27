@@ -62,6 +62,30 @@
     pointer-events:none;font-size:8px;letter-spacing:.08em;
     color:rgba(138,143,163,.38);white-space:nowrap;
   }
+  /* 首屏快速入座:三個時長,一觸即坐(進階選項仍在面板) */
+  #sitQuick{
+    position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:14;
+    display:flex;align-items:center;gap:8px;
+    opacity:0;animation:sqIn 1.6s ease 2.2s forwards;transition:opacity .9s ease;
+  }
+  #sitQuick.hidden{opacity:0 !important;pointer-events:none;}
+  @keyframes sqIn{to{opacity:1;}}
+  #sitQuick .sqLabel{
+    font-size:10px;letter-spacing:.3em;color:rgba(138,143,163,.75);
+    margin-right:4px;text-indent:.3em;
+  }
+  .sqBtn{
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+    color:rgba(232,200,122,.85);background:rgba(11,16,38,.42);
+    border:0.5px solid rgba(232,200,122,.30);border-radius:18px;
+    padding:7px 16px;cursor:pointer;transition:all .3s;backdrop-filter:blur(6px);
+  }
+  .sqBtn:hover{color:#070B1A;background:var(--gold);border-color:var(--gold);}
+  .sqBtn b{font-family:'Noto Sans TC',sans-serif;font-weight:400;font-size:10px;letter-spacing:.1em;}
+  @media (max-width:640px){
+    #sitQuick{bottom:56px;}
+    .sqBtn{padding:6px 12px;font-size:11px;}
+  }
   #freqInfo{
     position:fixed;left:22px;bottom:20px;z-index:10;pointer-events:none;
     font-family:var(--mono);font-size:10px;line-height:1.8;color:var(--sub);letter-spacing:.08em;
@@ -277,9 +301,9 @@
   .toggle:disabled{opacity:.32;cursor:default;}
 
   /* 專注模式:介面淡出,只餘場域與一行讀數;指標移動可暫時喚回 */
-  #title,#legend,#zoomCtl,#freqInfo,#topBar,#siteCredit,#panelWrap{transition:opacity .9s ease;}
+  #title,#legend,#zoomCtl,#freqInfo,#topBar,#siteCredit,#panelWrap,#sitQuick{transition:opacity .9s ease;}
   body.zen #title,body.zen #legend,body.zen #zoomCtl,body.zen #freqInfo,
-  body.zen #topBar,body.zen #siteCredit,body.zen #panelWrap{opacity:0;pointer-events:none;}
+  body.zen #topBar,body.zen #siteCredit,body.zen #panelWrap,body.zen #sitQuick{opacity:0;pointer-events:none;}
   body.zen.peek #title,body.zen.peek #legend,body.zen.peek #zoomCtl,body.zen.peek #freqInfo,
   body.zen.peek #topBar,body.zen.peek #siteCredit,body.zen.peek #panelWrap{
     opacity:.92;pointer-events:auto;transition:opacity .3s ease;
@@ -333,6 +357,14 @@
 <div id="sitProg"></div>
 <div id="sitRead"><span class="tNum">20:00</span><span class="tLab">入座</span></div>
 
+<!-- 首屏快速入座:7 / 14 / 21 分鐘,一觸即坐 -->
+<div id="sitQuick">
+  <span class="sqLabel">入座</span>
+  <button class="sqBtn" data-m="7">7<b> 分</b></button>
+  <button class="sqBtn" data-m="14">14<b> 分</b></button>
+  <button class="sqBtn" data-m="21">21<b> 分</b></button>
+</div>
+
 <div id="freqInfo">
   <div>SR <span class="big" id="fiMode">n=1</span> · <span class="big" id="fiReal">7.83 Hz</span></div>
   <div>縮時 <span class="big" id="fiVis">0.100 Hz</span> <span id="fiPeriod">(10.0 s/脈)</span></div>
@@ -369,10 +401,8 @@
         <div class="ctrl">
           <label>入座緩衝 Settle-in</label>
           <select id="sitSettle">
-            <option value="0">無 · 立即起鐘</option>
-            <option value="15" selected>15 秒</option>
-            <option value="30">30 秒</option>
-            <option value="60">60 秒</option>
+            <option value="5">5 秒</option>
+            <option value="10" selected>10 秒</option>
           </select>
         </div>
         <div class="ctrl">
@@ -400,7 +430,7 @@
         <button class="toggle off" id="tgZen"><span class="sw"></span>專注模式(隱藏介面)</button>
         <button class="toggle off" id="tgFull"><span class="sw"></span>全螢幕</button>
         <div class="caveatText">開始入座即自動收合面板並進入專注模式;移動指標或觸碰螢幕可暫時喚回介面。鐘聲為 216 Hz 缽音(起鐘一響 · 圓滿三響 · 間隔一輕響),與「諧振呼吸」共用同一主音量;音訊需先有一次點擊方能發聲(瀏覽器政策)。快捷鍵:<b style="color:#E8C87A;">空白鍵</b> 入座/暫止 · <b style="color:#E8C87A;">Z</b> 專注 · <b style="color:#E8C87A;">F</b> 全螢幕 · <b style="color:#E8C87A;">Esc</b> 退出。<span id="fsNote"></span></div>
-        <div class="caveatText">誠實界線:分頁切換或螢幕關閉時,瀏覽器會暫停動畫迴圈 —— 回到本頁時計時會自動補回已流逝的時間,但鐘聲不會在背景響起。此計時器僅為護持一座的時間框架,不作境界評量;久暫與深淺並無必然關係,Anapana 的要點仍是不控制、只覺察。「⏸ 暫停流動」同時暫停計時。<b style="color:#E8C87A;">聲熄</b>:引導音於設定時間後以 45 秒緩慢淡至全靜 —— 聲音承認自己是鷹架,先引息,再退場,只留圓滿鐘;此即簡報「兩段式靜坐」(引導息 → 聲熄純觀)的網頁內建版。</div>
+        <div class="caveatText">誠實界線:分頁切換或螢幕關閉時,瀏覽器會暫停動畫迴圈 —— 回到本頁時計時會自動補回已流逝的時間,但鐘聲不會在背景響起。此計時器僅為護持一座的時間框架,不作境界評量;久暫與深淺並無必然關係,Anapana 的要點仍是不控制、只覺察。「⏸ 暫停流動」同時暫停計時。<b style="color:#E8C87A;">聲之邊界</b>:引導音自入座起、至圓滿止 —— 頁面平時靜默,聲音只屬於一座之內。<b style="color:#E8C87A;">聲熄</b>:引導音於設定時間後以 45 秒緩慢淡至全靜 —— 聲音承認自己是鷹架,先引息,再退場,只留圓滿鐘;此即簡報「兩段式靜坐」(引導息 → 聲熄純觀)的網頁內建版。</div>
       </div>
     </div>
 
@@ -481,6 +511,7 @@
             <option value="silent">靜默</option>
           </select>
         </div>
+        <div class="caveatText"><b style="color:#E8C87A;">聲之邊界:引導音僅於一座期間發聲</b> —— 自點選時長(入座)起,至圓滿鐘後 6 秒收攏歸靜;未入座時頁面保持靜默,此處的選項為入座後的音色設定。縮放音為顯式開關,不在此限。</div>
         <div class="caveatText">音源認識論:<b style="color:#E8C87A;">φ 缽</b>泛音比 1:φ:φ²:φ³ —— φ 最難被有理數逼近,四層泛音永不同相、拍頻永不重複,與六維三旋轉、葉序 137.5° 為同一定理的聲音版;φ 音程無任何療癒上的特殊地位,唯一主張是「與畫面同構」。<b style="color:#E8C87A;">縮放音</b>為 Shepard 聽覺錯覺(循環比 φ²),與一維黃金尺「乘 φ² 映回自身」同一數學,僅縮放時淡入。氣息與海息底層為<b style="color:#E8C87A;">粉紅噪音(1/f)</b>:每八度能量相等的統計自相似(實證層)。136.1 Hz「OM 音」出自 Cousto「宇宙八度」推算,屬象徵系統;216 Hz 缽為傳統 108 系象徵。4-7-8 與箱式呼吸的臨床證據仍在累積中,不及慢速諧振呼吸(HRV)充分 —— 實證錨點始終是呼吸節奏本身,音色是載具,不是療效來源。</div>
         <div class="ctrl">
           <label>音量 <span id="vVol">0.5</span></label>
@@ -1327,10 +1358,12 @@ function initAudio(){
   const master = AC.createGain();
   master.gain.value = params.breath.vol * 0.5;
   master.connect(AC.destination);
-  // guide = 引導音匯流排(缽/OM/墊/海息/縮放音)→ 聲熄模式僅淡出此路;
-  // 靜坐鐘(playSitBell)直掛 master,圓滿三響不受聲熄影響。
+  // guide = 引導音匯流排(缽/OM/墊/海息)。
+  // v3.4 聲之邊界:引導音僅於「一座」期間發聲 ——
+  // 預設閘門關閉(gain 0),入座(選定時長)開啟、圓滿後緩緩收攏;
+  // 靜坐鐘(playSitBell)直掛 master,起鐘與圓滿三響永遠可聞。
   const guide = AC.createGain();
-  guide.gain.value = 1;
+  guide.gain.value = 0;
   guide.connect(master);
   Object.assign(breath, { ac:AC, master, guide });
 }
@@ -1551,7 +1584,7 @@ function shepEnsure(){
   if (shep.nodes || !breath.ac) return;
   const { ac } = breath;
   const bus = ac.createGain(); bus.gain.value = 0;
-  bus.connect(breath.guide);
+  bus.connect(breath.master);   // 顯式開關的探索音:不受入座閘門/聲熄管制
   const nodes = [];
   for (let k = 0; k < shep.N; k++){
     const osc = ac.createOscillator(); osc.type = 'sine';
@@ -1685,7 +1718,7 @@ function updateBreath(dt){
 const sit = {
   state:'idle',        // idle | settle | run | done
   totalSec: 20 * 60,   // 0 = 開放式(正向計時,無終點)
-  settleSec: 15,
+  settleSec: 10,
   intervalSec: 0,
   fadeAfter: 0,        // 聲熄:N 秒後引導音淡出(0 = 持續)
   faded: false,
@@ -1753,6 +1786,8 @@ function sitRender(){
   const num = read.querySelector('.tNum'), lab = read.querySelector('.tLab');
   read.classList.toggle('on', sit.state !== 'idle');
   read.classList.toggle('done', sit.state === 'done');
+  const sq = document.getElementById('sitQuick');
+  if (sq) sq.classList.toggle('hidden', sit.state !== 'idle');
   prog.classList.toggle('on', sit.state === 'run' && sit.totalSec > 0);
   if (sit.state === 'settle'){
     num.textContent = fmtT(sit.left);
@@ -1785,6 +1820,7 @@ function sitStart(){
   panel.classList.remove('open');
   document.getElementById('panelToggle').textContent = '☰ 控制';
   setZen(true);
+  guideRestore();   // 聲之邊界:自此刻起,引導音開啟
   if (sit.settleSec > 0){
     sit.state = 'settle'; sit.left = sit.settleSec; sit._shown = null;
     initAudio();
@@ -1797,7 +1833,7 @@ function sitStart(){
 function sitFinish(natural){
   sit.state = 'done';
   sit._shown = null;
-  guideRestore();   // 座畢引導音回復(圓滿鐘走 master,本不受聲熄影響)
+  guideFadeOut(6);   // 聲之邊界:座畢引導音 6 秒收攏歸靜(圓滿鐘走 master,不受影響)
   if (natural) ringTriple(); else playSitBell(0.8);
   sitRender();
   setTimeout(() => setZen(false), 6000);
@@ -2904,6 +2940,15 @@ $('sitInterval').addEventListener('change', e => { sit.intervalSec = (+e.target.
 $('sitFade').addEventListener('change', e => { sit.fadeAfter = +e.target.value; });
 $('tgShep').addEventListener('click', () => setShepard(!shep.on));
 $('sitStart').addEventListener('click', sitStart);
+document.querySelectorAll('.sqBtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const m = +btn.dataset.m;
+    sit.totalSec = m * 60;
+    document.querySelectorAll('.dbtn').forEach(b => b.classList.remove('on'));
+    const vd = document.getElementById('vDur'); if (vd) vd.textContent = m + ' min';
+    sitStart();
+  });
+});
 $('sitStop').addEventListener('click', () => { if (sit.state !== 'idle') sitFinish(false); });
 
 /* 專注模式:介面淡出;指標移動暫時喚回(面板展開時不自動隱去) */

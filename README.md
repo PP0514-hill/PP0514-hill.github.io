@@ -9,7 +9,7 @@
 | 竹構造與木構造的碳方法學・ISO 7567・商業變現路徑研究報告 | [https://PP0514-hill.github.io/bamboo-carbon-strategy/](https://PP0514-hill.github.io/bamboo-carbon-strategy/) | 2026-06-19 |
 | 鑽探數據差異之說明 | [https://PP0514-hill.github.io/brief-2607-cx/](https://PP0514-hill.github.io/brief-2607-cx/) | 2026-07-02 |
 | chiron-healing | [https://PP0514-hill.github.io/chiron-healing/](https://PP0514-hill.github.io/chiron-healing/) |  |
-| 一息宇宙 One Breath Cosmos — 費氏葉序 · 六維之流 | [https://PP0514-hill.github.io/one-breath-cosmos/](https://PP0514-hill.github.io/one-breath-cosmos/) | 2026-08-26 |
+| 一息宇宙 One Breath Cosmos — 費氏葉序 · 六維之流 | [https://PP0514-hill.github.io/one-breath-cosmos/](https://PP0514-hill.github.io/one-breath-cosmos/) | 2026-08-27 |
 | 一日斷食整合指南 · Ekadashi × One-Day Clean Fast | [https://PP0514-hill.github.io/one-day-fasting/](https://PP0514-hill.github.io/one-day-fasting/) | 2026-07-12 |
 | 覺察・想・感受 ── 現象世界 | [https://PP0514-hill.github.io/phenomenon-triad/](https://PP0514-hill.github.io/phenomenon-triad/) | 2026-06-22 |
 | 初樸事務所 · 獲利槓桿與自然構築策略儀表板 | [https://PP0514-hill.github.io/profit-leverage-dashboard/](https://PP0514-hill.github.io/profit-leverage-dashboard/) | 2026-06-19 |
