@@ -219,7 +219,7 @@ body.nobam .cty{fill:var(--pp-card-sub)!important}
 /* 園區示意範圍 */
 #gsite{opacity:0;transition:opacity .25s;pointer-events:none}
 .site-r{fill:none;stroke:var(--pp-ink-sub);stroke-width:1.1;stroke-dasharray:4 3;opacity:.55;vector-effect:non-scaling-stroke}
-.site-t{font-size:9px;fill:var(--pp-ink-sub);font-family:var(--font-zh);letter-spacing:.5px;paint-order:stroke;stroke:var(--pp-card);stroke-width:3px;stroke-linejoin:round}
+.site-t{font-size:13.5px;font-weight:500;fill:var(--pp-ink);font-family:var(--font-zh);letter-spacing:.3px;paint-order:stroke;stroke:var(--pp-card);stroke-width:4.5px;stroke-linejoin:round}
 
 /* ── 時間軸 ── */
 .tl{display:flex;flex-direction:column;--ycol:72px;--yline:58px}
@@ -1044,16 +1044,19 @@ const SITES=[
  {n:"石壁竹創森基地",        ids:["CV-04","CV-05","CV-08","MS-16"]},
  {n:"故宮南院",             ids:["MS-07","MS-10"]}
 ];
-SITES.forEach(t=>{
+SITES.forEach((t,si)=>{
   const ps=t.ids.map(id=>mkXY[id]).filter(Boolean);
   if(ps.length<2)return;
   const cx=ps.reduce((a,p)=>a+p.x,0)/ps.length, cy=ps.reduce((a,p)=>a+p.y,0)/ps.length;
   const r=Math.max.apply(null,ps.map(p=>Math.hypot(p.x-cx,p.y-cy)))+9;
   const g=el("g",{class:"site"});
   g.appendChild(el("circle",{cx:cx.toFixed(2),cy:cy.toFixed(2),r:r.toFixed(2),class:"site-r"}));
-  const lw=el("g",{transform:"translate("+cx.toFixed(2)+" "+(cy-r).toFixed(2)+")"});
+  /* 標註上下交錯，避免鄰近園區的文字疊在一起 */
+  const below=si%2===1;
+  const ly=below?(cy+r):(cy-r);
+  const lw=el("g",{transform:"translate("+cx.toFixed(2)+" "+ly.toFixed(2)+")"});
   const lin=el("g",{});
-  const tx=el("text",{class:"site-t","text-anchor":"middle",y:"-7"});
+  const tx=el("text",{class:"site-t","text-anchor":"middle",y:below?"18":"-10"});
   tx.textContent=t.n+"（"+ps.length+" 件）";
   lin.appendChild(tx); lw.appendChild(lin); g.appendChild(lw);
   invG.push(lin);
