@@ -82,6 +82,16 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .chip-aw::before{content:"";position:absolute;left:-10px;top:50%;transform:translateY(-50%);
   width:1px;height:17px;background:var(--pp-line)}
 .count{font-size:12.5px;color:var(--pp-ink-hint);font-family:var(--font-num);white-space:nowrap;margin-left:auto;flex:none}
+/* 四個分頁在窄螢幕放不下標題旁：分頁另起一列、等寬撐滿 */
+@media (max-width:720px){
+  .top-row:first-child{flex-wrap:wrap}
+  .top-row:first-child .brand{flex:1 1 100%}
+  .tabs{flex:1 1 100%}
+  .tabs button{flex:1;padding:0 4px}
+}
+@media (max-width:560px){
+  #net{height:min(78vh,760px)}
+}
 @media (max-width:560px){
   .brand h1{font-size:17px}
   .brand .sub{display:none}
@@ -452,6 +462,48 @@ body.nobam .cty{fill:var(--pp-card-sub)!important}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
+/* ── 作品總表 ── */
+.lgd{font-size:12.5px;color:var(--pp-ink-hint)}
+.vnote{margin-top:10px;font-size:12px;color:var(--pp-ink-hint);line-height:1.75}
+.lst-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.lst{width:100%;border-collapse:collapse;font-size:13px}
+table.lst th,table.lst td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--pp-line);white-space:nowrap}
+table.lst th{position:sticky;top:0;background:var(--pp-card);z-index:1;font-weight:500;
+  color:var(--pp-ink-sub);cursor:pointer;user-select:none;font-size:12px}
+table.lst th:after{content:"";opacity:.3;margin-left:5px}
+table.lst th.s-asc:after{content:"▲";opacity:.65}
+table.lst th.s-desc:after{content:"▼";opacity:.65}
+table.lst th.num,table.lst td.num{text-align:right}
+table.lst td.w-n{white-space:normal;min-width:9em}
+table.lst tbody tr{cursor:pointer}
+table.lst tbody tr.off{display:none}
+@media (hover:hover){table.lst tbody tr:hover{background:var(--pp-wash)}}
+table.lst tbody tr.sel{background:var(--pp-wash);box-shadow:inset 3px 0 0 var(--pp-ink)}
+.tr-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.aw-y{color:var(--pp-ink)}
+.aw-n{color:var(--pp-ink-hint)}
+
+/* ── 協作網 ── */
+.net-box{position:relative;background:var(--pp-wash);border:1px solid var(--pp-line);border-radius:10px;overflow:hidden}
+#net{display:block;width:100%;height:min(74vh,720px);touch-action:none;cursor:grab}
+#net.grabbing{cursor:grabbing}
+.net-n{cursor:pointer}
+.net-e{stroke:#8A8475;fill:none}
+.net-lb{font-family:var(--font-zh);fill:var(--pp-ink);paint-order:stroke;
+  stroke:var(--pp-wash);stroke-width:4.5px;stroke-linejoin:round;pointer-events:none}
+#net.dim .net-n:not(.hot){opacity:.18}
+#net.dim .net-e:not(.hot){opacity:.05}
+#net.dim .net-lbg:not(.hot){opacity:.12}
+.net-e.hot{stroke:var(--pp-ink)}
+.net-tip{position:absolute;left:10px;bottom:10px;max-width:min(92%,460px);z-index:3;
+  background:var(--pp-card);border:1px solid var(--pp-line);border-radius:8px;padding:9px 12px;
+  font-size:12.5px;line-height:1.7;color:var(--pp-ink-sub)}
+.net-tip b{color:var(--pp-ink);font-weight:500}
+.net-tip i{font-style:normal;color:var(--pp-ink-hint)}
+.net-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:12.5px;color:var(--pp-ink-sub)}
+.net-legend span{display:inline-flex;align-items:center;gap:6px}
+.net-legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+
 .foot{
   max-width:1560px;margin:0 auto;
   padding-left:max(16px,env(safe-area-inset-left,0px));
@@ -470,6 +522,8 @@ body.nobam .cty{fill:var(--pp-card-sub)!important}
       <div class="tabs" role="tablist" aria-label="檢視方式">
         <button id="tab-map" role="tab" aria-selected="true" aria-controls="view-map">地圖</button>
         <button id="tab-time" role="tab" aria-selected="false" aria-controls="view-time">時間軸</button>
+        <button id="tab-list" role="tab" aria-selected="false" aria-controls="view-list">作品</button>
+        <button id="tab-net" role="tab" aria-selected="false" aria-controls="view-net">協作網</button>
       </div>
     </div>
     <div class="top-row">
@@ -543,6 +597,42 @@ body.nobam .cty{fill:var(--pp-card-sub)!important}
       </div>
       <div class="tl" id="tl"></div>
       <div class="lanes" id="lanes" hidden></div>
+    </section>
+
+    <section class="canvas" id="view-list" role="tabpanel" aria-labelledby="tab-list" hidden>
+      <div class="canvas-head">
+        <h2>作品總表</h2>
+        <span class="lgd" id="lst-count"></span>
+      </div>
+      <div class="lst-wrap">
+        <table class="lst" id="lst">
+          <thead><tr>
+            <th data-k="id" class="s-asc">編號</th><th data-k="n">作品</th><th data-k="yr">年</th>
+            <th data-k="ed">屆別</th><th data-k="city">縣市</th><th data-k="lead">設計</th>
+            <th data-k="np" class="num">照片</th><th data-k="aw" class="num">獎項</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="vnote">點任一列看單件作品。欄位標題可排序。「設計」欄照原始署名呈現，人名在前、所屬單位淡色附後；十年軌跡十七件目前僅建有設計一欄。</p>
+    </section>
+
+    <section class="canvas" id="view-net" role="tabpanel" aria-labelledby="tab-net" hidden>
+      <div class="canvas-head">
+        <h2>協作網</h2>
+        <span class="lgd" id="net-sub"></span>
+      </div>
+      <div class="net-box">
+        <svg id="net" role="img" aria-label="竹構築作品協作網，節點為參與單位，連線為共同參與同一件作品"></svg>
+        <div class="zoomctl">
+          <button id="nzIn" type="button" aria-label="放大">＋</button>
+          <button id="nzOut" type="button" aria-label="縮小">－</button>
+          <button id="nzRst" class="rs" type="button" aria-label="重設">重設</button>
+        </div>
+        <div class="net-tip" id="netTip" hidden></div>
+      </div>
+      <div class="net-legend" id="netLgd"></div>
+      <p class="vnote">圓圈大小＝參與件數，連線粗細＝共同參與的件數。四屆計畫本身亦列為一件，辦理與策展層才看得見。大藏聯合建築師事務所以甘銘源、李綠枝二人計入；其十年軌跡十七件僅有設計一欄，故圓圈反映作者身分而非協作廣度。可滾輪縮放、拖曳平移。</p>
     </section>
   </div>
 
@@ -628,12 +718,12 @@ const W=[
 {id:"PT-3-04",n:"浮林",en:"The Float",tr:"pt",yr:2024,ed:"島嶼構竹 第三屆",loc:"陽明交大第三招待所前松樹林",city:"新竹市",lat:24.78920,lng:120.99590,gq:"園",
  dim:"每單元 1.5 × 3.6 × 4.5 m，共 4 單元",mat:"桂竹、膜結構",model:"49×35×48 cm",desc:"竹壓桿與鋼索懸浮四單元，金屬接頭",team:[["設計","林柏陽（林柏陽建築師事務所＋境衍設計）"],["結構","原型結構"],["施作","境衍設計"],["燈光","偶得設計"]],media:[]},
 {id:"PT-3-05",n:"竹旋幻居",en:"MemutAR",tr:"pt",yr:2024,ed:"島嶼構竹 第三屆",loc:"陽明交大西區滯洪池水泥平台",city:"新竹市",lat:24.78700,lng:120.99280,gq:"園",
- dim:"4.9 × 12.3 × 5 m",mat:"竹、PTFE 膜",model:"無模型",desc:"雙曲拋物面；AR 放樣組裝",team:[["設計","高仕棠 Kristof Crolla（LEAD）"],["施作","藝創木構、冠閳企業、PT Bamboo Pure（峇里島預製）"],["燈光","LEAD、藝創木構"]],media:[]},
+ dim:"4.9 × 12.3 × 5 m",mat:"竹、PTFE 膜",model:"無模型",desc:"雙曲拋物面；AR 放樣組裝",team:[["設計","高仕棠 Kristof Crolla（LEAD）"],["施作","藝創木構、冠閎企業、PT Bamboo Pure（峇里島預製）"],["燈光","LEAD、藝創木構"]],media:[]},
 {id:"PT-3-06",n:"羽翼之亭",en:"Pavilion of Wing",tr:"pt",yr:2024,ed:"島嶼構竹 第三屆",loc:"雲林斗六糖廠",city:"雲林縣",lat:23.67715,lng:120.53800,gq:"園",site:"斗六糖廠竹創基地",
  dim:"長 8.1 × 寬 3.2 × 最高 4.2 × 最低 1.6 m",mat:"孟宗竹、桂竹、金屬、石頭、透明中空板",model:"50×60×25 cm",desc:"三鈸拱尺度漸變；桿件全數烤彎",
  team:[["設計","游智傑、周修宇、陳文鴻、徐佳慶（諸野竹木構）"],["結構","原型結構"],["施作","設計團隊自行施作"],["金屬件","郁晨工程"]],media:[]},
 {id:"PT-3-07",n:"邊竹",en:"The Portal",tr:"pt",yr:2024,ed:"島嶼構竹 第三屆",loc:"雲林斗六糖廠",city:"雲林縣",lat:23.67690,lng:120.53830,gq:"園",site:"斗六糖廠竹創基地",
- dim:"3.5 × 8.9 × 6.8 m",mat:"孟宗竹、桂竹、石、土、砂、石灰、銅片",model:"80×49×30 cm",desc:"剖竹集束環形梁；竹拱穹頂",team:[["設計","莊逸堯、劉嬇琦、陳孝康、游筑釣、鄭月斑、謝青純（自然心地）"],["結構","原型結構 陳冠帆、張家維"],["施作","設計團隊與志工群"],["燈光","偶得照明設計"]],media:[]},
+ dim:"3.5 × 8.9 × 6.8 m",mat:"孟宗竹、桂竹、石、土、砂、石灰、銅片",model:"80×49×30 cm",desc:"剖竹集束環形梁；竹拱穹頂",team:[["設計","莊逸堯、劉嫈琦、陳孝康、游筑鈞、鄭月斑、謝青純（自然心地）"],["結構","原型結構 陳冠帆、張家維"],["施作","設計團隊與志工群"],["燈光","偶得照明設計"]],media:[]},
 
 /* ── 第四屆 2025 ── */
 {id:"PT-4-01",n:"竹蝶",en:"Bamboo Butterfly",tr:"pt",yr:2025,ed:"島嶼構竹 第四屆",loc:"臺東知本森林公園千根榕步道旁",city:"臺東縣",lat:22.68710,lng:120.98822,gq:"定",
@@ -641,7 +731,7 @@ const W=[
  team:[["設計","陳宣誠（共感地景創作）"],["結構","陳宣誠＋原型結構 陳冠帆、曾崇育、羅立庭"],["竹構協力","顏品設計、欣林竹藝社"],["製作","黃世昌、林菀萱、許博舜、陳重諧、邛星傑、范正揚、郭昌憲、李子涵、李威儀、郭乃榮"],["燈光","偶得設計"]],media:[]},
 {id:"PT-4-02",n:"第三空間",en:"Third Place",tr:"pt",yr:2025,ed:"島嶼構竹 第四屆",loc:"知本國家森林遊樂區野營場",city:"臺東縣",lat:22.68850,lng:120.99000,gq:"園",
  dim:"3.7 × 9 × 2.9 m",mat:"竹集成環、刺竹、孟宗竹、農膜、鋼板",model:"52×67×28 cm",desc:"竹集束環百餘個；懸鏈線拱，溫泉防腐",
- team:[["設計","臺灣義築協會 謝易澄、王詽釣、簡志明"],["結構","原型結構 陳冠帆、曾崇育、羅立庭"],["竹環開發與加工","大安高工 林振輝、楊舜銘與學生 14 人"],["竹編圖騰","鄭浩祥 Ahung Masikad、公東高工師生 14 人"],["竹環組裝","牧竹文化創意 張釣博"],["竹構施工","納樊司工作室 Navas 余琦昂"],["麻繩固定","卡大地布部落 Pangtre 馬靖"],["竹石鐵件","李世安"],["吊裝運輸","董義誠"],["級配","香蘭社區 蕭惠明"],["生活統籌","南迴義築工作站 杜妍儀"],["竹材","臺南百竹園"],["燈光","南迴義築工作站"]],media:[]},
+ team:[["設計","臺灣義築協會 謝易澄、王譽鈞、簡志明"],["結構","原型結構 陳冠帆、曾崇育、羅立庭"],["竹環開發與加工","大安高工 林振輝、楊舜銘與學生 14 人"],["竹編圖騰","鄭浩祥 Ahung Masikad、公東高工師生 14 人"],["竹環組裝","牧竹文化創意 張鈞博"],["竹構施工","納樊司工作室 Navas 余琦昂"],["麻繩固定","卡大地布部落 Pangtre 馬靖"],["竹石鐵件","李世安"],["吊裝運輸","董義誠"],["級配","香蘭社區 蕭惠明"],["生活統籌","南迴義築工作站 杜妍儀"],["竹材","臺南百竹園"],["燈光","南迴義築工作站"]],media:[]},
 {id:"PT-4-03",n:"石頭的孩子",en:"mupangca' gana varasa'",tr:"pt",yr:2025,ed:"島嶼構竹 第四屆",loc:"知本國家森林遊樂區嬉遊林間區",city:"臺東縣",lat:22.68780,lng:120.99060,gq:"園",
  dim:"7 × 5.3 × 3.8 m",mat:"刺竹、孟宗竹、鋼筋、麻繩、鐵構",model:"原表註記無法丈量",desc:"水火烤彎骨架；繩結非剛性柱腳",
  team:[["設計","柯慕一（村夢遊牧）"],["結構","柯慕一"]],media:[]},
@@ -680,7 +770,7 @@ const W=[
  desc:"輕巧、明亮、景緻是飛行者的身體經驗。竹構棚希望傳達同樣的意象，並搭配造型土椅子、多功能水槽，形成眷村裡休憩遊憩的場所。在既有兩棟磚造建築旁落柱，盡可能拉大跨距、減少落柱，凸顯竹材的輕巧；交織狀構造與透光後的陰影傳達飛行的晃動。",media:[]},
 {id:"CV-07",n:"見晴竹韻",tr:"cv",yr:2026,ed:"公共工程實踐",loc:"知本國家森林遊樂區野營地",city:"臺東縣",lat:22.68830,lng:120.98960,gq:"園",done:"2026-02",
  dim:"寬 14 × 深 8 × 高 6.5 m",mat:"竹構造、木瓦、銅瓦",model:"未註記",
- team:[["設計","張瀓今、翁靖婷、楊閩棣、楊承泰"],["結構設計","原型結構"],["竹構施工","仲夏夜竹工作坊"],["協力","臺灣義築協會"],["泥作","寶華昱工程行"]],
+ team:[["設計","張瀞今、翁靖婷、楊閩棣、楊承泰"],["結構設計","原型結構"],["竹構施工","仲夏夜竹工作坊"],["協力","臺灣義築協會"],["泥作","寶華昱工程行"]],
  desc:"座落知本溪畔森林，以竹材的非標準化特質回應當代建築對標準化構築的探索。採三竹集束與交叉拱構建大跨距結構，串聯低簷休憩區與挑高舞台。因應知本高濕、多雨及強風氣候，從選材、防腐、深簷覆蓋至離地構造建立整合性耐久對策。",media:[]},
 {id:"CV-08",n:"圓竹",tr:"cv",yr:2024,ed:"公共工程實踐",loc:"雲林古坑草嶺石壁社區",city:"雲林縣",lat:23.62370,lng:120.71395,gq:"園",site:"石壁竹創森基地",done:"2024-08",
  dim:"圓形內凹漏斗狀大屋頂",mat:"孟宗竹、柳杉實木",model:"未註記",
@@ -881,7 +971,19 @@ const EVENTS=[
  {y:2026,k:"獎項",t:"臺灣建築獎　決選入圍",d:"八仙山森林遊樂區竹構計畫入圍，一百一十二件選十二件，十月下旬評審現勘後揭曉。",chk:1},
  {y:2026,k:"展覽",t:"臺灣當代竹構築－島嶼竹跡特展",d:"斗六糖廠竹創基地，9/10–11/29，為竹產業創生基地定錨下一個十年。",key:1}
 ];
-window.PP_BAMBOO={W:W,AWARDS:AWARDS,PRATIO:PRATIO,PHOTOS:PHOTOS,EVENTS:EVENTS,generatedAt:"2026-10-23T17:29+08:00",source:"Notion 竹跡特展｜作品（MCP 直接匯出，合併舊種子之 desc／dim／mat）"};
+/* ── 四屆母案：只供協作網的辦理與策展層使用，不出現在地圖與時間軸 ── */
+const COHORTS=[
+{id:"SITE-04",n:"構竹林鐵新銳建築展　第一屆",yr:2021,ed:"構竹林鐵 第一屆",
+ team:[["主辦","社團法人臺灣竹會"],["理事長","甘銘源"],["策畫","甘銘源、李綠枝"],["策展人","陳冠帆"],["結構設計","原型結構"],["照明設計","偶得設計"],["指導","行政院農業委員會林務局"],["協辦","阿里山林業鐵路及文化資產管理處、承億文旅集團"],["官方媒體","Green Media 綠媒體"],["攝影","朱逸文"]]},
+{id:"SITE-05",n:"構竹林鐵新銳建築展　第二屆",yr:2022,ed:"構竹林鐵 第二屆",
+ team:[["主辦","社團法人臺灣竹會"],["理事長","甘銘源"],["策展人","陳冠帆"],["結構設計","原型結構 吳蓓倫、陳佳宏"],["指導","行政院農業委員會林務局"],["協辦","阿里山林業鐵路及文化資產管理處"],["官方媒體","Green Media 綠媒體"]]},
+{id:"SITE-06",n:"島嶼構竹新銳建築展　第三屆",yr:2024,ed:"島嶼構竹 第三屆",
+ team:[["主辦","社團法人臺灣竹會"],["理事長","許倍銜"],["策展人","葉育鑫"],["結構設計","原型結構"],["照明設計","偶得設計"],["官方媒體","Green Media 綠媒體"],["公關","元本沅顧問"],["執行協力","陽明交大建築研究所"]]},
+{id:"SITE-07",n:"島嶼構竹新銳建築展　第四屆",yr:2025,ed:"島嶼構竹 第四屆",
+ team:[["主辦","社團法人臺灣竹會"],["理事長","許倍銜"],["策展人","葉育鑫"],["結構設計","原型結構"],["協辦","林業保育署臺東分署"],["官方媒體","Green Media 綠媒體"],["公關","元本沅顧問"]]}
+];
+
+window.PP_BAMBOO={W:W,COHORTS:COHORTS,AWARDS:AWARDS,PRATIO:PRATIO,PHOTOS:PHOTOS,EVENTS:EVENTS,generatedAt:"2026-10-23T17:29+08:00",source:"Notion 竹跡特展｜作品（MCP 直接匯出，合併舊種子之 desc／dim／mat）"};
 })();
 
 </script>
@@ -1274,11 +1376,12 @@ function render(w){
 }
 
 function select(id,src){
-  if(picked){markers[picked]&&markers[picked].classList.remove("sel");evs[picked]&&evs[picked].classList.remove("sel");laneSq[picked]&&laneSq[picked].classList.remove("sel");}
+  if(picked){markers[picked]&&markers[picked].classList.remove("sel");evs[picked]&&evs[picked].classList.remove("sel");laneSq[picked]&&laneSq[picked].classList.remove("sel");listRow[picked]&&listRow[picked].classList.remove("sel");}
   picked=id;
   markers[id]&&markers[id].classList.add("sel");
   evs[id]&&evs[id].classList.add("sel");
   laneSq[id]&&laneSq[id].classList.add("sel");
+  listRow[id]&&listRow[id].classList.add("sel");
   try{history.replaceState(null,"","#"+id);}catch(e){}
   render(W.find(w=>w.id===id));
   document.body.classList.add("picked");
@@ -1287,7 +1390,7 @@ function select(id,src){
 }
 function deselect(){
   document.body.classList.remove("picked");
-  if(picked){markers[picked]&&markers[picked].classList.remove("sel");evs[picked]&&evs[picked].classList.remove("sel");laneSq[picked]&&laneSq[picked].classList.remove("sel");picked=null;}
+  if(picked){markers[picked]&&markers[picked].classList.remove("sel");evs[picked]&&evs[picked].classList.remove("sel");laneSq[picked]&&laneSq[picked].classList.remove("sel");listRow[picked]&&listRow[picked].classList.remove("sel");picked=null;}
   try{history.replaceState(null,"",location.pathname+location.search);}catch(e){}
   paintPanel();
 }
@@ -1405,9 +1508,11 @@ function applyFilter(){
     markers[w.id].classList.toggle("off",!v);
     evs[w.id].classList.toggle("off",!v);
     laneSq[w.id]&&laneSq[w.id].classList.toggle("off",!v);
+    listRow[w.id]&&listRow[w.id].classList.toggle("off",!v);
     if(v)n++;
   });
   document.getElementById("count").textContent="顯示 "+n+" / "+W.length+" 件";
+  document.getElementById("lst-count").textContent=n+" / "+W.length+" 件";
   document.querySelectorAll(".yr").forEach(r=>{
     const body=r.querySelector(".yr-body");
     const anyEv=body.querySelector(".ev");
@@ -1479,17 +1584,419 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!planwrap.hidden){e
 
 /* ── 檢視切換 ── */
 const tabMap=document.getElementById("tab-map"),tabTime=document.getElementById("tab-time");
-const vMap=document.getElementById("view-map"),vTime=document.getElementById("view-time");
+
+/* ══════════════════════════════════════════════════════════════
+   作品總表
+   ══════════════════════════════════════════════════════════════ */
+const listRow={};
+/* 設計署名照原文拆成「人」與「單位」，供總表顯示。
+   優先取角色名剛好是「設計」的一欄（CV-06 的「設計概念」不搶先）。
+   只在括號外切「＋」「、」，括號內的「＋」保留為單位清單。 */
+function splitTop(s,seps){
+  const out=[]; let depth=0, cur="";
+  for(const ch of s){
+    if(ch==="（")depth++; else if(ch==="）")depth=Math.max(0,depth-1);
+    if(depth===0&&seps.indexOf(ch)>=0){out.push(cur);cur="";} else cur+=ch;
+  }
+  out.push(cur); return out.map(x=>x.trim()).filter(Boolean);
+}
+const ORG_HEAD=/^(\S{2,12}?(?:協會|工作室|事務所|設計|結構|工作坊|實驗室|製作所|研究室))\s+(\S.*)$/;
+function designOf(w){
+  const none={who:"",unit:""};
+  if(!w.team)return none;
+  const d=w.team.find(t=>t[0]==="設計")||w.team.find(t=>/設計/.test(t[0])&&!/燈光|照明|結構|團隊|概念/.test(t[0]));
+  if(!d)return none;
+  const ppl=[], units=[];
+  splitTop(String(d[1]),"＋").forEach((chunk,ci)=>{
+    /* 「甲、乙、丙（單位）」：括號屬於整串人名 */
+    const tail=chunk.match(/^([^（）]+)（([^（）]+)）$/);
+    if(tail&&/[、,]/.test(tail[1])){
+      tail[1].split(/[、,]/).forEach(p=>{p=p.trim();if(p)ppl.push(p);});
+      tail[2].split(/\s*＋\s*/).forEach(u=>u&&units.push(u.trim()));
+      return;
+    }
+    splitTop(chunk,"、,").forEach((item,ii)=>{
+      const pm=item.match(/^([^（]+)（([^（）]+)）$/);
+      let name=item;
+      if(pm){name=pm[1].trim(); pm[2].split(/\s*＋\s*/).forEach(u=>u&&units.push(u.trim()));}
+      const om=name.match(ORG_HEAD);
+      if(om&&ii===0){units.push(om[1]); name=om[2].trim();}
+      if(ci>0&&!pm){units.push(name);return;}          // 「＋原型結構」這類合作單位
+      ppl.push(name);
+    });
+  });
+  const uu=[...new Set(units)];
+  let who=ppl[0]||"";
+  if(ppl.length>1)who+=" 等 "+ppl.length+" 人";
+  return {who:who, unit:uu.join("、")};
+}
+function leadOf(w){const d=designOf(w);return d.who||d.unit;}
+(function buildList(){
+  const tb=document.querySelector("#lst tbody");
+  const rows=W.map(w=>{
+    const np=PHOTOS[w.id]||0, aw=(AWARDS[w.id]||[]).length;
+    const tr=document.createElement("tr");
+    tr.dataset.id=w.id;
+    tr._k={id:w.id,n:w.n,yr:w.yr,ed:w.ed||"",city:w.city||"",lead:leadOf(w),np:np,aw:aw};
+    tr.innerHTML='<td><span class="tr-dot" style="background:var(--tr-'+w.tr+')"></span>'+esc(w.id)+'</td>'+
+      '<td class="w-n">'+esc(w.n)+(w.en?' <i class="aw-n">'+esc(w.en)+'</i>':'')+'</td>'+
+      '<td>'+(w.yr||"")+'</td><td>'+esc(w.ed||"")+'</td><td>'+esc(w.city||"")+'</td>'+
+      (function(){const d=designOf(w);return '<td>'+(d.who?esc(d.who):'')+(d.unit?' <i class="aw-n">'+esc(d.unit)+'</i>':'')+(d.who||d.unit?'':'—')+'</td>';})()+
+      '<td class="num '+(np?"aw-y":"aw-n")+'">'+(np||"—")+'</td>'+
+      '<td class="num '+(aw?"aw-y":"aw-n")+'">'+(aw||"—")+'</td>';
+    listRow[w.id]=tr; return tr;
+  });
+  rows.forEach(r=>tb.appendChild(r));
+  let sk="id",sd=1;
+  document.querySelectorAll("#lst th").forEach(th=>th.addEventListener("click",()=>{
+    const k=th.dataset.k; sd=(k===sk)?-sd:1; sk=k;
+    document.querySelectorAll("#lst th").forEach(o=>o.classList.remove("s-asc","s-desc"));
+    th.classList.add(sd>0?"s-asc":"s-desc");
+    rows.slice().sort((a,b)=>{
+      const x=a._k[k],y=b._k[k];
+      if(typeof x==="number"&&typeof y==="number")return (x-y)*sd;
+      return String(x).localeCompare(String(y),"zh-Hant")*sd;
+    }).forEach(r=>tb.appendChild(r));
+  }));
+  tb.addEventListener("click",e=>{const tr=e.target.closest("tr");if(tr&&tr.dataset.id)select(tr.dataset.id,"list");});
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   協作網：由團隊欄位現場組圖
+   ══════════════════════════════════════════════════════════════ */
+const NET=(function(){
+  const ROLE=[["理事長","主辦"],["主辦","主辦"],["策畫","策展"],["策展","策展"],["指導","主辦"],
+    ["協辦","主辦"],["官方媒體","主辦"],["媒體","主辦"],["公關","主辦"],["執行","主辦"],
+    ["燈光","燈光"],["照明","燈光"],["結構","結構"],["設計","設計"],["施作","施作"],["竹構","施作"],
+    ["製作","施作"],["組裝","施作"],["加工","施作"],["承造","施作"],
+    ["竹材","材料"],["竹片","材料"],["農膜","材料"],["材料","材料"],["薄膜","材料"]];
+  const COL={結構:"#9C3D2C",設計:"#2B2A26",施作:"#8A7F5C",燈光:"#B9B2A0",材料:"#5E7F55",
+             協力:"#C3BFB6",主辦:"#3E6B8C",策展:"#C08A2E"};
+  const ALIAS={"甘銘源":"大藏聯合建築師事務所","李綠枝":"大藏聯合建築師事務所",
+    "社團法人臺灣竹會":"臺灣竹會","Green Media 綠媒體":"綠媒體","偶得照明設計":"偶得設計",
+    "仲夏夜竹工作坊":"仲夏夜工作坊","仲夏夜竹藝工坊":"仲夏夜工作坊",
+    "伸茂溫室工程":"伸茂園藝溫室工程","原型結構（顧問）":"原型結構",
+    "原型結構工程顧問":"原型結構","華志聯合制作":"華志聯合設計制作",
+    "諸野竹木構專門有限公司":"諸野竹木構","偶得照明":"偶得設計"};
+  const DROP=/^(設計者自行施作|設計團隊自行施作|設計團隊與志工群)$/;
+  const TAIL=/(與學生\s*\d+\s*人|師生\s*\d+\s*人|等)$/;
+  const SKIP_ROLE=/^設計團隊$/;
+  const ORG=/^([一-鿿A-Za-z.]{2,8}(?:結構工程顧問|結構|設計|工作室|工作坊|文創|企業|事務所|協會|高工|公司|木構|竹藝社|工程|農場|工作站|部落|社區|百竹園|文化工坊|文化創意|遊牧|研究室|創作|興業|植人|木業|手作|製研|木造|實驗室|製作所|學院))\s+\S+/;
+  function roleOf(r){for(const[k,v]of ROLE)if(r.indexOf(k)>=0)return v;return "協力";}
+  /* 一個角色欄位的值 → 參與單位
+     規則一：「單位 成員甲、成員乙…」整段歸給該單位（成員是單位內的人）
+     規則二：「單位甲＋單位乙」分開計
+     規則三：人名後的括號說明去掉，保留人名（與全景圖的一二屆處理一致）
+     規則四：「師生 14 人」「與學生 14 人」之類的尾綴去掉，保留前面的單位 */
+  function orgs(val){
+    const out=[];
+    val=String(val).replace(/，以.*$/,"").trim();
+    /* 規則五：「甲、乙、丙（某單位）」＝該單位的團隊署名，整段歸給括號裡的單位 */
+    const team=val.match(/^([^（）]+)（([^（）]+)）$/);
+    if(team&&/[、,]/.test(team[1])&&team[1].split(/[、,]/).every(x=>/^[\u4e00-\u9fff]{2,4}$/.test(x.trim()))){
+      team[2].split(/\s*＋\s*/).forEach(u=>{u=u.trim();if(u.length>=2)out.push(ALIAS[u]||u);});
+      return out;
+    }
+    val=val.replace(/（[^（）]*）/g,"");   // 先去括號，括號內的＋才不會被切開
+    val.split(/\s*＋\s*/).forEach(chunk=>{
+      chunk=chunk.trim(); if(!chunk)return;
+      const head=chunk.split(/[、,；;／/]/)[0].trim();
+      const m=head.match(ORG);
+      if(m){out.push(ALIAS[m[1]]||m[1]);return;}
+      chunk.split(/[、,；;／/]/).forEach(p=>{
+        p=p.replace(TAIL,"").trim();
+        if(!p||DROP.test(p))return;
+        p=p.replace(/^([\u4e00-\u9fff]{2,4})\s+[A-Za-z][A-Za-z .]*$/,"$1");
+        p=ALIAS[p]||p;
+        if(p.length<2)return;
+        out.push(p);
+      });
+    });
+    return out;
+  }
+  const items=W.map(w=>({id:w.id,n:w.n,tr:w.tr,team:w.team}))
+    .concat((_D.COHORTS||[]).map(c=>({id:c.id,n:c.n,tr:"site",team:c.team})));
+  const nw={},nr={},edge={};
+  items.forEach(w=>{
+    if(!w.team)return;
+    const mem=new Set(), wr={};
+    w.team.forEach(([role,val])=>{
+      if(SKIP_ROLE.test(role))return;
+      const rc=roleOf(role);
+      let list=orgs(val);
+      if(list.length>=6&&list.every(x=>/^[\u4e00-\u9fff]{2,4}$/.test(x)))
+        list=[w.n+"　"+role+"群（"+list.length+" 人）"];
+      list.forEach(o=>{
+        mem.add(o);
+        (nw[o]=nw[o]||new Set()).add(w.id);
+        (wr[o]=wr[o]||new Set()).add(rc);
+      });
+    });
+    for(const o in wr)wr[o].forEach(rc=>{(nr[o]=nr[o]||{})[rc]=(nr[o][rc]||0)+1;});
+    const a=[...mem].sort();
+    for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++){
+      const k=a[i]+"\u0000"+a[j]; edge[k]=(edge[k]||0)+1;
+    }
+  });
+  const nodes={};
+  Object.keys(nw).forEach(o=>{
+    const PRI=["設計","結構","施作","主辦","策展","燈光","材料","協力"];
+    let best="協力",bn=0;
+    PRI.forEach(k=>{const c=(nr[o]||{})[k]||0;if(c>bn){bn=c;best=k;}});
+    nodes[o]={w:[...nw[o]].sort(),role:best,n:nw[o].size};
+  });
+  const edges=Object.keys(edge).map(k=>{const[a,b]=k.split("\u0000");return[a,b,edge[k]];});
+  const names=Object.keys(nodes);
+  const workName={}; items.forEach(w=>workName[w.id]=w.n);
+  return {nodes,edges,names,COL,workName,nWorks:items.length};
+})();
+
+/* 佈局：Fruchterman–Reingold，每個連通群各自排；
+   最大群居中，其餘小群整團擺在周圍（同一群的成員不會被拆散）。結果為確定性。 */
+function netLayout(){
+  const names=NET.names, idx={}; names.forEach((o,i)=>idx[o]=i);
+  const N=names.length, adj=names.map(()=>[]);
+  NET.edges.forEach(([a,b,c])=>{adj[idx[a]].push([idx[b],c]);adj[idx[b]].push([idx[a],c]);});
+  const seen=new Array(N).fill(-1), comps=[];
+  for(let i=0;i<N;i++){ if(seen[i]>=0)continue;
+    const q=[i],c=[]; seen[i]=comps.length;
+    while(q.length){const v=q.pop();c.push(v);adj[v].forEach(([u])=>{if(seen[u]<0){seen[u]=comps.length;q.push(u);}});}
+    comps.push(c); }
+  comps.sort((a,b)=>b.length-a.length||names[a[0]].localeCompare(names[b[0]]));
+  const P=names.map(()=>({x:0,y:0}));
+  const K=34;                                           // 理想邊長（世界單位）
+  function fr(comp){
+    const n=comp.length; if(n===1){P[comp[0]]={x:0,y:0};return;}
+    const set=new Set(comp);
+    comp.slice().sort((a,b)=>NET.nodes[names[b]].n-NET.nodes[names[a]].n)
+      .forEach((v,k)=>{const a=k*2.399963,r=K*0.55*Math.sqrt(k+1);P[v]={x:Math.cos(a)*r,y:Math.sin(a)*r};});
+    const E=[]; comp.forEach(v=>adj[v].forEach(([u,c])=>{if(set.has(u)&&u>v)E.push([v,u,c]);}));
+    let T=K*3; const IT=n>20?520:220;
+    for(let it=0;it<IT;it++){
+      const dx={},dy={}; comp.forEach(v=>{dx[v]=0;dy[v]=0;});
+      for(let i=0;i<n;i++){const a=comp[i];
+        for(let j=i+1;j<n;j++){const b=comp[j];
+          let x=P[a].x-P[b].x, y=P[a].y-P[b].y, d=Math.hypot(x,y);
+          if(d<0.01){x=0.01*(i-j);y=0.01;d=Math.hypot(x,y);}
+          const f=K*K/d; dx[a]+=x/d*f; dy[a]+=y/d*f; dx[b]-=x/d*f; dy[b]-=y/d*f; } }
+      E.forEach(([a,b,c])=>{
+        const x=P[a].x-P[b].x, y=P[a].y-P[b].y, d=Math.hypot(x,y)||0.01;
+        const f=d*d/K*(1+0.25*Math.log(c));
+        dx[a]-=x/d*f; dy[a]-=y/d*f; dx[b]+=x/d*f; dy[b]+=y/d*f; });
+      comp.forEach(v=>{
+        dx[v]-=P[v].x*0.035; dy[v]-=P[v].y*0.035;         // 向心力：避免外圍單點外飄
+        const d=Math.hypot(dx[v],dy[v])||0.01, m=Math.min(d,T);
+        P[v].x+=dx[v]/d*m; P[v].y+=dy[v]/d*m; });
+      T=Math.max(0.4,T*0.985);
+    }
+  }
+  comps.forEach(fr);
+  /* 最大群轉正：長軸水平 */
+  const core=comps[0];
+  let mx=0,my=0; core.forEach(v=>{mx+=P[v].x;my+=P[v].y;}); mx/=core.length; my/=core.length;
+  let sxx=0,syy=0,sxy=0; core.forEach(v=>{const x=P[v].x-mx,y=P[v].y-my;sxx+=x*x;syy+=y*y;sxy+=x*y;});
+  const th=0.5*Math.atan2(2*sxy,sxx-syy), cs=Math.cos(-th), sn=Math.sin(-th);
+  core.forEach(v=>{const x=P[v].x-mx,y=P[v].y-my;P[v]={x:x*cs-y*sn,y:x*sn+y*cs};});
+  const xs=core.map(v=>P[v].x), ys=core.map(v=>P[v].y);
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  /* 小群沿最大群右側由上往下排一欄；放不下再往左側 */
+  const small=comps.slice(1);
+  let colX=x1+K*2.2, cy=y0, side=1;
+  small.forEach(c=>{
+    const cxs=c.map(v=>P[v].x), cys=c.map(v=>P[v].y);
+    const w=Math.max(...cxs)-Math.min(...cxs), h=Math.max(...cys)-Math.min(...cys);
+    const ox=(Math.max(...cxs)+Math.min(...cxs))/2, oy=(Math.max(...cys)+Math.min(...cys))/2;
+    if(cy+h>y1+K){ if(side===1){side=-1;colX=x0-K*2.2;cy=y0;} else {cy=y0;colX+=side*K*3;} }
+    const tx=colX+side*w/2, ty=cy+h/2;
+    c.forEach(v=>{P[v].x+=tx-ox; P[v].y+=ty-oy;});
+    cy+=h+K*1.4;
+  });
+  return {P,idx,outside:small.reduce((a,c)=>a+c.length,0),nSmall:small.length};
+}
+
+/* 繪製、縮放與平移 */
+const netSvg=document.getElementById("net"), netTip=document.getElementById("netTip");
+let netDone=false, netK=1, netTx=0, netTy=0, netG=null, netNodes={}, netLbs={}, netEls=[], netHot=null;
+const NVB={w:1200,h:820};   // 橫式預設；直式畫面於 netDraw 內改寫
+/* viewBox 以 xMidYMid meet 置中：算出實際比例與留邊，滑鼠座標才換得準 */
+function netFit(){
+  const r=netSvg.getBoundingClientRect(), s=Math.min(r.width/NVB.w, r.height/NVB.h)||1;
+  return {r:r, s:s, ox:(r.width-NVB.w*s)/2, oy:(r.height-NVB.h*s)/2};
+}
+function netPt(e){
+  const f=netFit();
+  return {x:(e.clientX-f.r.left-f.ox)/f.s, y:(e.clientY-f.r.top-f.oy)/f.s};
+}
+function netScr(){return netFit().s;}
+function netApply(){
+  netG.setAttribute("transform","translate("+netTx.toFixed(2)+" "+netTy.toFixed(2)+") scale("+netK.toFixed(4)+")");
+  const s=netScr(), z=s*netK, inv=1/z;                         // z＝世界單位→螢幕像素
+  for(const o in netNodes)netNodes[o].setAttribute("stroke-width",(1.4*inv).toFixed(3));
+  netEls.forEach(l=>l.setAttribute("stroke-width",(Math.max(0.6,l._w)*inv).toFixed(3)));
+  /* 依件數決定在哪個倍率開始顯示名字；放大越多、顯示越多 */
+  const minN = netK>=2.6?1 : netK>=1.6?2 : 3;
+  const placed=[];
+  /* 佔位順序：被點選的單位 → 其相鄰單位 → 其餘；同層依件數大到小 */
+  const rank=o=>o===netHot?0:(netHot&&netLbs[o].g.classList.contains("hot")?1:2);
+  const order=NET.names.slice().sort((a,b)=>rank(a)-rank(b)||NET.nodes[b].n-NET.nodes[a].n);
+  const Wv=NVB.w*s, Hv=NVB.h*s;
+  order.forEach(o=>{
+    const L=netLbs[o], d=NET.nodes[o];
+    /* 標註靠邊時往內推，不被框切掉 */
+    const sx0=(L.x*netK+netTx)*s, lim=L.w/2+4;
+    const shift=sx0<lim?(lim-sx0):(sx0>Wv-lim?(Wv-lim-sx0):0);
+    const lx=L.x+shift/(s*netK);
+    L.g.setAttribute("transform","translate("+lx.toFixed(1)+" "+(L.y-L.r-3*inv).toFixed(1)+") scale("+inv.toFixed(4)+")");
+    const hot=netHot&&L.g.classList.contains("hot"), self=(o===netHot);
+    let show = hot || (!netHot && d.n>=minN);
+    if(show){
+      const sx=sx0+shift, sy=((L.y-L.r)*netK+netTy)*s - 4;   // 螢幕座標
+      const w=L.w, h=L.fs+2;
+      const rs=L.r*netK*s, ny=(L.y*netK+netTy)*s;
+      const nodeOff = sx0<-rs||sx0>Wv+rs||ny<-rs||ny>Hv+rs;              // 節點本身在畫面外
+      if(nodeOff||sy<h*0.6) show=self&&!nodeOff;
+      else if(!self && placed.some(b=>Math.abs(b.x-sx)<(b.w+w)/2+2&&Math.abs(b.y-sy)<(b.h+h)/2)) show=false;
+      if(show)placed.push({x:sx,y:sy,w:w,h:h});
+    }
+    L.g.style.display=show?"":"none";
+  });
+}
+function netZoom(f,px,py){
+  const k2=Math.max(.45,Math.min(7,netK*f));
+  if(k2===netK)return;
+  netTx=px-(px-netTx)*(k2/netK); netTy=py-(py-netTy)*(k2/netK); netK=k2; netApply();
+}
+function netReset(){netK=1;netTx=0;netTy=0;netApply();}
+function netPick(o){
+  if(netHot===o){netHot=null;netSvg.classList.remove("dim");netTip.hidden=true;
+    netEls.forEach(l=>l.classList.remove("hot"));
+    for(const k in netNodes){netNodes[k].classList.remove("hot");netLbs[k].g.classList.remove("hot");}
+    netApply();
+    return;}
+  netHot=o; netSvg.classList.add("dim");
+  const near=new Set([o]);
+  netEls.forEach(l=>{const h=(l._a===o||l._b===o);l.classList.toggle("hot",h);if(h){near.add(l._a);near.add(l._b);}});
+  for(const k in netNodes){
+    const h=near.has(k);
+    netNodes[k].classList.toggle("hot",h); netLbs[k].g.classList.toggle("hot",h);
+  }
+  const d=NET.nodes[o], ws=d.w.map(id=>NET.workName[id]||id);
+  const part=[...near].filter(x=>x!==o).sort();
+  netTip.hidden=false;
+  netTip.innerHTML='<b>'+esc(o)+'</b>　<i>'+esc(d.role)+'　'+d.n+' 件</i><br>'+
+    esc(ws.slice(0,8).join("、"))+(ws.length>8?'　<i>等 '+ws.length+' 件</i>':'')+
+    '<br><i>共事 '+part.length+' 個單位</i>';
+  /* 說明框放在被點節點的對側，不蓋住它 */
+  const f=netFit(), L=netLbs[o], ny=((L.y*netK+netTy)*f.s+f.oy)/f.r.height;
+  if(ny>0.5){netTip.style.top="10px";netTip.style.bottom="auto";}
+  else{netTip.style.top="auto";netTip.style.bottom="10px";}
+  netApply();
+}
+function netDraw(){
+  if(netDone)return; netDone=true;
+  const L=netLayout(), P=L.P, idx=L.idx;
+  /* 直式畫面（手機）：佈局轉 90°，viewBox 改直式，才不會只用到上方一小塊 */
+  const bx=netSvg.getBoundingClientRect();
+  if(bx.height>bx.width*1.05){
+    NVB.w=820; NVB.h=1200;
+    P.forEach(p=>{const x=p.x; p.x=-p.y; p.y=x;});
+  }
+  const xs=NET.names.map(o=>P[idx[o]].x), ys=NET.names.map(o=>P[idx[o]].y);
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  const M=70, sc=Math.min((NVB.w-2*M)/(x1-x0||1),(NVB.h-2*M)/(y1-y0||1));
+  const px=o=>NVB.w/2+(P[idx[o]].x-(x0+x1)/2)*sc, py=o=>NVB.h/2+(P[idx[o]].y-(y0+y1)/2)*sc;
+  netSvg.setAttribute("viewBox","0 0 "+NVB.w+" "+NVB.h);
+  const NS="http://www.w3.org/2000/svg";
+  const el=(t,a)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);return n;};
+  netG=el("g",{}); netSvg.appendChild(netG);
+  const gE=el("g",{}), gN=el("g",{}), gL=el("g",{});
+  netG.appendChild(gE); netG.appendChild(gN); netG.appendChild(gL);
+  NET.edges.slice().sort((a,b)=>a[2]-b[2]).forEach(([a,b,c])=>{
+    const l=el("line",{class:"net-e",x1:px(a).toFixed(1),y1:py(a).toFixed(1),
+      x2:px(b).toFixed(1),y2:py(b).toFixed(1),opacity:(0.13+Math.min(c,4)*0.09).toFixed(2)});
+    l._w=0.5+c*0.55; l._a=a; l._b=b; l.setAttribute("stroke-width",l._w.toFixed(2));
+    netEls.push(l); gE.appendChild(l);
+  });
+  NET.names.slice().sort((a,b)=>NET.nodes[a].n-NET.nodes[b].n).forEach(o=>{
+    const d=NET.nodes[o], r=3.4+Math.sqrt(d.n)*3.6;
+    const c=el("circle",{class:"net-n",cx:px(o).toFixed(1),cy:py(o).toFixed(1),r:r.toFixed(1),
+      fill:NET.COL[d.role]||"#C3BFB6",stroke:"var(--pp-wash)","stroke-width":"1.8",tabindex:"0",
+      role:"button","aria-label":o+"，"+d.role+"，參與 "+d.n+" 件"});
+    c.addEventListener("click",ev=>{ev.stopPropagation();netPick(o);});
+    c.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();netPick(o);}});
+    netNodes[o]=c; gN.appendChild(c);
+    const n=d.n, fs=n>=8?15:(n>=3?13.5:(n>=2?12.5:11.5));
+    const g2=el("g",{class:"net-lbg"});
+    const t=el("text",{class:"net-lb","text-anchor":"middle","font-size":fs,"font-weight":n>=2?500:400});
+    const txt=o+(n>=2?"　"+n:""); t.textContent=txt;
+    g2.appendChild(t); gL.appendChild(g2);
+    const w=[...txt].reduce((a,ch)=>a+(ch.charCodeAt(0)>0x2000?1:0.56),0)*fs;
+    netLbs[o]={g:g2,x:px(o),y:py(o),r:r,fs:fs,w:w};
+  });
+  document.getElementById("net-sub").textContent=
+    NET.names.length+" 個單位　"+NET.edges.length+" 條連線　"+W.length+" 件作品＋"+(_D.COHORTS||[]).length+" 屆計畫";
+  document.getElementById("netLgd").innerHTML=
+    ["設計","結構","施作","燈光","材料","協力","主辦","策展"].map(k=>
+      '<span><i style="background:'+NET.COL[k]+'"></i>'+k+'</span>').join("");
+  netApply();
+}
+
+/* 縮放與平移的操作繫結 */
+document.getElementById("nzIn").addEventListener("click",()=>netZoom(1.35,NVB.w/2,NVB.h/2));
+document.getElementById("nzOut").addEventListener("click",()=>netZoom(1/1.35,NVB.w/2,NVB.h/2));
+document.getElementById("nzRst").addEventListener("click",netReset);
+netSvg.addEventListener("wheel",e=>{
+  e.preventDefault(); const p=netPt(e);
+  netZoom(Math.pow(0.9988,e.deltaY),p.x,p.y);
+},{passive:false});
+netSvg.addEventListener("dblclick",e=>{const p=netPt(e);netZoom(1.8,p.x,p.y);});
+window.addEventListener("resize",()=>{if(netDone&&curView==="net")netApply();});
+(function(){
+  let from=null, moved=false, pt=[];
+  netSvg.addEventListener("pointerdown",e=>{
+    pt.push(e); if(pt.length>1)return;
+    from=netPt(e); moved=false; netSvg.setPointerCapture(e.pointerId); netSvg.classList.add("grabbing");
+  });
+  netSvg.addEventListener("pointermove",e=>{
+    const i=pt.findIndex(p=>p.pointerId===e.pointerId); if(i>=0)pt[i]=e;
+    if(pt.length===2){
+      const a=pt.map(netPt), d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+      if(from&&from._d){netZoom(d/from._d,(a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2);}
+      from={_d:d}; moved=true; return;
+    }
+    if(!from||from._d)return;
+    const p=netPt(e); netTx+=p.x-from.x; netTy+=p.y-from.y;
+    if(Math.abs(p.x-from.x)+Math.abs(p.y-from.y)>2)moved=true;
+    from=p; netApply();
+  });
+  const up=e=>{
+    pt=pt.filter(p=>p.pointerId!==e.pointerId);
+    if(!pt.length){from=null;netSvg.classList.remove("grabbing");
+      if(!moved&&e.target===netSvg&&netHot)netPick(netHot);}
+    else from=null;
+  };
+  netSvg.addEventListener("pointerup",up);
+  netSvg.addEventListener("pointercancel",up);
+})();
+
+const VIEWS={map:{t:tabMap,v:document.getElementById("view-map")},
+             time:{t:tabTime,v:document.getElementById("view-time")},
+             list:{t:document.getElementById("tab-list"),v:document.getElementById("view-list")},
+             net: {t:document.getElementById("tab-net"), v:document.getElementById("view-net")}};
+let curView="map";
 function show(which){
-  const m=which==="map";
-  tabMap.setAttribute("aria-selected",String(m));
-  tabTime.setAttribute("aria-selected",String(!m));
-  vMap.hidden=!m; vTime.hidden=m;
-  if(!m){curY=null;onScrollYear();}
+  if(!VIEWS[which])which="map";
+  curView=which;
+  for(const k in VIEWS){
+    const on=(k===which);
+    VIEWS[k].t.setAttribute("aria-selected",String(on));
+    VIEWS[k].v.hidden=!on;
+  }
+  if(which==="time"){curY=null;onScrollYear();}
+  if(which==="net")netDraw();
   paintPanel();
 }
-tabMap.addEventListener("click",()=>show("map"));
-tabTime.addEventListener("click",()=>show("time"));
+for(const k in VIEWS)VIEWS[k].t.addEventListener("click",()=>show(k));
 
 /* ── 密度條、年度摘要、跨檢視連動 ── */
 function vis(w){return on[w.tr]&&(!awOnly||AWARDED.has(w.id));}
@@ -1552,7 +2059,7 @@ let curY=null;
 
 function paintPanel(){
   if(picked)return;
-  if(!mqDesk.matches||vTime.hidden){dbody.innerHTML=EMPTY;return;}
+  if(!mqDesk.matches||curView!=="time"){dbody.innerHTML=EMPTY;return;}
   dbody.innerHTML=tlMode==="lane"?renderLaneSum():renderYear(curY||Y0);
 }
 
@@ -1561,7 +2068,7 @@ function onScrollYear(){
   if(rafY)return;
   rafY=requestAnimationFrame(()=>{
     rafY=0;
-    if(vTime.hidden||tlMode!=="year")return;
+    if(curView!=="time"||tlMode!=="year")return;
     const line=topHpx()+150;
     let best=Y0;
     for(const y of YRS){if(yrEl[y].getBoundingClientRect().top<=line)best=y;}
